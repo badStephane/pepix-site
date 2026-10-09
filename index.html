@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/donnees.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -44,8 +45,8 @@
       </video>
       <div class="conteneur heros-cadre">
         <div class="etiquette">
-          <h1 id="t-heros">Tout commence par une <span class="jaune">graine.</span></h1>
-          <p>Oignon, tomate, chou et piment en sachets de 5 g. Livrés à Dakar en 24 à 48 h, avec la fiche de culture.</p>
+          <h1 id="t-heros" data-reglage="herosTitre">Tout commence par une <span class="jaune">graine.</span></h1>
+          <p data-reglage="herosTexte">Oignon, tomate, chou et piment en sachets de 5 g. Livrés à Dakar en 24 à 48 h, avec la fiche de culture.</p>
           <div class="etiquette-actions">
             <a class="btn btn-jaune" href="boutique.html">Voir les semences</a>
             <a class="lien-clair" href="conseils.html">Calendrier de semis</a>
@@ -74,8 +75,8 @@
       </picture>
       <div class="conteneur bandeau-texte">
         <p class="bandeau-sur">Avant l'ensachage</p>
-        <h2 id="t-bandeau">Chaque lot est mis à germer avant d'être ensaché.</h2>
-        <p>Au dos du sachet, un QR code ouvre la fiche de culture de la variété.</p>
+        <h2 id="t-bandeau" data-reglage="bandeauTitre">Chaque lot est mis à germer avant d'être ensaché.</h2>
+        <p data-reglage="bandeauTexte">Au dos du sachet, un QR code ouvre la fiche de culture de la variété.</p>
       </div>
       <small class="bandeau-credit">Photo : Nikolett Emmert, Pexels</small>
     </section>
@@ -101,7 +102,7 @@
       <div>
         <h2>Une question sur vos cultures ?</h2>
         <p>L'équipe répond sur WhatsApp, en français et en wolof.</p>
-        <a class="btn btn-sombre" href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+        <a class="btn btn-sombre" href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." data-wa target="_blank" rel="noopener">Écrire sur WhatsApp</a>
       </div>
     </section>
   </main>
@@ -122,12 +123,12 @@
         <h2>Contact</h2>
         <ul>
           <li><span>Dakar, Sénégal</span></li>
-          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." data-wa target="_blank" rel="noopener">WhatsApp</a></li>
         </ul>
       </div>
     </div>
     <div class="conteneur pied-bas">
-      <span>© 2026 Pépix. Projet d'école réalisé par Yannick Felix Viera MOREIRA, ISM.</span>
+      <span>© 2026 Pépix. Projet d'école réalisé par Yannick Felix Viera MOREIRA, ISM. <a href="admin.html" class="lien-admin">Espace admin</a></span>
       <span>Paiement par Wave, Orange Money ou à la livraison</span>
     </div>
   </footer>

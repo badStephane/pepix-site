@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Espace admin, Pépix</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1B3A22">
+  <link rel="icon" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="js/donnees.js" defer></script>
+  <script src="js/admin.js" defer></script>
+</head>
+<body class="admin">
+  <a class="evitement" href="#vue">Aller au contenu</a>
+
+  <!-- Connexion (démo : code gardé dans le navigateur, pas une vraie sécurité) -->
+  <div class="connexion" id="connexion" hidden>
+    <form class="connexion-carte" id="form-connexion" novalidate>
+      <img src="img/logo.webp" alt="Pépix" width="74" height="66">
+      <h1>Espace admin</h1>
+      <div class="champ">
+        <label for="code">Code d'accès</label>
+        <input id="code" name="code" type="password" autocomplete="current-password" required aria-describedby="code-aide code-erreur">
+        <span class="aide" id="code-aide">Démo : le code est <b>pepix2026</b>.</span>
+        <span class="msg-erreur" id="code-erreur">Code incorrect, réessayez.</span>
+      </div>
+      <button type="submit" class="btn btn-sombre">Entrer</button>
+      <p class="connexion-note">Version de démonstration : les commandes et réglages restent dans ce navigateur.</p>
+      <a class="lien" href="index.html">Retour au site</a>
+    </form>
+  </div>
+
+  <!-- Interface admin -->
+  <div class="admin-cadre" id="admin" hidden>
+    <aside class="admin-barre">
+      <a class="admin-logo" href="#tableau"><img src="img/logo.webp" alt="" width="40" height="36"><span>Pépix <small>admin</small></span></a>
+      <nav class="admin-nav" aria-label="Sections de l'admin">
+        <a href="#tableau" data-vue="tableau"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 16v-4"/><path d="M12 16V8"/><path d="M17 16v-7"/></svg><span>Tableau de bord</span></a>
+        <a href="#commandes" data-vue="commandes"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Commandes</span><b class="pastille" id="pastille-nouvelles" hidden></b></a>
+        <a href="#produits" data-vue="produits"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20h10"/><path d="M12 20v-8"/><path d="M12 12c0-4 3-6 7-6 0 4-3 6-7 6Z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5Z"/></svg><span>Produits</span></a>
+        <a href="#textes" data-vue="textes"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg><span>Textes du site</span></a>
+      </nav>
+      <div class="admin-barre-bas">
+        <a href="index.html" target="_blank" rel="noopener">Voir le site</a>
+        <button type="button" id="deconnexion">Se déconnecter</button>
+      </div>
+    </aside>
+
+    <main class="admin-contenu" id="vue" tabindex="-1"></main>
+  </div>
+
+  <!-- Détail d'une commande -->
+  <div class="voile voile-droite" id="voile-commande">
+    <div class="panier admin-detail" id="detail-commande" role="dialog" aria-modal="true" aria-labelledby="detail-titre"></div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

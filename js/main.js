@@ -6,28 +6,10 @@
    Le panier est gardé dans le navigateur (localStorage).
    ========================================================== */
 
-const PRODUITS = [
-  {
-    id: 'oignon', nom: 'Oignon', variete: 'Jaune Paille', prix: 1500,
-    semis: 'Oct. – Déc. (pépinière)', cycle: '120–150 jours', espacement: '10 × 20 cm',
-    conseils: ['Semer en pépinière, repiquer à 6–8 semaines', "Arrêter l'arrosage 2 semaines avant récolte", "Sécher les bulbes à l'ombre avant stockage"],
-  },
-  {
-    id: 'tomate', nom: 'Tomate', variete: 'Marmande', prix: 1800,
-    semis: 'Oct. – Févr.', cycle: '70–90 jours', espacement: '50 × 70 cm',
-    conseils: ['Semis en pépinière 3–4 semaines avant repiquage', 'Tuteurer dès 20 cm de hauteur', 'Supprimer les gourmands régulièrement'],
-  },
-  {
-    id: 'chou', nom: 'Chou', variete: 'Cœur de bœuf', prix: 1200,
-    semis: 'Oct. – Janv.', cycle: '80–100 jours', espacement: '50 × 60 cm',
-    conseils: ['Repiquer à 4–5 feuilles', 'Arrosage régulier, sans excès', 'Surveiller les chenilles en début de cycle'],
-  },
-  {
-    id: 'piment', nom: 'Piment', variete: 'Super Cayenne', prix: 1500,
-    semis: 'Oct. – Mars', cycle: '90–120 jours', espacement: '40 × 60 cm',
-    conseils: ['Semis en pépinière 4–6 semaines avant repiquage', 'Repiquer à 4–6 feuilles vraies', "Éviter l'excès d'eau au pied"],
-  },
-];
+// Produits et réglages : valeurs par défaut + modifications de l'admin (js/donnees.js)
+const TOUS_PRODUITS = Pepix.produits();
+const PRODUITS = TOUS_PRODUITS.filter(p => p.visible);
+const REGLAGES = Pepix.reglages();
 
 // Mois de semis (s) et de récolte (r) : 0 = janvier ... 11 = décembre
 const CALENDRIER = {
@@ -38,7 +20,7 @@ const CALENDRIER = {
 };
 const MOIS = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 const MOIS_LONGS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-const FRAIS_LIVRAISON = 1000;
+const FRAIS_LIVRAISON = Math.max(0, Number(REGLAGES.fraisLivraison) || 0);
 
 // Petites icônes (style Lucide), dessinées en SVG
 const ICONES = {
@@ -65,6 +47,8 @@ const produit = id => PRODUITS.find(p => p.id === id);
 /* ---------- Panier (sauvegardé dans le navigateur) ---------- */
 let panier = {};
 try { panier = JSON.parse(localStorage.getItem('pepix-panier')) || {}; } catch (e) { panier = {}; }
+// Un produit masqué ou épuisé depuis l'admin sort du panier
+for (const id of Object.keys(panier)) { const p = produit(id); if (!p || !p.enStock) delete panier[id]; }
 let vuePanier = 'lignes';          // 'lignes' | 'formulaire' | 'confirmation'
 let derniereCommande = null;
 
@@ -125,7 +109,7 @@ function carteProduit(p, avecLivraison) {
   // Carte façon sachet : photo, nom, variété, repères de culture, prix.
   // Toute la carte ouvre la fiche grâce au bouton du titre (étendu en CSS).
   return `
-    <article class="carte" data-id="${p.id}">
+    <article class="carte${p.enStock ? '' : ' carte-epuisee'}" data-id="${p.id}">
       <div class="carte-image photo-${p.id}" role="img" aria-label="Sachet de semences ${p.nom} Pépix"></div>
       <div class="carte-corps">
         <h3><button type="button" class="carte-ouvrir" data-ouvrir="${p.id}" aria-label="${p.nom}, voir la fiche">${p.nom}</button></h3>
@@ -136,7 +120,9 @@ function carteProduit(p, avecLivraison) {
         </dl>
         <div class="carte-pied">
           <strong>${prix(p.prix)} FCFA</strong>
-          <button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter</button>
+          ${p.enStock
+            ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter</button>`
+            : `<span class="epuise">Épuisé</span>`}
         </div>
       </div>
     </article>`;
@@ -150,6 +136,34 @@ function afficherProduits(conteneur, avecLivraison) {
     const carte = e.target.closest('.carte');
     if (carte) ouvrirFiche(carte.dataset.id);
   });
+}
+
+/* ---------- Textes réglés dans l'admin ---------- */
+const echapper = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function appliquerReglages() {
+  document.querySelectorAll('[data-reglage]').forEach(el => {
+    const cle = el.dataset.reglage;
+    const valeur = REGLAGES[cle];
+    if (valeur === undefined || valeur === '') return;
+    if (cle === 'herosTitre') {
+      // Le dernier mot du titre passe en jaune, comme sur le sachet
+      const t = String(valeur).trim();
+      const i = t.lastIndexOf(' ');
+      el.innerHTML = i > 0 ? `${echapper(t.slice(0, i))} <span class="jaune">${echapper(t.slice(i + 1))}</span>` : echapper(t);
+    } else if (cle === 'fraisLivraison') {
+      el.textContent = FRAIS_LIVRAISON ? `${prix(FRAIS_LIVRAISON)} FCFA` : 'offerte';
+    } else {
+      el.textContent = valeur;
+    }
+  });
+  document.querySelectorAll('a[data-wa]').forEach(a => {
+    a.href = Pepix.lienWhatsApp("Bonjour Pépix, j'ai une question sur mes cultures.");
+  });
+  const annonce = String(REGLAGES.annonce || '').trim();
+  if (annonce) {
+    document.body.insertAdjacentHTML('afterbegin', `<p class="annonce" role="note">${echapper(annonce)}</p>`);
+  }
 }
 
 /* ---------- Page Conseils : calendrier et fiches ---------- */
@@ -198,7 +212,7 @@ function afficherFiches(conteneur) {
       <ol>${p.conseils.map(c => `<li>${c}</li>`).join('')}</ol>
       <div class="fiche-pied">
         <strong>Sachet de 5 g, ${prix(p.prix)} FCFA</strong>
-        <button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter au panier</button>
+        ${p.enStock ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter au panier</button>` : '<span class="epuise">Épuisé</span>'}
       </div>
     </article>`).join('');
   conteneur.addEventListener('click', e => {
@@ -231,7 +245,8 @@ function ouvrirFiche(id) {
       </div>
       <span class="livraison">Livré en 24 à 48 h à Dakar</span>
       <a class="modale-lien" href="conseils.html#fiche-${p.id}">Voir la fiche de culture complète</a>
-      <div class="modale-actions">
+      ${p.enStock ? '' : '<p class="epuise-note">Épuisé pour le moment. Écrivez-nous sur WhatsApp pour être prévenu du retour en stock.</p>'}
+      <div class="modale-actions"${p.enStock ? '' : ' hidden'}>
         <div class="quantite" role="group" aria-label="Quantité">
           <button type="button" data-moins aria-label="Diminuer la quantité" disabled>${icone('moins')}</button>
           <strong id="fiche-qte" aria-live="polite">1</strong>
@@ -385,15 +400,19 @@ function brancherFormulaire() {
     }
     const d = new FormData(form);
     const st = sousTotal();
-    derniereCommande = {
-      numero: 'PX-' + Math.floor(1000 + Math.random() * 9000),
+    const lignesCommande = PRODUITS.filter(p => panier[p.id]).map(p => ({ id: p.id, nom: p.nom, variete: p.variete, prix: p.prix, qte: panier[p.id] }));
+    // Enregistrée dans le navigateur : l'espace admin la retrouve (démo)
+    derniereCommande = Pepix.ajouterCommande({
       nom: d.get('nom').trim(),
       tel: d.get('tel').trim(),
       adresse: d.get('adresse').trim(),
       paiement: d.get('paiement'),
-      articles: PRODUITS.filter(p => panier[p.id]).map(p => `${panier[p.id]} × ${p.nom}`).join(', '),
+      lignes: lignesCommande,
+      sousTotal: st,
+      livraison: FRAIS_LIVRAISON,
       total: st + FRAIS_LIVRAISON,
-    };
+    });
+    derniereCommande.articles = lignesCommande.map(l => `${l.qte} × ${l.nom}`).join(', ');
     panier = {};
     sauverPanier();
     vuePanier = 'confirmation';
@@ -592,6 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   majCompteur();
+  appliquerReglages();
   almanach();
   videoHeros();
 });

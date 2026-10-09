@@ -49,3 +49,14 @@ Hébergé sur Netlify (site statique, pas d'étape de build, voir `netlify.toml`
 Vidéo de l'accueil : « Seedlings growing from the starting tray », Frank Meriño, [Pexels](https://www.pexels.com/video/seedlings-growing-from-the-starting-tray-8459699/) (licence Pexels, utilisation gratuite).
 
 Photo de la page Qui sommes-nous : « A small plant sprouting from the soil », Nikolett Emmert, [Pexels](https://www.pexels.com/photo/a-small-plant-sprouting-from-the-soil-17497507/).
+
+## Espace admin (démo)
+
+Adresse : `/admin.html` (lien « Espace admin » en bas de chaque page). Code de démo : `pepix2026`.
+
+- **Tableau de bord** : chiffre d'affaires, commandes, commandes à traiter, panier moyen, ventes des 14 derniers jours, sachets vendus par produit.
+- **Commandes** : recherche, filtre par statut, détail, changement de statut (nouvelle, confirmée, livrée, annulée), message WhatsApp au client, export CSV.
+- **Produits** : variété, prix, en stock ou épuisé, affiché ou masqué.
+- **Textes du site** : annonce en haut du site, titres et textes de l'accueil, frais de livraison, numéro WhatsApp.
+
+Version de démonstration : commandes et réglages sont gardés dans le navigateur (localStorage), dans `js/donnees.js`. Une commande passée sur la boutique apparaît dans l'admin ouvert dans le même navigateur, même dans un autre onglet. Le code d'accès n'est pas une vraie sécurité : pour un usage réel, il faudrait une base de données et une authentification côté serveur.

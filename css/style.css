@@ -546,3 +546,13 @@ body.bloque { overflow: hidden; }
   .pied ul a, .pied ul span { padding: 0; min-height: 44px; display: inline-flex; align-items: center; }
   .repere span { font-size: 14px; }
 }
+
+/* Visuels sachets : même règle partout (cartes, fiche, panier, conseils) */
+[class*="photo-"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+
+/* ---------- Réglages pilotés par l'admin ---------- */
+.annonce { margin: 0; background: var(--jaune); color: var(--vert-fonce); text-align: center; font-weight: 700; font-size: 15px; padding: 10px 16px; }
+.epuise { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px dashed var(--terre); border-radius: 8px; font-weight: 700; color: var(--terre); font-size: 14px; }
+.carte-epuisee .carte-image { filter: grayscale(.7); opacity: .75; }
+.epuise-note { margin: 0; padding: 12px 14px; background: var(--kraft); border-radius: 8px; font-size: 15px; }
+.lien-admin { color: inherit; text-decoration: underline; text-underline-offset: 3px; margin-left: 6px; }
