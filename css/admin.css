@@ -241,3 +241,13 @@ body.admin { background: #F3EEE2; }
   .palmares li { grid-template-columns: 64px minmax(0, 1fr) auto; }
 }
 .admin .aide { font-size: 14px; color: var(--terre); }
+
+/* Correctifs responsive : cibles tactiles */
+.admin-logo { min-height: 44px; }
+.bloc-tete .lien { display: inline-flex; align-items: center; min-height: 44px; padding-block: 0; }
+.admin-haut-mobile a, .admin-haut-mobile button { display: inline-flex; align-items: center; }
+/* Sous 1100 px, la liste des commandes passe en cartes (le tableau serait coupé) */
+@media (max-width: 1100px) {
+  .tableau-defile { display: none; }
+  .cartes-commandes { display: flex; }
+}
