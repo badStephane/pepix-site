@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/donnees.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -38,7 +39,7 @@
 
     <section class="conteneur boutique-intro">
       <h1 class="grand-titre">Semences maraîchères</h1>
-      <p class="note">Sachets de 5 g conditionnés par Pépix. Livraison en 24 à 48 h à Dakar, 3 à 5 jours en région, 1 000 FCFA.</p>
+      <p class="note">Sachets de 5 g conditionnés par Pépix. Livraison en 24 à 48 h à Dakar, 3 à 5 jours en région, <span data-reglage="fraisLivraison">1 000 FCFA</span>.</p>
     </section>
 
     <section class="conteneur" style="padding-top:16px;padding-bottom:64px" aria-label="Produits">
@@ -65,12 +66,12 @@
         <h2>Contact</h2>
         <ul>
           <li><span>Dakar, Sénégal</span></li>
-          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." data-wa target="_blank" rel="noopener">WhatsApp</a></li>
         </ul>
       </div>
     </div>
     <div class="conteneur pied-bas">
-      <span>© 2026 Pépix. Projet d'école réalisé par Yannick Felix Viera MOREIRA, ISM.</span>
+      <span>© 2026 Pépix. Projet d'école réalisé par Yannick Felix Viera MOREIRA, ISM. <a href="admin.html" class="lien-admin">Espace admin</a></span>
       <span>Paiement par Wave, Orange Money ou à la livraison</span>
     </div>
   </footer>
