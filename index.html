@@ -9,7 +9,7 @@
   <meta property="og:title" content="Pépix, semences maraîchères au Sénégal">
   <meta property="og:description" content="Semences d'oignon, tomate, chou et piment en sachets de 5 g, livrées à Dakar en 24 à 48 h, avec un guide de culture.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="img/piment.webp">
+  <meta property="og:image" content="img/sachet-piment.webp">
   <link rel="icon" href="img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,12 +56,6 @@
       <small class="video-credit">Vidéo : Frank Meriño, Pexels</small>
     </section>
 
-    <!-- Ce qu'on promet, dit simplement -->
-    <section class="conteneur declaration">
-      <p>Chaque lot est mis à germer avant d'être ensaché.
-      Au dos du sachet, un QR code ouvre la fiche de culture de la variété.</p>
-    </section>
-
     <!-- Les quatre sachets (générés par js/main.js) -->
     <section class="conteneur section" aria-labelledby="t-semences">
       <div class="section-titre">
@@ -69,6 +63,21 @@
         <a class="lien" href="boutique.html">Toute la boutique</a>
       </div>
       <div class="produits" id="produits-accueil"></div>
+    </section>
+
+    <!-- Moment fort : photo pleine largeur -->
+    <section class="bandeau" aria-labelledby="t-bandeau">
+      <picture>
+        <source media="(max-width: 700px)" srcset="img/bandeau-mobile.webp">
+        <img src="img/bandeau-1920.webp" srcset="img/bandeau-900.webp 900w, img/bandeau-1920.webp 1920w" sizes="100vw"
+             width="1920" height="840" loading="lazy" alt="Une graine qui germe dans le terreau">
+      </picture>
+      <div class="conteneur bandeau-texte">
+        <p class="bandeau-sur">Avant l'ensachage</p>
+        <h2 id="t-bandeau">Chaque lot est mis à germer avant d'être ensaché.</h2>
+        <p>Au dos du sachet, un QR code ouvre la fiche de culture de la variété.</p>
+      </div>
+      <small class="bandeau-credit">Photo : Nikolett Emmert, Pexels</small>
     </section>
 
     <!-- Almanach : le mois en cours, calculé par js/main.js -->

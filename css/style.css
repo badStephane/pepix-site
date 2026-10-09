@@ -193,7 +193,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
   overflow: hidden; display: flex; flex-direction: column; transition: border-color var(--rapide);
 }
 .carte:hover { border-color: var(--vert-fonce); }
-.carte-image { aspect-ratio: 5 / 6; background-color: #F3EDE0; border-bottom: 1px solid var(--filet); }
+.carte-image { aspect-ratio: 5 / 6; background-color: #F4EEE7; border-bottom: 1px solid var(--filet); }
 .carte-corps { padding: clamp(12px, 2vw, 18px); display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .carte h3 { font-size: clamp(21px, 3.6vw, 26px); }
 .carte-ouvrir { border: 0; background: none; padding: 0; font: inherit; text-align: left; }
@@ -210,11 +210,12 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .btn.ajoute { background: var(--vert); color: #fff; }
 @media (max-width: 520px) { .carte-reperes { grid-template-columns: 1fr; } }
 
-/* Images produit : découpe dans la planche de photos (sprite) */
-.photo-oignon { background-image: url(../img/gamme.webp); background-size: 400% auto; background-position: 100% 95.4%; }
-.photo-tomate { background-image: url(../img/gamme.webp); background-size: 400% auto; background-position: 0% 4.5%; }
-.photo-chou   { background-image: url(../img/gamme.webp); background-size: 400% auto; background-position: 33.33% 95.4%; }
-.photo-piment { background-image: url(../img/piment.webp); background-size: 410% auto; background-position: 3.2% 53%; }
+/* Images produit : un visuel par sachet */
+.carte-image { background-size: cover; background-position: center; }
+.photo-oignon { background-image: url(../img/sachet-oignon.webp); }
+.photo-tomate { background-image: url(../img/sachet-tomate.webp); }
+.photo-chou   { background-image: url(../img/sachet-chou.webp); }
+.photo-piment { background-image: url(../img/sachet-piment.webp); }
 
 /* ---------- Accueil : almanach du mois ---------- */
 .almanach { background: var(--kraft); }
@@ -470,9 +471,6 @@ fieldset.champ { border: 0; padding: 0; margin: 0; }
 body.bloque { overflow: hidden; }
 
 /* Photo de la page Qui sommes-nous */
-.photo-apropos { margin: 0; display: flex; flex-direction: column; gap: 10px; }
-.photo-apropos img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 55%; border-radius: 10px; background: var(--kraft); }
-.photo-apropos figcaption { font-size: 13px; color: var(--terre); }
 
 .sachet-contenu { padding-bottom: 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px 48px; align-items: start; }
 .sachet-contenu h2 { font-size: 28px; }
@@ -483,3 +481,18 @@ body.bloque { overflow: hidden; }
 .porteur h2 { font-size: 28px; }
 .porteur p { margin: 0; font-size: 18px; line-height: 1.6; border-left: 3px solid var(--jaune); padding-left: 20px; }
 @media (max-width: 760px) { .porteur { grid-template-columns: 1fr; } }
+
+/* Bandeau photo pleine largeur (accueil) */
+.bandeau { position: relative; display: flex; align-items: center; min-height: clamp(420px, 44vw, 640px); background: #2A1D12; color: #fff; overflow: hidden; }
+.bandeau picture, .bandeau img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bandeau::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,14,8,.88) 0%, rgba(20,14,8,.6) 38%, rgba(20,14,8,0) 62%); }
+.bandeau-texte { position: relative; z-index: 1; width: 100%; padding-top: 72px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 14px; }
+.bandeau h2 { color: #fff; font-size: clamp(32px, 4.6vw, 60px); line-height: 1.02; max-width: 640px; }
+.bandeau-texte p { margin: 0; max-width: 440px; font-size: 18px; line-height: 1.55; color: rgba(255,255,255,.9); }
+.bandeau-texte .bandeau-sur { font-size: 14px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--jaune); }
+.bandeau-credit { position: absolute; right: 16px; bottom: 12px; z-index: 1; font-size: 12px; color: rgba(255,255,255,.8); }
+@media (max-width: 700px) {
+  .bandeau { align-items: flex-end; min-height: min(125vw, 620px); }
+  .bandeau::after { background: linear-gradient(0deg, rgba(20,14,8,.92) 0%, rgba(20,14,8,.65) 45%, rgba(20,14,8,0) 75%); }
+  .bandeau-texte { padding-bottom: 48px; }
+}
