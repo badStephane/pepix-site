@@ -155,7 +155,7 @@ function afficherProduits(conteneur, avecLivraison) {
 /* ---------- Page Conseils : calendrier et fiches ---------- */
 function afficherCalendrier(conteneur) {
   const ceMois = new Date().getMonth();
-  let html = '<div class="ligne-cal" aria-hidden="true"><span></span>' +
+  let html = '<p class="cal-glisser">Faites glisser le tableau pour voir toute l\'année.</p><div class="cal-defile" tabindex="0" role="region" aria-label="Calendrier, défilement horizontal"><div class="ligne-cal" aria-hidden="true"><span></span>' +
     MOIS.map((m, i) => `<span class="mois${i === ceMois ? ' actuel' : ''}">${m}</span>`).join('') + '</div>';
   for (const p of PRODUITS) {
     const c = CALENDRIER[p.id];
@@ -169,6 +169,7 @@ function afficherCalendrier(conteneur) {
     });
     html += '</div>';
   }
+  html += '</div>';
   // Conseil calculé pour le mois en cours
   const aSemer = PRODUITS.filter(p => CALENDRIER[p.id].s.includes(ceMois)).map(p => p.nom.toLowerCase());
   const aRecolter = PRODUITS.filter(p => CALENDRIER[p.id].r.includes(ceMois)).map(p => p.nom.toLowerCase());
@@ -535,7 +536,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const boutique = $('#produits-boutique');
   if (boutique) afficherProduits(boutique, true);
   const cal = $('#calendrier');
-  if (cal) afficherCalendrier(cal);
+  if (cal) {
+    afficherCalendrier(cal);
+    // Sur petit écran, le calendrier défile : on amène le mois en cours dans la vue
+    const defile = cal.querySelector('.cal-defile');
+    const actuel = cal.querySelector('.mois.actuel');
+    if (defile && actuel && defile.scrollWidth > defile.clientWidth) {
+      defile.scrollLeft = Math.max(0, actuel.offsetLeft - defile.offsetLeft - defile.clientWidth / 2 + 60);
+    }
+  }
   const fiches = $('#fiches');
   if (fiches) afficherFiches(fiches);
 

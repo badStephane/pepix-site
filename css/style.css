@@ -129,10 +129,26 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .btn-panier .compteur.saut { animation: saut 420ms var(--courbe); }
 @keyframes saut { 40% { transform: scale(1.35); } }
 
+/* Barre du bas : mobile uniquement */
+.nav-bas { display: none; }
 @media (max-width: 720px) {
-  .menu { order: 3; flex-basis: 100%; margin: 0 -20px; padding: 0 10px; }
-  .menu a { padding: 10px; font-size: 14px; }
+  .menu { display: none; }
+  .entete .conteneur { padding: 8px 16px; }
   .logo img { height: 44px; }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  .nav-bas {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    background: var(--papier); border-top: 1px solid var(--filet);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .nav-bas a {
+    min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    font-size: 12px; font-weight: 700; color: var(--terre); border-top: 3px solid transparent; touch-action: manipulation;
+  }
+  .nav-bas .icone { width: 22px; height: 22px; }
+  .nav-bas a[aria-current="page"] { color: var(--vert-fonce); border-top-color: var(--jaune); }
+  .nav-bas a:active { background: var(--kraft); }
 }
 
 /* ---------- Accueil : vidéo + étiquette du sachet ---------- */
@@ -166,7 +182,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 }
 
 @media (max-width: 720px) {
-  .heros-video { min-height: 0; padding-top: 46vh; }
+  .heros-video { min-height: 0; padding-top: max(190px, 28vh); }
   .heros-cadre { padding: 0; }
   .etiquette { border-radius: 0; padding: 28px 24px 32px; max-width: none; }
   .video-bouton { top: 16px; bottom: auto; right: 16px; }
@@ -405,7 +421,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .ligne-info > div { display: flex; flex-direction: column; gap: 2px; }
 .ligne-info span { font-size: 13px; color: var(--texte-doux); }
 .ligne-qte { display: flex; align-items: center; gap: 4px; }
-.ligne-qte button { border: 1px solid var(--filet); background: var(--blanc); width: 36px; height: 36px; border-radius: 6px; color: var(--vert-fonce); display: flex; align-items: center; justify-content: center; }
+.ligne-qte button { border: 1px solid var(--filet); background: var(--blanc); width: 44px; height: 44px; border-radius: 6px; color: var(--vert-fonce); display: flex; align-items: center; justify-content: center; }
 .ligne-qte button .icone { width: 16px; height: 16px; }
 .ligne-qte button:hover { background: var(--kraft); }
 .ligne-qte strong { min-width: 22px; text-align: center; }
@@ -458,7 +474,8 @@ fieldset.champ { border: 0; padding: 0; margin: 0; }
 .toast span { flex: 1; min-width: 0; }
 .toast button { border: 0; background: var(--jaune); color: var(--vert-fonce); font-weight: 700; padding: 8px 12px; border-radius: 6px; font-size: 13px; white-space: nowrap; }
 @media (max-width: 520px) {
-  .toast { left: 16px; right: 16px; max-width: none; transform: translateY(20px); }
+  .toast { left: 16px; right: 16px; max-width: none; transform: translateY(20px); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  .toast button { min-height: 44px; font-size: 14px; }
   .toast.visible { transform: none; }
 }
 
@@ -495,4 +512,37 @@ body.bloque { overflow: hidden; }
   .bandeau { align-items: flex-end; min-height: min(125vw, 620px); }
   .bandeau::after { background: linear-gradient(0deg, rgba(20,14,8,.92) 0%, rgba(20,14,8,.65) 45%, rgba(20,14,8,0) 75%); }
   .bandeau-texte { padding-bottom: 48px; }
+}
+
+/* ---------- Mobile : lisibilité et cibles tactiles ---------- */
+.lien, .lien-clair { display: inline-block; padding-block: 10px; }
+@media (max-width: 720px) {
+  .carte-reperes { font-size: 14px; }
+  .pied-bas { font-size: 14px; }
+  .pied ul a, .pied ul span { padding: 10px 0; }
+  .legende span { font-size: 14px; }
+  .legende i { width: 18px; height: 18px; font-size: 12px; }
+}
+
+/* Calendrier : seul le tableau défile, la colonne des cultures reste fixe */
+.calendrier { overflow-x: visible; min-width: 0; }
+.cal-defile { overflow-x: auto; display: flex; flex-direction: column; gap: 12px; padding: 3px 0 5px; scrollbar-width: thin; border-radius: 4px; }
+.cal-defile:focus-visible { outline: 3px solid var(--jaune); outline-offset: 2px; }
+.ligne-cal > :first-child { position: sticky; left: 0; z-index: 1; background: var(--blanc); align-self: stretch; display: flex; align-items: center; }
+.cal-glisser { display: none; margin: 0; font-size: 14px; color: var(--terre); }
+@media (max-width: 720px) {
+  .cal-glisser { display: block; }
+  .calendrier { padding: 20px; }
+}
+/* Panier : sur petit écran, quantité et prix passent sous le produit */
+.ligne-vignette { background-size: cover; background-position: center; }
+@media (max-width: 520px) {
+  .ligne { flex-wrap: wrap; row-gap: 10px; }
+  .ligne-info { flex: 1 1 100%; }
+  .ligne-info span { font-size: 14px; }
+}
+.contacts dd a { display: inline-block; padding-block: 10px; }
+@media (max-width: 720px) {
+  .pied ul a, .pied ul span { padding: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .repere span { font-size: 14px; }
 }
