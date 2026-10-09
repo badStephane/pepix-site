@@ -1,5 +1,7 @@
 # Pépix · Semences maraîchères
 
+Projet d'école réalisé par Yannick Felix Viera MOREIRA (ISM).
+
 Site vitrine et boutique de démonstration pour Pépix, une marque de semences maraîchères (oignon, tomate, chou, piment) au Sénégal. Projet d'école.
 
 ## Contenu
