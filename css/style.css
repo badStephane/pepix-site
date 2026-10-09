@@ -153,26 +153,64 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 600; margin: 0; lin
 /* ---------- Grilles ---------- */
 .grille-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 48px; align-items: center; }
 
-/* ---------- Accueil : héros ---------- */
-.heros { padding-top: 56px; padding-bottom: 40px; }
-.heros-texte { display: flex; flex-direction: column; gap: 22px; }
+/* ---------- Accueil : héros avec vidéo en fond ---------- */
+.heros-video {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: var(--vert-fonce) url(../img/pepinieres-poster.webp) center / cover no-repeat;
+  color: var(--creme); min-height: min(80vh, 720px); display: flex; align-items: center;
+}
+.heros-fond { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.heros-voile {
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgba(17, 38, 22, .9) 0%, rgba(17, 38, 22, .78) 42%, rgba(17, 38, 22, .3) 100%),
+              linear-gradient(0deg, rgba(17, 38, 22, .55), transparent 40%);
+}
+.heros-grille { width: 100%; padding-top: 72px; padding-bottom: 88px; display: grid; grid-template-columns: 1.25fr .75fr; gap: 48px; align-items: center; }
+.heros-texte { display: flex; flex-direction: column; gap: 22px; max-width: 600px; }
 .badge {
   align-self: flex-start; background: var(--jaune-pale); color: var(--brun);
   font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 999px;
   display: inline-flex; align-items: center; gap: 6px;
 }
 .badge .icone { width: 16px; height: 16px; }
-.heros h1 { font-size: clamp(40px, 6vw, 68px); line-height: 1.02; text-wrap: balance; }
+.heros-video h1 { font-size: clamp(42px, 6.4vw, 76px); line-height: 1.02; text-wrap: balance; color: var(--creme); }
+.heros-video h1 .or { color: var(--jaune); }
 .or { color: var(--or); }
-.heros p { font-size: 18px; line-height: 1.6; margin: 0; max-width: 520px; color: var(--texte-doux); }
+.heros-video p { font-size: 18px; line-height: 1.6; margin: 0; max-width: 520px; color: rgba(250, 246, 236, .92); }
+.heros-video .btn-contour { color: var(--creme); border-color: var(--creme); }
+.heros-video .btn-contour:hover { background: var(--creme); color: var(--vert-fonce); }
 .boutons { display: flex; gap: 12px; flex-wrap: wrap; }
-.confiance { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--texte-doux); font-weight: 600; }
+.confiance { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; font-weight: 600; color: rgba(250, 246, 236, .92); }
 .confiance span { display: inline-flex; align-items: center; gap: 6px; }
-.confiance .icone { width: 18px; height: 18px; color: var(--vert); }
-.heros-image {
-  aspect-ratio: 5 / 4; border-radius: 28px; background-color: #EFE7D3;
-  background-image: url(../img/piment.webp); background-size: auto 112%; background-position: 0% 50%;
-  box-shadow: var(--ombre);
+.confiance .icone { width: 18px; height: 18px; color: var(--jaune); }
+
+.heros-sachet {
+  justify-self: end; width: min(100%, 340px); background: var(--creme-clair); color: var(--vert-fonce);
+  border-radius: 24px; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+  transform: rotate(2deg); transition: transform var(--normal) var(--courbe);
+}
+.heros-sachet:hover { transform: rotate(0deg) translateY(-4px); }
+.heros-sachet-photo { display: block; aspect-ratio: 4 / 5; background: #EFE7D3 url(../img/piment.webp) 0% 50% / auto 112% no-repeat; }
+.heros-sachet-info { display: flex; flex-direction: column; gap: 2px; padding: 14px 18px; }
+.heros-sachet-info b { font-family: var(--titre); font-weight: 600; font-size: 19px; }
+.heros-sachet-info span { font-size: 14px; color: var(--texte-doux); }
+
+.video-bouton {
+  position: absolute; right: 24px; bottom: 56px; width: 44px; height: 44px; border-radius: 50%; border: 0;
+  background: rgba(250, 246, 236, .9); color: var(--vert-fonce); display: flex; align-items: center; justify-content: center;
+  transition: background-color var(--rapide);
+}
+.video-bouton:hover { background: var(--creme); }
+.video-bouton[hidden] { display: none; }
+.video-credit { position: absolute; left: 24px; bottom: 60px; font-size: 12px; color: rgba(250, 246, 236, .75); }
+
+.promesses-zone { margin-top: -40px; position: relative; z-index: 1; padding-bottom: 24px; }
+.promesses-zone .promesses { box-shadow: var(--ombre); }
+
+@media (max-width: 860px) {
+  .heros-grille { grid-template-columns: 1fr; padding-top: 56px; padding-bottom: 96px; }
+  .heros-sachet { display: none; }
+  .heros-voile { background: linear-gradient(180deg, rgba(17, 38, 22, .78), rgba(17, 38, 22, .88)); }
 }
 
 /* ---------- Bandeau promesses ---------- */

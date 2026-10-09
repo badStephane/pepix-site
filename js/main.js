@@ -50,6 +50,8 @@ const ICONES = {
   retour: '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
   sac: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
   camion: '<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+  pause: '<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
+  lecture: '<polygon points="6 3 20 12 6 21 6 3"/>',
   alerte: '<circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>',
 };
 const icone = (nom, classe = 'icone') =>
@@ -453,6 +455,42 @@ function animerApparitions() {
   blocs.forEach(b => obs.observe(b));
 }
 
+/* ---------- Vidéo en fond de l'accueil ---------- */
+function videoHeros() {
+  const video = $('.heros-fond');
+  if (!video) return;
+  const bouton = $('.video-bouton');
+  const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const economie = navigator.connection && navigator.connection.saveData;
+  let voulue = !reduit && !economie;   // lecture souhaitée par le visiteur
+
+  const majBouton = () => {
+    const enLecture = !video.paused;
+    bouton.innerHTML = icone(enLecture ? 'pause' : 'lecture');
+    bouton.setAttribute('aria-label', enLecture ? 'Mettre la vidéo en pause' : 'Lire la vidéo');
+    bouton.setAttribute('aria-pressed', String(!enLecture));
+  };
+  const lire = () => { video.preload = 'auto'; return video.play().catch(() => {}); };
+
+  bouton.hidden = false;
+  video.addEventListener('play', majBouton);
+  video.addEventListener('pause', majBouton);
+  bouton.addEventListener('click', () => {
+    voulue = video.paused;
+    if (voulue) lire(); else video.pause();
+  });
+  majBouton();
+  if (voulue) lire();
+
+  // Met la vidéo en pause quand l'accueil n'est plus à l'écran (économise la batterie)
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) video.pause();
+      else if (voulue) lire();
+    }).observe(video);
+  }
+}
+
 /* ---------- Démarrage ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   // Fenêtres communes à toutes les pages
@@ -526,4 +564,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   majCompteur();
   animerApparitions();
+  videoHeros();
 });
