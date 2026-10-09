@@ -14,9 +14,11 @@ Site vitrine et boutique de démonstration pour Pépix, une marque de semences m
 - `css/style.css` : toute la mise en forme (couleurs dans les variables en haut du fichier, responsive mobile inclus).
 - `js/main.js` : les données des produits, l'affichage des cartes, du calendrier et des fiches, la fenêtre produit et le panier.
 - `img/` : logo et photos des sachets.
+- `video/` : vidéo de fond de l'accueil, en WebM et MP4 (environ 650 Ko chacune, boucle sans coupure de 9 s).
 
 ## Fonctionnalités
 
+- Accueil avec une vidéo en fond (jeunes plants en pépinière). Bouton pause, pause automatique quand l'accueil sort de l'écran, et image fixe à la place si le visiteur réduit les animations ou économise ses données.
 - Navigation entre les 4 pages, en-tête fixe, page 404 personnalisée.
 - Fiche produit en fenêtre (clic sur une carte), choix de la quantité, lien vers la fiche de culture.
 - Panier en tiroir : ajout, retrait, sous-total, livraison, total. Le bouton « Ajouter » confirme l'ajout et une notification propose d'ouvrir le panier.
@@ -39,3 +41,7 @@ puis aller sur http://localhost:8000.
 ## Mise en ligne
 
 Hébergé sur Netlify (site statique, pas d'étape de build, voir `netlify.toml`).
+
+## Crédits
+
+Vidéo de l'accueil : « Seedlings growing from the starting tray », Frank Meriño, [Pexels](https://www.pexels.com/video/seedlings-growing-from-the-starting-tray-8459699/) (licence Pexels, utilisation gratuite).
