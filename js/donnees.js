@@ -36,7 +36,7 @@ const REGLAGES_BASE = {
   bandeauTitre: "Chaque lot est mis à germer avant d'être ensaché.",
   bandeauTexte: 'Au dos du sachet, un QR code ouvre la fiche de culture de la variété.',
   fraisLivraison: 1000,
-  whatsapp: '',
+  whatsapp: '221771786915',
 };
 
 const STATUTS = {
