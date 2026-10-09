@@ -467,3 +467,8 @@ fieldset.champ { border: 0; padding: 0; margin: 0; }
 .introuvable p { color: var(--texte-doux); font-size: 17px; max-width: 460px; }
 
 body.bloque { overflow: hidden; }
+
+/* Photo de la page Qui sommes-nous */
+.photo-apropos { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.photo-apropos img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 55%; border-radius: 10px; background: var(--kraft); }
+.photo-apropos figcaption { font-size: 13px; color: var(--terre); }

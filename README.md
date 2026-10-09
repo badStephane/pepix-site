@@ -45,3 +45,5 @@ Hébergé sur Netlify (site statique, pas d'étape de build, voir `netlify.toml`
 ## Crédits
 
 Vidéo de l'accueil : « Seedlings growing from the starting tray », Frank Meriño, [Pexels](https://www.pexels.com/video/seedlings-growing-from-the-starting-tray-8459699/) (licence Pexels, utilisation gratuite).
+
+Photo de la page Qui sommes-nous : « A small plant sprouting from the soil », Nikolett Emmert, [Pexels](https://www.pexels.com/photo/a-small-plant-sprouting-from-the-soil-17497507/).
