@@ -122,16 +122,18 @@ function notifier(texte) {
 
 /* ---------- Cartes produit (accueil et boutique) ---------- */
 function carteProduit(p, avecLivraison) {
-  // Toute la carte est cliquable grâce au bouton du titre (étendu en CSS),
-  // sans imbriquer deux boutons l'un dans l'autre.
+  // Carte façon sachet : photo, nom, variété, repères de culture, prix.
+  // Toute la carte ouvre la fiche grâce au bouton du titre (étendu en CSS).
   return `
-    <article class="carte apparait" data-id="${p.id}">
-      <div class="carte-image photo-${p.id}" role="img" aria-label="Sachet de semences ${p.nom} Pépix"><span class="voir" aria-hidden="true">Voir la fiche</span></div>
+    <article class="carte" data-id="${p.id}">
+      <div class="carte-image photo-${p.id}" role="img" aria-label="Sachet de semences ${p.nom} Pépix"></div>
       <div class="carte-corps">
-        <span class="origine">Semences Pépix</span>
         <h3><button type="button" class="carte-ouvrir" data-ouvrir="${p.id}" aria-label="${p.nom}, voir la fiche">${p.nom}</button></h3>
-        <span class="variete">Variété ${p.variete} · 5 g</span>
-        ${avecLivraison ? `<span class="livraison">${icone('camion')}Livraison 24–48 h à Dakar</span>` : ''}
+        <span class="variete">${p.variete}, sachet de 5 g</span>
+        <dl class="carte-reperes">
+          <div><dt>Semis</dt><dd>${p.semis.replace(' (pépinière)', '')}</dd></div>
+          <div><dt>Cycle</dt><dd>${p.cycle}</dd></div>
+        </dl>
         <div class="carte-pied">
           <strong>${prix(p.prix)} FCFA</strong>
           <button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter</button>
@@ -173,14 +175,14 @@ function afficherCalendrier(conteneur) {
   const phrase = [
     aSemer.length ? `à semer : ${aSemer.join(', ')}` : '',
     aRecolter.length ? `à récolter : ${aRecolter.join(', ')}` : '',
-  ].filter(Boolean).join(' · ') || 'période de repos pour ces cultures';
+  ].filter(Boolean).join(', et ') || 'période de repos pour ces cultures';
   html += `<p class="cal-note"><b>En ${MOIS_LONGS[ceMois]}</b>, ${phrase}.</p>`;
   conteneur.insertAdjacentHTML('beforeend', html);
 }
 
 function afficherFiches(conteneur) {
   conteneur.innerHTML = PRODUITS.map(p => `
-    <article class="fiche apparait" id="fiche-${p.id}">
+    <article class="fiche" id="fiche-${p.id}">
       <div class="fiche-haut">
         <div>
           <span class="fiche-vignette photo-${p.id}" aria-hidden="true"></span>
@@ -194,7 +196,7 @@ function afficherFiches(conteneur) {
       </div>
       <ol>${p.conseils.map(c => `<li>${c}</li>`).join('')}</ol>
       <div class="fiche-pied">
-        <strong>Sachet 5 g · ${prix(p.prix)} FCFA</strong>
+        <strong>Sachet de 5 g, ${prix(p.prix)} FCFA</strong>
         <button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter au panier</button>
       </div>
     </article>`).join('');
@@ -216,17 +218,17 @@ function ouvrirFiche(id) {
     <div class="modale-image photo-${p.id}" role="img" aria-label="Sachet de semences ${p.nom} Pépix"></div>
     <div class="modale-corps">
       <div class="modale-haut">
-        <span class="origine">Semences Pépix</span>
+        <span class="variete">Sachet Pépix</span>
         <button type="button" class="btn-rond" data-fermer aria-label="Fermer">${icone('x')}</button>
       </div>
       <h2 id="fiche-titre">${p.nom}</h2>
-      <span class="variete">Variété ${p.variete} · sachet 5 g</span>
+      <span class="variete">Variété ${p.variete}, sachet de 5 g</span>
       <div class="reperes">
         <div class="repere"><span>Semis</span><b>${p.semis}</b></div>
         <div class="repere"><span>Cycle</span><b>${p.cycle}</b></div>
         <div class="repere"><span>Espacement</span><b>${p.espacement}</b></div>
       </div>
-      <span class="livraison">${icone('camion')}Livraison 24–48 h à Dakar</span>
+      <span class="livraison">Livré en 24 à 48 h à Dakar</span>
       <a class="modale-lien" href="conseils.html#fiche-${p.id}">Voir la fiche de culture complète</a>
       <div class="modale-actions">
         <div class="quantite" role="group" aria-label="Quantité">
@@ -234,7 +236,7 @@ function ouvrirFiche(id) {
           <strong id="fiche-qte" aria-live="polite">1</strong>
           <button type="button" data-plus aria-label="Augmenter la quantité">${icone('plus')}</button>
         </div>
-        <button type="button" class="btn btn-vert" data-valider>Ajouter · <span id="fiche-total">${prix(p.prix)}</span>&nbsp;FCFA</button>
+        <button type="button" class="btn btn-vert" data-valider>Ajouter pour <span id="fiche-total">${prix(p.prix)}</span>&nbsp;FCFA</button>
       </div>
     </div>`;
   ouvrir('#voile-fiche');
@@ -256,7 +258,7 @@ function afficherPanier() {
     zone.innerHTML = `
       <div class="panier-message" tabindex="-1" id="confirmation">
         <span class="grand-icone ok">${icone('check')}</span>
-        <strong>Merci ${c.nom.split(' ')[0]} !</strong>
+        <strong>Jërëjëf, ${c.nom.split(' ')[0]} !</strong>
         <span>Votre commande <b>${c.numero}</b> est enregistrée. Nous vous appelons au ${c.tel} pour confirmer la livraison.</span>
         <div class="recap">
           <div><span>Articles</span><span>${c.articles}</span></div>
@@ -289,8 +291,8 @@ function afficherPanier() {
       <div><span>Livraison</span><span>${prix(FRAIS_LIVRAISON)} FCFA</span></div>
       <div class="total"><span>Total</span><span>${prix(st + FRAIS_LIVRAISON)} FCFA</span></div>
       ${vuePanier === 'lignes'
-        ? `<button type="button" class="btn btn-sombre" data-etape-formulaire>Commander ${icone('fleche')}</button>
-           <small>Wave · Orange Money · Paiement à la livraison</small>`
+        ? `<button type="button" class="btn btn-sombre" data-etape-formulaire>Commander</button>
+           <small>Wave, Orange Money ou paiement à la livraison</small>`
         : `<button type="submit" form="form-commande" class="btn btn-sombre">Confirmer la commande</button>`}
     </div>`;
 
@@ -335,7 +337,7 @@ function afficherPanier() {
         <div class="ligne">
           <div class="ligne-info">
             <span class="ligne-vignette photo-${p.id}" aria-hidden="true"></span>
-            <div><strong>${p.nom}</strong><span>${p.variete} · ${prix(p.prix)} F</span></div>
+            <div><strong>${p.nom}</strong><span>${p.variete}, ${prix(p.prix)} F</span></div>
           </div>
           <div class="ligne-qte">
             <button type="button" data-retirer="${p.id}" aria-label="Retirer un ${p.nom}">${icone('moins')}</button>
@@ -443,16 +445,29 @@ function ouvrirPanier() {
   ouvrir('#voile-panier');
 }
 
-/* ---------- Apparition douce des blocs au défilement ---------- */
-function animerApparitions() {
-  // Pas d'animation si le visiteur a demandé à réduire les mouvements : tout reste visible
-  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.documentElement.classList.add('js-anim');
-  const blocs = document.querySelectorAll('.apparait');
-  const obs = new IntersectionObserver(entrees => {
-    entrees.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
-  }, { rootMargin: '0px 0px -8% 0px' });
-  blocs.forEach(b => obs.observe(b));
+/* ---------- Almanach de l'accueil : le mois en cours ---------- */
+function almanach() {
+  const zone = $('#almanach-mois');
+  if (!zone) return;
+  const m = new Date().getMonth();
+  const aSemer = PRODUITS.filter(p => CALENDRIER[p.id].s.includes(m)).map(p => p.nom.toLowerCase());
+  const aRecolter = PRODUITS.filter(p => CALENDRIER[p.id].r.includes(m)).map(p => p.nom.toLowerCase());
+  const liste = l => l.length > 1 ? l.slice(0, -1).join(', ') + ' et ' + l[l.length - 1] : l[0];
+  zone.textContent = MOIS_LONGS[m][0].toUpperCase() + MOIS_LONGS[m].slice(1);
+  if (m === 9) return; // octobre : le texte écrit dans la page convient
+  const titre = $('#almanach-titre'), detail = $('#almanach-detail');
+  if (aSemer.length) {
+    titre.textContent = `C'est le moment de semer : ${liste(aSemer)}.`;
+    detail.textContent = aRecolter.length
+      ? `Et côté récolte : ${liste(aRecolter)}. Les dates précises sont sur chaque fiche.`
+      : 'Semez en pépinière à l\'ombre, puis repiquez 4 à 8 semaines plus tard selon l\'espèce.';
+  } else if (aRecolter.length) {
+    titre.textContent = `Le temps des récoltes : ${liste(aRecolter)}.`;
+    detail.textContent = 'Les prochains semis reprennent en octobre. Profitez-en pour préparer et amender vos planches.';
+  } else {
+    titre.textContent = 'Hivernage : on prépare la prochaine saison.';
+    detail.textContent = 'Les semis de saison sèche reprennent en octobre. Commandez vos sachets en septembre pour être prêt.';
+  }
 }
 
 /* ---------- Vidéo en fond de l'accueil ---------- */
@@ -568,6 +583,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   majCompteur();
-  animerApparitions();
+  almanach();
   videoHeros();
 });
