@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pépix · Semences maraîchères au Sénégal</title>
-  <meta name="description" content="Semences d'oignon, tomate, chou et piment en sachets refermables, livrées au Sénégal avec des conseils de culture.">
+  <title>Pépix, semences maraîchères au Sénégal</title>
+  <meta name="description" content="Semences d'oignon, tomate, chou et piment en sachets de 5 g, livrées à Dakar en 24 à 48 h, avec un guide de culture.">
   <meta name="theme-color" content="#1B3A22">
-  <meta property="og:title" content="Pépix · Semences maraîchères au Sénégal">
-  <meta property="og:description" content="Semences d'oignon, tomate, chou et piment en sachets refermables, livrées au Sénégal avec des conseils de culture.">
+  <meta property="og:title" content="Pépix, semences maraîchères au Sénégal">
+  <meta property="og:description" content="Semences d'oignon, tomate, chou et piment en sachets de 5 g, livrées à Dakar en 24 à 48 h, avec un guide de culture.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="img/piment.webp">
   <link rel="icon" href="img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
 </head>
@@ -36,86 +36,63 @@
 
   <main id="contenu" tabindex="-1">
 
-    <!-- Héros avec vidéo en fond (lancée par js/main.js, sauf si le visiteur réduit les animations) -->
+    <!-- Accueil : vidéo de pépinière en fond, texte dans un bandeau vert comme l'étiquette du sachet -->
     <section class="heros-video" aria-labelledby="t-heros">
       <video class="heros-fond" muted loop playsinline preload="none" poster="img/pepinieres-poster.webp" aria-hidden="true" tabindex="-1">
         <source src="video/pepinieres.webm" type="video/webm">
         <source src="video/pepinieres.mp4" type="video/mp4">
       </video>
-      <div class="heros-voile" aria-hidden="true"></div>
-      <div class="conteneur heros-grille">
-        <div class="heros-texte">
-          <span class="badge"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>Nouveau · Sachets Pépix</span>
-          <h1 id="t-heros">Tout commence par une <span class="or">graine.</span></h1>
-          <p>Nos propres semences d'oignon, tomate, chou et piment, conditionnées en sachets refermables avec un guide de culture.</p>
-          <div class="boutons">
-            <a class="btn btn-jaune" href="boutique.html">Voir la boutique <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            <a class="btn btn-contour" href="conseils.html">Conseils de culture</a>
-          </div>
-          <div class="confiance">
-            <span><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Dès 1 200 FCFA le sachet</span>
-            <span><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Wave, Orange Money ou à la livraison</span>
+      <div class="conteneur heros-cadre">
+        <div class="etiquette">
+          <h1 id="t-heros">Tout commence par une <span class="jaune">graine.</span></h1>
+          <p>Oignon, tomate, chou et piment en sachets de 5 g. Livrés à Dakar en 24 à 48 h, avec la fiche de culture.</p>
+          <div class="etiquette-actions">
+            <a class="btn btn-jaune" href="boutique.html">Voir les semences</a>
+            <a class="lien-clair" href="conseils.html">Calendrier de semis</a>
           </div>
         </div>
-        <a class="heros-sachet" href="boutique.html" aria-label="Voir le sachet Piment Super Cayenne dans la boutique">
-          <span class="heros-sachet-photo"></span>
-          <span class="heros-sachet-info"><b>Piment Super Cayenne</b><span>Sachet 5 g · 1 500 FCFA</span></span>
-        </a>
       </div>
       <button type="button" class="video-bouton" aria-pressed="false" aria-label="Mettre la vidéo en pause" hidden></button>
       <small class="video-credit">Vidéo : Frank Meriño, Pexels</small>
     </section>
 
-    <!-- Nos promesses -->
-    <section class="conteneur apparait promesses-zone" aria-label="Nos engagements">
-      <div class="promesses">
-        <div><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><strong>Germination testée</strong><span>Chaque lot est contrôlé avant mise en sachet.</span></div>
-        <div><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></span><strong>Livraison rapide</strong><span>24–48 h à Dakar, 3–5 jours en région.</span></div>
-        <div><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg></span><strong>Guide inclus</strong><span>Un QR code sur chaque sachet.</span></div>
-      </div>
+    <!-- Ce qu'on promet, dit simplement -->
+    <section class="conteneur declaration">
+      <p>Chaque lot est mis à germer avant d'être ensaché.
+      Au dos du sachet, un QR code ouvre la fiche de culture de la variété.</p>
     </section>
 
-    <!-- Produits (générés par js/main.js) -->
+    <!-- Les quatre sachets (générés par js/main.js) -->
     <section class="conteneur section" aria-labelledby="t-semences">
       <div class="section-titre">
-        <h2 id="t-semences">Nos semences</h2>
-        <a class="btn-lien" href="boutique.html">Tout voir <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <h2 id="t-semences">Quatre semences pour la saison sèche</h2>
+        <a class="lien" href="boutique.html">Toute la boutique</a>
       </div>
       <div class="produits" id="produits-accueil"></div>
     </section>
 
-    <!-- Comment ça marche -->
-    <section class="bande-sable" aria-labelledby="t-marche">
-      <div class="conteneur">
-        <h2 class="titre" id="t-marche" style="font-size:36px">Comment ça marche</h2>
-        <ol class="etapes" style="list-style:none;margin:0;padding:0">
-          <li class="etape apparait"><span class="numero" aria-hidden="true">1</span><strong>Choisissez</strong><span>Sélectionnez vos semences et la quantité adaptée à votre parcelle.</span></li>
-          <li class="etape apparait"><span class="numero" aria-hidden="true">2</span><strong>Payez simplement</strong><span>Wave, Orange Money ou paiement à la livraison.</span></li>
-          <li class="etape apparait"><span class="numero" aria-hidden="true">3</span><strong>Recevez en 24–48 h</strong><span>Livraison rapide à Dakar, 3–5 jours en région.</span></li>
-          <li class="etape apparait"><span class="numero" aria-hidden="true">4</span><strong>Cultivez</strong><span>Suivez la fiche de culture et posez vos questions sur WhatsApp.</span></li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- Conseil du moment -->
-    <section class="conteneur grille-2 conseil">
-      <div class="conseil-texte apparait">
-        <span class="surtitre">Conseil du moment</span>
-        <h2>Octobre : lancez vos pépinières de saison sèche.</h2>
-        <p>Oignon, tomate, chou et piment se sèment tous en pépinière à partir d'octobre. Préparez vos planches à l'ombre et repiquez 4 à 8 semaines plus tard selon l'espèce.</p>
-        <a class="btn-lien" href="conseils.html">Voir le calendrier de semis <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      </div>
-      <div class="illustration apparait"><svg viewBox="0 0 400 300" role="img" aria-label="Illustration : planches de pépinière sous une ombrière, au lever du soleil"><defs><linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7E6B0"/><stop offset="1" stop-color="#FAF6EC"/></linearGradient></defs><rect width="400" height="300" fill="url(#ciel)"/><circle cx="312" cy="92" r="38" fill="#F2B817"/><path d="M0 190 C80 170 150 182 220 172 C290 162 340 170 400 160 V300 H0Z" fill="#E8DEC6"/><g stroke="#5B3F26" stroke-width="5" stroke-linecap="round"><path d="M60 120 V232"/><path d="M340 120 V232"/></g><path d="M40 112 H360 L350 128 H50Z" fill="#1B3A22" opacity=".85"/><g stroke="#FAF6EC" stroke-width="1.2" opacity=".35"><path d="M50 113 V127"/><path d="M70 113 V127"/><path d="M90 113 V127"/><path d="M110 113 V127"/><path d="M130 113 V127"/><path d="M150 113 V127"/><path d="M170 113 V127"/><path d="M190 113 V127"/><path d="M210 113 V127"/><path d="M230 113 V127"/><path d="M250 113 V127"/><path d="M270 113 V127"/><path d="M290 113 V127"/><path d="M310 113 V127"/><path d="M330 113 V127"/><path d="M350 113 V127"/></g><path d="M50 128 H350 L380 236 H20Z" fill="#1B3A22" opacity=".06"/><rect x="38" y="196" width="324" height="18" rx="9" fill="#7A5638"/><rect x="38" y="196" width="324" height="7" rx="3.5" fill="#8E6644"/><rect x="44" y="226" width="312" height="18" rx="9" fill="#7A5638"/><rect x="44" y="226" width="312" height="7" rx="3.5" fill="#8E6644"/><rect x="50" y="256" width="300" height="18" rx="9" fill="#7A5638"/><rect x="50" y="256" width="300" height="7" rx="3.5" fill="#8E6644"/><g transform="translate(62 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(92 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(122 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(152 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(182 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(212 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(242 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(272 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(302 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(332 200) scale(0.9)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(74 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(104 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(134 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(164 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(194 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(224 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(254 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(284 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(314 230) scale(1.02)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(62 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(92 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(122 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(152 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(182 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(212 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(242 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(272 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(302 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(332 260) scale(1.1400000000000001)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g></svg></div>
-    </section>
-
-    <!-- WhatsApp -->
-    <section class="conteneur apparait" style="padding-bottom:64px">
-      <div class="whatsapp">
-        <div>
-          <h2>Une question sur vos cultures ?</h2>
-          <span>Notre équipe vous répond sur WhatsApp, en français et en wolof.</span>
+    <!-- Almanach : le mois en cours, calculé par js/main.js -->
+    <section class="almanach">
+      <div class="conteneur almanach-grille">
+        <p class="almanach-mois" id="almanach-mois">Octobre</p>
+        <div class="almanach-texte">
+          <h2 id="almanach-titre">Lancez vos pépinières de saison sèche.</h2>
+          <p id="almanach-detail">Oignon, tomate, chou et piment se sèment tous en pépinière à partir d'octobre. Préparez vos planches à l'ombre et repiquez 4 à 8 semaines plus tard selon l'espèce.</p>
+          <a class="lien" href="conseils.html">Voir le calendrier complet</a>
         </div>
-        <a class="btn btn-jaune" href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Écrire sur WhatsApp</a>
+      </div>
+    </section>
+
+    <!-- Commander -->
+    <section class="conteneur commander">
+      <div>
+        <h2>Commander</h2>
+        <p>Ajoutez vos sachets au panier, laissez votre numéro et votre quartier. On vous appelle pour confirmer, puis on livre : 24 à 48 h à Dakar, 3 à 5 jours en région. Vous payez par Wave, Orange Money ou en espèces à la livraison.</p>
+      </div>
+      <div>
+        <h2>Une question sur vos cultures ?</h2>
+        <p>L'équipe répond sur WhatsApp, en français et en wolof.</p>
+        <a class="btn btn-sombre" href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener">Écrire sur WhatsApp</a>
       </div>
     </section>
   </main>
@@ -126,7 +103,7 @@
       <div class="pied-marque">
         <strong>PÉPIX</strong>
         <span>Tout commence par une <span class="jaune">graine.</span></span>
-        <p>Semences maraîchères en sachets refermables, avec un guide de culture, livrées partout au Sénégal.</p>
+        <p>Semences maraîchères en sachets de 5 g, testées en germination, livrées partout au Sénégal.</p>
       </div>
       <div>
         <h2>Le site</h2>
@@ -135,15 +112,15 @@
       <div>
         <h2>Contact</h2>
         <ul>
-          <li><span><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Dakar, Sénégal</span></li>
-          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>WhatsApp</a></li>
-          <li><a href="mailto:contact@pepix.sn"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>contact@pepix.sn</a></li>
+          <li><span>Dakar, Sénégal</span></li>
+          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="mailto:contact@pepix.sn">contact@pepix.sn</a></li>
         </ul>
       </div>
     </div>
     <div class="conteneur pied-bas">
-      <span>© 2026 Pépix · Projet d'école, site de démonstration</span>
-      <span>Wave · Orange Money · Paiement à la livraison</span>
+      <span>© 2026 Pépix. Projet d'école, site de démonstration.</span>
+      <span>Paiement par Wave, Orange Money ou à la livraison</span>
     </div>
   </footer>
 

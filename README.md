@@ -18,7 +18,7 @@ Site vitrine et boutique de démonstration pour Pépix, une marque de semences m
 
 ## Fonctionnalités
 
-- Accueil avec une vidéo en fond (jeunes plants en pépinière). Bouton pause, pause automatique quand l'accueil sort de l'écran, et image fixe à la place si le visiteur réduit les animations ou économise ses données.
+- Accueil avec une vidéo de pépinière en fond et le texte dans un bandeau vert inspiré du sachet. Bouton pause, pause automatique quand l'accueil sort de l'écran, et image fixe à la place si le visiteur réduit les animations ou économise ses données.
 - Navigation entre les 4 pages, en-tête fixe, page 404 personnalisée.
 - Fiche produit en fenêtre (clic sur une carte), choix de la quantité, lien vers la fiche de culture.
 - Panier en tiroir : ajout, retrait, sous-total, livraison, total. Le bouton « Ajouter » confirme l'ajout et une notification propose d'ouvrir le panier.
