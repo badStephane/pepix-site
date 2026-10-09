@@ -598,3 +598,21 @@ body.bloque { overflow: hidden; }
   .bandeau h2 { max-width: 56vw; }
   .bandeau-texte p { max-width: 48vw; }
 }
+
+/* ---------- Photos sans déformation sur tous les écrans ---------- */
+/* Qui sommes-nous : la photo garde son format d'origine (3:2), rien n'est étiré */
+.photo-apropos { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.photo-apropos img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 10px; background: var(--kraft); }
+.photo-apropos figcaption { font-size: 13px; color: var(--terre); }
+
+/* Accueil mobile : la vidéo occupe seulement la partie visible au-dessus de l'étiquette,
+   au format paysage, au lieu d'être zoomée en plein écran derrière le texte */
+@media (max-width: 720px) {
+  .heros-video { flex-direction: column; align-items: stretch; padding-top: 0; }
+  .heros-fond { position: relative; inset: auto; z-index: 0; flex: 1 1 auto; height: auto; min-height: 190px; object-position: 50% 60%; }
+  .heros-cadre { margin-top: -22px; }
+}
+/* Tablette : hauteur du héros proche du format de la vidéo (16:9), moins de recadrage */
+@media (min-width: 721px) and (max-width: 1100px) {
+  .heros-video { min-height: min(calc(56.25vw + 140px), 84vh); }
+}
