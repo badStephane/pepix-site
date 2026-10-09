@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pépix · Semences maraîchères au Sénégal</title>
+  <meta name="description" content="Semences d'oignon, tomate, chou et piment en sachets refermables, livrées au Sénégal avec des conseils de culture.">
+  <link rel="icon" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- En-tête (identique sur toutes les pages) -->
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html" aria-label="Accueil Pépix"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <nav class="menu" aria-label="Navigation principale">
+        <a href="index.html" aria-current="page">Accueil</a>
+        <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+        <a href="conseils.html">Conseils</a>
+        <a href="boutique.html">Boutique</a>
+      </nav>
+      <button class="btn-panier" aria-label="Panier, 0 article">Panier<span class="compteur">0</span></button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Héros -->
+    <section class="conteneur grille-2 heros">
+      <div class="heros-texte">
+        <span class="badge">Nouveau · Sachets Pépix</span>
+        <h1>Tout commence par une <span>graine.</span></h1>
+        <p>Nos propres semences d'oignon, tomate, chou et piment, conditionnées en sachets refermables avec un guide de culture.</p>
+        <div class="boutons">
+          <a class="btn btn-vert" href="boutique.html">Voir la boutique</a>
+          <a class="btn btn-contour" href="conseils.html">Conseils de culture</a>
+        </div>
+      </div>
+      <div class="heros-image" role="img" aria-label="Sachet de semences de piment Pépix"></div>
+    </section>
+
+    <!-- Nos promesses -->
+    <section class="conteneur" style="padding-bottom:24px">
+      <div class="promesses">
+        <div><strong>Germination testée</strong><span>Chaque lot est contrôlé avant mise en sachet.</span></div>
+        <div><strong>Livraison rapide</strong><span>24–48 h à Dakar, 3–5 jours en région.</span></div>
+        <div><strong>Guide inclus</strong><span>Un QR code sur chaque sachet.</span></div>
+      </div>
+    </section>
+
+    <!-- Produits (générés par js/main.js) -->
+    <section class="conteneur section">
+      <div class="section-titre">
+        <h2>Nos semences</h2>
+        <a class="btn-lien" href="boutique.html">Tout voir →</a>
+      </div>
+      <div class="produits" id="produits-accueil"></div>
+    </section>
+
+    <!-- Comment ça marche -->
+    <section class="bande-sable">
+      <div class="conteneur">
+        <h2 class="titre" style="font-size:36px">Comment ça marche</h2>
+        <div class="etapes">
+          <div class="etape"><span class="numero">1</span><strong>Choisissez</strong><span>Sélectionnez vos semences et la quantité adaptée à votre parcelle.</span></div>
+          <div class="etape"><span class="numero">2</span><strong>Payez simplement</strong><span>Wave, Orange Money ou paiement à la livraison.</span></div>
+          <div class="etape"><span class="numero">3</span><strong>Recevez en 24–48 h</strong><span>Livraison rapide à Dakar, 3–5 jours en région.</span></div>
+          <div class="etape"><span class="numero">4</span><strong>Cultivez</strong><span>Suivez la fiche de culture et posez vos questions sur WhatsApp.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conseil du moment -->
+    <section class="conteneur grille-2 conseil">
+      <div class="conseil-texte">
+        <span class="surtitre">Conseil du moment</span>
+        <h2>Octobre : lancez vos pépinières de saison sèche.</h2>
+        <p>Oignon, tomate, chou et piment se sèment tous en pépinière à partir d'octobre. Préparez vos planches à l'ombre et repiquez 4 à 8 semaines plus tard selon l'espèce.</p>
+        <a class="btn-lien" href="conseils.html">Voir le calendrier de semis →</a>
+      </div>
+      <div class="photo-attente"><span>photo : pépinière</span></div>
+    </section>
+
+    <!-- WhatsApp -->
+    <section class="conteneur" style="padding-bottom:64px">
+      <div class="whatsapp">
+        <div>
+          <h2>Une question sur vos cultures ?</h2>
+          <span>Notre équipe vous répond sur WhatsApp, en français et en wolof.</span>
+        </div>
+        <a class="btn btn-jaune" href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pied de page -->
+  <footer class="pied">
+    <div class="conteneur">
+      <div><strong>PÉPIX</strong><span>Tout commence par une <span class="jaune">graine.</span></span></div>
+      <div class="infos"><span>www.pepix.sn</span><span>Dakar, Sénégal</span></div>
+    </div>
+  </footer>
+
+</body>
+</html>

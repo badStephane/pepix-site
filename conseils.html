@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conseils de culture · Pépix</title>
+  <meta name="description" content="Calendrier de semis et de récolte, fiches de culture pour l'oignon, la tomate, le chou et le piment.">
+  <link rel="icon" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- En-tête (identique sur toutes les pages) -->
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html" aria-label="Accueil Pépix"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <nav class="menu" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+        <a href="conseils.html" aria-current="page">Conseils</a>
+        <a href="boutique.html">Boutique</a>
+      </nav>
+      <button class="btn-panier" aria-label="Panier, 0 article">Panier<span class="compteur">0</span></button>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="conteneur intro">
+      <span class="surtitre">Conseils</span>
+      <h1 class="grand-titre">Fiches de culture</h1>
+      <p style="max-width:620px">Les repères essentiels pour réussir chaque culture. Le QR code de chaque sachet renvoie vers la fiche correspondante.</p>
+    </section>
+
+    <!-- Calendrier (lignes générées par js/main.js) -->
+    <section class="conteneur" style="padding-top:24px;padding-bottom:16px">
+      <div class="calendrier" id="calendrier">
+        <div class="calendrier-haut">
+          <h2>Calendrier de semis et de récolte</h2>
+          <div class="legende">
+            <span><i style="background:#3D7322;color:#fff">S</i>Semis</span>
+            <span><i style="background:#F2B817">R</i>Récolte</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="conteneur bases">
+      <div class="base"><strong>Préparer le sol</strong><span>Ameublir sur 25–30 cm, retirer les cailloux et incorporer du fumier bien décomposé deux semaines avant le semis.</span></div>
+      <div class="base"><strong>Réussir la pépinière</strong><span>Semer en planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer en fin de journée.</span></div>
+      <div class="base"><strong>Arroser au bon moment</strong><span>Tôt le matin ou en fin d'après-midi, au pied des plants. Pailler pour limiter l'évaporation.</span></div>
+    </section>
+
+    <section class="conteneur" style="padding-top:24px">
+      <h2 class="titre" style="font-size:32px">Par culture</h2>
+    </section>
+    <section class="conteneur fiches" id="fiches"></section>
+
+    <section class="conteneur faq">
+      <h2>Questions fréquentes</h2>
+      <div class="faq-liste">
+        <details><summary>Combien de plants avec un sachet de 5 g ?</summary><p>Selon l'espèce : environ 1 000 plants pour la tomate et le piment, davantage pour l'oignon. Le détail figure sur chaque fiche.</p></details>
+        <details><summary>Comment conserver les graines restantes ?</summary><p>Dans le sachet refermé, au sec, à l'abri de la lumière et de la chaleur.</p></details>
+        <details><summary>Livrez-vous en dehors de Dakar ?</summary><p>Oui, dans toutes les régions en 3 à 5 jours.</p></details>
+        <details><summary>Puis-je commander en grande quantité ?</summary><p>Oui. Contactez-nous sur WhatsApp pour un tarif producteur.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pied de page -->
+  <footer class="pied">
+    <div class="conteneur">
+      <div><strong>PÉPIX</strong><span>Tout commence par une <span class="jaune">graine.</span></span></div>
+      <div class="infos"><span>www.pepix.sn</span><span>Dakar, Sénégal</span></div>
+    </div>
+  </footer>
+
+</body>
+</html>
