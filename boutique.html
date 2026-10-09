@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boutique · Pépix</title>
+  <meta name="description" content="Achetez nos semences maraîchères en sachets de 5 g : oignon, tomate, chou et piment.">
+  <link rel="icon" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- En-tête (identique sur toutes les pages) -->
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html" aria-label="Accueil Pépix"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <nav class="menu" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+        <a href="conseils.html">Conseils</a>
+        <a href="boutique.html" aria-current="page">Boutique</a>
+      </nav>
+      <button class="btn-panier" aria-label="Panier, 0 article">Panier<span class="compteur">0</span></button>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="conteneur boutique-intro">
+      <div>
+        <span class="surtitre">Boutique</span>
+        <h1 class="grand-titre">Semences maraîchères</h1>
+      </div>
+      <div class="note">Semences conditionnées par Pépix. Livraison 24–48 h à Dakar.</div>
+    </section>
+
+    <section class="conteneur" style="padding-top:24px;padding-bottom:64px">
+      <!-- Cartes générées par js/main.js -->
+      <div class="produits" id="produits-boutique"></div>
+      <div class="paiements">
+        <b>Paiement :</b>
+        <span>Wave</span><span>Orange Money</span><span>Paiement à la livraison</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pied de page -->
+  <footer class="pied">
+    <div class="conteneur">
+      <div><strong>PÉPIX</strong><span>Tout commence par une <span class="jaune">graine.</span></span></div>
+      <div class="infos"><span>www.pepix.sn</span><span>Dakar, Sénégal</span></div>
+    </div>
+  </footer>
+
+</body>
+</html>
