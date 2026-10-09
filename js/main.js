@@ -482,6 +482,11 @@ function videoHeros() {
   majBouton();
   if (voulue) lire();
 
+  // Reprend la lecture quand on revient sur l'onglet (le navigateur la met en pause en arrière-plan)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && voulue) lire();
+  });
+
   // Met la vidéo en pause quand l'accueil n'est plus à l'écran (économise la batterie)
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([en]) => {
