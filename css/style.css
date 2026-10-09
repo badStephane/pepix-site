@@ -20,7 +20,7 @@
   --filet: #D9CCAF;
   --erreur: #B3261E;
 
-  --titre: 'Fredoka', sans-serif;
+  --titre: 'Nunito Sans', system-ui, sans-serif;
   --corps: 'Nunito Sans', sans-serif;
 
   --rapide: 160ms;
@@ -67,7 +67,7 @@ p { margin: 0; }
 
 .conteneur { max-width: 1180px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 
-h1, h2, h3, .titre { font-family: var(--titre); font-weight: 600; margin: 0; line-height: 1.08; }
+h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; line-height: 1.08; letter-spacing: -0.015em; }
 .grand-titre { font-size: clamp(38px, 5.4vw, 58px); line-height: 1.02; text-wrap: balance; max-width: 16ch; }
 .jaune { color: var(--jaune); }
 
@@ -176,7 +176,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 600; margin: 0; lin
 /* ---------- Accueil : déclaration ---------- */
 .declaration { padding-top: 72px; padding-bottom: 24px; }
 .declaration p {
-  font-family: var(--titre); font-weight: 500; font-size: clamp(22px, 2.8vw, 32px); line-height: 1.3;
+  font-family: var(--titre); font-weight: 700; font-size: clamp(22px, 2.8vw, 32px); line-height: 1.3;
   max-width: 28em; text-wrap: pretty;
 }
 
@@ -205,7 +205,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 600; margin: 0; lin
 .carte-reperes dt { color: var(--terre); }
 .carte-reperes dd { margin: 0; font-weight: 700; line-height: 1.3; }
 .carte-pied { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 14px; gap: 8px; }
-.carte-pied strong { font-family: var(--titre); font-weight: 600; font-size: clamp(17px, 3vw, 20px); white-space: nowrap; }
+.carte-pied strong { font-family: var(--titre); font-weight: 800; font-size: clamp(17px, 3vw, 20px); white-space: nowrap; }
 .carte-pied .btn { position: relative; z-index: 1; flex: 1 0 auto; min-height: 44px; padding: 10px 14px; font-size: 14px; }
 .btn.ajoute { background: var(--vert); color: #fff; }
 @media (max-width: 520px) { .carte-reperes { grid-template-columns: 1fr; } }
@@ -220,7 +220,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 600; margin: 0; lin
 .almanach { background: var(--kraft); }
 .almanach-grille { padding-top: 64px; padding-bottom: 64px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 56px; align-items: end; }
 .almanach-mois {
-  font-family: var(--titre); font-weight: 600; font-size: clamp(64px, 10vw, 150px); line-height: .82;
+  font-family: var(--titre); font-weight: 800; font-size: clamp(64px, 10vw, 150px); line-height: .82;
   color: var(--vert-fonce); letter-spacing: -.02em;
 }
 .almanach-texte { display: flex; flex-direction: column; gap: 14px; max-width: 34em; }
@@ -337,7 +337,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 600; margin: 0; lin
 .pied-haut { padding-top: 48px; padding-bottom: 32px; display: grid; grid-template-columns: 1.4fr repeat(2, 1fr); gap: 32px; }
 @media (max-width: 720px) { .pied-haut { grid-template-columns: 1fr 1fr; } .pied-marque { grid-column: 1 / -1; } }
 .pied-marque { display: flex; flex-direction: column; gap: 6px; font-size: 15px; }
-.pied-marque strong { font-family: var(--titre); font-size: 28px; font-weight: 600; }
+.pied-marque strong { font-family: var(--titre); font-size: 28px; font-weight: 800; }
 .pied-marque p { margin-top: 6px; opacity: .8; max-width: 320px; line-height: 1.55; font-size: 14px; }
 .pied h2 { font-family: var(--corps); font-size: 15px; font-weight: 700; color: var(--jaune); margin-bottom: 10px; }
 .pied ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; font-size: 15px; }
@@ -394,7 +394,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 600; margin: 0; lin
 .panier-message .grand-icone { width: 64px; height: 64px; border-radius: 50%; background: var(--kraft); color: var(--vert); display: flex; align-items: center; justify-content: center; }
 .panier-message .grand-icone .icone { width: 28px; height: 28px; }
 .panier-message .ok { background: var(--vert); color: #fff; }
-.panier-message strong { font-family: var(--titre); font-weight: 600; font-size: 26px; }
+.panier-message strong { font-family: var(--titre); font-weight: 800; font-size: 26px; }
 .recap { width: 100%; background: var(--blanc); border: 1px solid var(--filet); border-radius: 8px; padding: 14px 16px; text-align: left; font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
 .recap div { display: flex; justify-content: space-between; gap: 12px; }
 .panier-lignes { flex: 1; overflow: auto; padding: 12px 24px; }
@@ -463,7 +463,7 @@ fieldset.champ { border: 0; padding: 0; margin: 0; }
 
 /* ---------- Page 404 ---------- */
 .introuvable { padding-top: 64px; padding-bottom: 96px; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
-.introuvable .code-404 { margin: 0; font-family: Fredoka, sans-serif; font-weight: 600; font-size: clamp(96px, 18vw, 200px); line-height: .9; color: var(--vert); }
+.introuvable .code-404 { margin: 0; font-family: var(--titre); font-weight: 800; font-size: clamp(96px, 18vw, 200px); line-height: .9; color: var(--vert); }
 .introuvable .grand-titre { max-width: none; }
 .introuvable p { color: var(--texte-doux); font-size: 17px; max-width: 460px; }
 
