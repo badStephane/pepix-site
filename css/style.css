@@ -479,3 +479,7 @@ body.bloque { overflow: hidden; }
 .sachet-contenu ul { margin: 0; padding: 0; list-style: none; border-top: 3px solid var(--vert-fonce); }
 .sachet-contenu li { padding: 14px 0; border-bottom: 1px solid var(--filet); font-size: 17px; line-height: 1.55; }
 @media (max-width: 760px) { .sachet-contenu { grid-template-columns: 1fr; } }
+.porteur { padding-bottom: 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 16px 48px; align-items: start; }
+.porteur h2 { font-size: 28px; }
+.porteur p { margin: 0; font-size: 18px; line-height: 1.6; border-left: 3px solid var(--jaune); padding-left: 20px; }
+@media (max-width: 760px) { .porteur { grid-template-columns: 1fr; } }
