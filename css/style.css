@@ -577,3 +577,24 @@ body.bloque { overflow: hidden; }
 .carte-epuisee .carte-image { filter: grayscale(.7); opacity: .75; }
 .epuise-note { margin: 0; padding: 12px 14px; background: var(--kraft); border-radius: 8px; font-size: 15px; }
 .lien-admin { color: inherit; text-decoration: underline; text-underline-offset: 3px; margin-left: 6px; }
+
+/* ---------- Correctifs responsive (audit 320 à 1440 px) ---------- */
+.grille-2 > * { min-width: 0; }
+.photo-apropos img { max-width: 100%; }
+.pied ul a, .pied ul span { min-height: 44px; display: inline-flex; align-items: center; padding: 0; }
+.lien-admin { display: inline-flex; align-items: center; min-height: 44px; }
+.modale-lien { display: inline-flex; align-items: center; min-height: 44px; }
+.legende i { font-size: 11px; }
+/* 4 produits : 2 colonnes, puis 4 dès qu'il y a la place (jamais 3 + 1 orphelin) */
+.produits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 960px) { .produits { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* Tablette : crédit et bouton pause en haut, loin de l'étiquette */
+@media (min-width: 721px) and (max-width: 1100px) {
+  .video-bouton { top: 16px; bottom: auto; right: 16px; }
+  .video-credit { top: 28px; bottom: auto; right: 72px; }
+}
+/* Tablette : le titre du bandeau photo ne passe pas sur la graine */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .bandeau h2 { max-width: 56vw; }
+  .bandeau-texte p { max-width: 48vw; }
+}
