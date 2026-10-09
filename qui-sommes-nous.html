@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Qui sommes-nous · Pépix</title>
   <meta name="description" content="Pépix sélectionne et conditionne des semences maraîchères adaptées au climat du Sénégal.">
+  <meta name="theme-color" content="#1B3A22">
+  <meta property="og:title" content="Qui sommes-nous · Pépix">
+  <meta property="og:description" content="Pépix sélectionne et conditionne des semences maraîchères adaptées au climat du Sénégal.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="img/piment.webp">
   <link rel="icon" href="img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,22 +18,23 @@
   <script src="js/main.js" defer></script>
 </head>
 <body>
+  <a class="evitement" href="#contenu">Aller au contenu</a>
 
   <!-- En-tête (identique sur toutes les pages) -->
   <header class="entete">
     <div class="conteneur">
-      <a class="logo" href="index.html" aria-label="Accueil Pépix"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <a class="logo" href="index.html" aria-label="Pépix, retour à l'accueil"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
       <nav class="menu" aria-label="Navigation principale">
         <a href="index.html">Accueil</a>
         <a href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
         <a href="conseils.html">Conseils</a>
         <a href="boutique.html">Boutique</a>
       </nav>
-      <button class="btn-panier" aria-label="Panier, 0 article">Panier<span class="compteur">0</span></button>
+      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier<span class="compteur">0</span></button>
     </div>
   </header>
 
-  <main>
+  <main id="contenu" tabindex="-1">
 
     <section class="conteneur grille-2 apropos">
       <div class="apropos-texte">
@@ -37,45 +43,64 @@
         <p class="texte-long">Pépix est née d'un constat simple : trouver des graines de qualité, au bon prix et avec les bons conseils, reste difficile pour beaucoup de producteurs. Nous sélectionnons des semences adaptées au climat local et nous accompagnons chaque client de la graine à la récolte.</p>
         <p class="texte-long">Aujourd'hui, nous conditionnons nos propres semences sous la marque Pépix, avec un contrôle de chaque lot.</p>
       </div>
-      <div class="photo-attente"><span>photo : équipe Pépix</span></div>
+      <div class="illustration"><svg viewBox="0 0 400 300" role="img" aria-label="Illustration : une graine devient une pousse puis un plant de tomate"><rect width="400" height="300" fill="#F2EBD9"/><circle cx="330" cy="70" r="30" fill="#F2B817"/><path d="M0 214 H400 V300 H0Z" fill="#7A5638"/><path d="M0 214 H400 V224 H0Z" fill="#8E6644"/><ellipse cx="70" cy="232" rx="11" ry="7" fill="#5B3F26" transform="rotate(-20 70 232)"/><path d="M66 228 q4 2 8 0" stroke="#F2EBD9" stroke-width="1.5" fill="none" opacity=".6"/><g transform="translate(170 214) scale(2.4)"><path d="M0 0 C0 -10 0 -16 0 -22" stroke="#3D7322" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M0 -16 C-10 -22 -16 -18 -16 -12 C-8 -10 -3 -12 0 -16Z" fill="#3D7322"/><path d="M0 -20 C9 -28 16 -24 17 -18 C9 -15 4 -16 0 -20Z" fill="#4F8A2E"/></g><g transform="translate(300 214)"><path d="M0 0 V-110" stroke="#3D7322" stroke-width="4" stroke-linecap="round"/><path d="M0 -40 C-30 -50 -44 -40 -48 -28 C-30 -24 -14 -28 0 -40Z" fill="#3D7322"/><path d="M0 -62 C26 -78 44 -68 48 -54 C28 -50 12 -52 0 -62Z" fill="#4F8A2E"/><path d="M0 -86 C-24 -100 -38 -92 -42 -80 C-24 -76 -10 -78 0 -86Z" fill="#4F8A2E"/><path d="M0 -104 C14 -118 28 -114 30 -104 C18 -98 8 -100 0 -104Z" fill="#3D7322"/><circle cx="-26" cy="-14" r="12" fill="#D9452B"/><circle cx="24" cy="-34" r="10" fill="#D9452B"/><circle cx="-18" cy="-60" r="9" fill="#E8692F"/><path d="M-26 -26 l-4 -4 M-26 -26 l4 -4" stroke="#3D7322" stroke-width="2" stroke-linecap="round"/></g><g stroke="#5B3F26" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 6"><path d="M92 196 C110 170 130 166 148 176"/><path d="M196 170 C220 140 248 136 268 150"/></g><g fill="#5B3F26"><path d="M150 170 l6 8 -10 2z"/><path d="M270 144 l6 8 -10 2z"/></g><g font-family="Fredoka, sans-serif" font-weight="600" font-size="15" fill="#1B3A22" text-anchor="middle"><text x="70" y="270">Graine</text><text x="170" y="270">Pousse</text><text x="300" y="270">Récolte</text></g></svg></div>
     </section>
 
-    <section class="conteneur valeurs">
-      <div class="valeur"><span class="point" style="background:#F2B817"></span><strong>Qualité</strong><span>Des variétés choisies pour leur rendement et leur adaptation au climat.</span></div>
-      <div class="valeur"><span class="point" style="background:#4F8A2E"></span><strong>Accompagnement</strong><span>Des conseils simples, de la pépinière à la récolte.</span></div>
-      <div class="valeur"><span class="point" style="background:#5B3F26"></span><strong>Proximité</strong><span>Une équipe basée au Sénégal, joignable par WhatsApp.</span></div>
+    <section class="conteneur valeurs" aria-label="Nos valeurs">
+      <div class="valeur apparait"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><strong>Qualité</strong><span>Des variétés choisies pour leur rendement et leur adaptation au climat.</span></div>
+      <div class="valeur apparait"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span><strong>Accompagnement</strong><span>Des conseils simples, de la pépinière à la récolte.</span></div>
+      <div class="valeur apparait"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span><strong>Proximité</strong><span>Une équipe basée au Sénégal, joignable par WhatsApp.</span></div>
     </section>
 
-    <section class="conteneur feuille-route">
-      <h2>Notre feuille de route</h2>
+    <section class="conteneur feuille-route" aria-labelledby="t-route">
+      <h2 id="t-route">Notre feuille de route</h2>
       <div class="phases">
-        <div class="phase">
-          <div class="phase-haut"><span>Phase 1</span><span>Terminée</span></div>
+        <div class="phase apparait">
+          <div class="phase-haut"><span>Phase 1</span><span class="etat"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Terminée</span></div>
           <strong>Sélection partenaire</strong>
           <span>Des semences de fournisseurs vérifiés, expédiées directement, avec nos fiches de conseil.</span>
         </div>
-        <div class="phase active">
-          <div class="phase-haut"><span>Phase 2</span><span>En cours</span></div>
+        <div class="phase active apparait">
+          <div class="phase-haut"><span>Phase 2</span><span class="etat"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>En cours</span></div>
           <strong>Gamme Pépix</strong>
           <span>Nos propres sachets refermables, lots contrôlés, guide de culture par QR code.</span>
         </div>
       </div>
     </section>
 
-    <section class="contacts">
+    <section class="contacts" aria-label="Nous contacter">
       <div class="conteneur">
-        <div><span>Adresse</span><strong>Dakar, Sénégal</strong></div>
-        <div><span>WhatsApp</span><strong>+221 00 000 00 00</strong></div>
-        <div><span>E-mail</span><strong>contact@pepix.sn</strong></div>
+        <div class="contact"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span><div><span>Adresse</span><strong>Dakar, Sénégal</strong></div></div>
+        <div class="contact"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span><div><span>WhatsApp</span><strong>+221 00 000 00 00</strong></div></div>
+        <div class="contact"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span><div><span>E-mail</span><strong><a href="mailto:contact@pepix.sn">contact@pepix.sn</a></strong></div></div>
       </div>
     </section>
   </main>
 
   <!-- Pied de page -->
   <footer class="pied">
-    <div class="conteneur">
-      <div><strong>PÉPIX</strong><span>Tout commence par une <span class="jaune">graine.</span></span></div>
-      <div class="infos"><span>www.pepix.sn</span><span>Dakar, Sénégal</span></div>
+    <div class="conteneur pied-haut">
+      <div class="pied-marque">
+        <strong>PÉPIX</strong>
+        <span>Tout commence par une <span class="jaune">graine.</span></span>
+        <p>Semences maraîchères en sachets refermables, avec un guide de culture, livrées partout au Sénégal.</p>
+      </div>
+      <div>
+        <h2>Le site</h2>
+        <ul><li><a href="index.html">Accueil</a></li><li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li><li><a href="conseils.html">Conseils</a></li><li><a href="boutique.html">Boutique</a></li></ul>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><span><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Dakar, Sénégal</span></li>
+          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>WhatsApp</a></li>
+          <li><a href="mailto:contact@pepix.sn"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>contact@pepix.sn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="conteneur pied-bas">
+      <span>© 2026 Pépix · Projet d'école, site de démonstration</span>
+      <span>Wave · Orange Money · Paiement à la livraison</span>
     </div>
   </footer>
 

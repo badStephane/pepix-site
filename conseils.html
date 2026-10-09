@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Conseils de culture · Pépix</title>
   <meta name="description" content="Calendrier de semis et de récolte, fiches de culture pour l'oignon, la tomate, le chou et le piment.">
+  <meta name="theme-color" content="#1B3A22">
+  <meta property="og:title" content="Conseils de culture · Pépix">
+  <meta property="og:description" content="Calendrier de semis et de récolte, fiches de culture pour l'oignon, la tomate, le chou et le piment.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="img/piment.webp">
   <link rel="icon" href="img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,22 +18,23 @@
   <script src="js/main.js" defer></script>
 </head>
 <body>
+  <a class="evitement" href="#contenu">Aller au contenu</a>
 
   <!-- En-tête (identique sur toutes les pages) -->
   <header class="entete">
     <div class="conteneur">
-      <a class="logo" href="index.html" aria-label="Accueil Pépix"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <a class="logo" href="index.html" aria-label="Pépix, retour à l'accueil"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
       <nav class="menu" aria-label="Navigation principale">
         <a href="index.html">Accueil</a>
         <a href="qui-sommes-nous.html">Qui sommes-nous</a>
         <a href="conseils.html" aria-current="page">Conseils</a>
         <a href="boutique.html">Boutique</a>
       </nav>
-      <button class="btn-panier" aria-label="Panier, 0 article">Panier<span class="compteur">0</span></button>
+      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier<span class="compteur">0</span></button>
     </div>
   </header>
 
-  <main>
+  <main id="contenu" tabindex="-1">
 
     <section class="conteneur intro">
       <span class="surtitre">Conseils</span>
@@ -37,45 +43,75 @@
     </section>
 
     <!-- Calendrier (lignes générées par js/main.js) -->
-    <section class="conteneur" style="padding-top:24px;padding-bottom:16px">
+    <section class="conteneur" style="padding-top:24px;padding-bottom:16px" aria-labelledby="t-cal">
       <div class="calendrier" id="calendrier">
         <div class="calendrier-haut">
-          <h2>Calendrier de semis et de récolte</h2>
+          <h2 id="t-cal">Calendrier de semis et de récolte</h2>
           <div class="legende">
             <span><i style="background:#3D7322;color:#fff">S</i>Semis</span>
             <span><i style="background:#F2B817">R</i>Récolte</span>
+            <span><i class="maintenant"></i>Ce mois-ci</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="conteneur bases">
-      <div class="base"><strong>Préparer le sol</strong><span>Ameublir sur 25–30 cm, retirer les cailloux et incorporer du fumier bien décomposé deux semaines avant le semis.</span></div>
-      <div class="base"><strong>Réussir la pépinière</strong><span>Semer en planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer en fin de journée.</span></div>
-      <div class="base"><strong>Arroser au bon moment</strong><span>Tôt le matin ou en fin d'après-midi, au pied des plants. Pailler pour limiter l'évaporation.</span></div>
+    <section class="conteneur bases" aria-label="Les bases">
+      <div class="base apparait"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 22 7 17"/><path d="m19 9-4 4"/><path d="M22 2c-3 1-6 1.5-8.5 4L9 10.5l4.5 4.5L18 10.5C20.5 8 21 5 22 2Z"/><path d="M7 17l1.5-1.5"/></svg></span><strong>Préparer le sol</strong><span>Ameublir sur 25–30 cm, retirer les cailloux et incorporer du fumier bien décomposé deux semaines avant le semis.</span></div>
+      <div class="base apparait"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span><strong>Réussir la pépinière</strong><span>Semer en planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer en fin de journée.</span></div>
+      <div class="base apparait"><span class="pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg></span><strong>Arroser au bon moment</strong><span>Tôt le matin ou en fin d'après-midi, au pied des plants. Pailler pour limiter l'évaporation.</span></div>
     </section>
 
     <section class="conteneur" style="padding-top:24px">
       <h2 class="titre" style="font-size:32px">Par culture</h2>
     </section>
-    <section class="conteneur fiches" id="fiches"></section>
+    <section class="conteneur fiches" id="fiches" aria-label="Fiches par culture"></section>
 
-    <section class="conteneur faq">
-      <h2>Questions fréquentes</h2>
+    <section class="conteneur faq" aria-labelledby="t-faq">
+      <h2 id="t-faq">Questions fréquentes</h2>
       <div class="faq-liste">
-        <details><summary>Combien de plants avec un sachet de 5 g ?</summary><p>Selon l'espèce : environ 1 000 plants pour la tomate et le piment, davantage pour l'oignon. Le détail figure sur chaque fiche.</p></details>
-        <details><summary>Comment conserver les graines restantes ?</summary><p>Dans le sachet refermé, au sec, à l'abri de la lumière et de la chaleur.</p></details>
-        <details><summary>Livrez-vous en dehors de Dakar ?</summary><p>Oui, dans toutes les régions en 3 à 5 jours.</p></details>
-        <details><summary>Puis-je commander en grande quantité ?</summary><p>Oui. Contactez-nous sur WhatsApp pour un tarif producteur.</p></details>
+        <details><summary>Combien de plants avec un sachet de 5 g ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Selon l'espèce : environ 1 000 plants pour la tomate et le piment, davantage pour l'oignon. Le détail figure sur chaque fiche.</p></details>
+        <details><summary>Comment conserver les graines restantes ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Dans le sachet refermé, au sec, à l'abri de la lumière et de la chaleur.</p></details>
+        <details><summary>Livrez-vous en dehors de Dakar ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Oui, dans toutes les régions en 3 à 5 jours.</p></details>
+        <details><summary>Puis-je commander en grande quantité ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Oui. Contactez-nous sur WhatsApp pour un tarif producteur.</p></details>
+      </div>
+    </section>
+
+    <section class="conteneur">
+      <div class="appel apparait">
+        <div>
+          <h2>Prêt à semer ?</h2>
+          <p>Sachets de 5 g dès 1 200 FCFA, livrés en 24–48 h à Dakar.</p>
+        </div>
+        <a class="btn btn-vert" href="boutique.html">Voir la boutique <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
       </div>
     </section>
   </main>
 
   <!-- Pied de page -->
   <footer class="pied">
-    <div class="conteneur">
-      <div><strong>PÉPIX</strong><span>Tout commence par une <span class="jaune">graine.</span></span></div>
-      <div class="infos"><span>www.pepix.sn</span><span>Dakar, Sénégal</span></div>
+    <div class="conteneur pied-haut">
+      <div class="pied-marque">
+        <strong>PÉPIX</strong>
+        <span>Tout commence par une <span class="jaune">graine.</span></span>
+        <p>Semences maraîchères en sachets refermables, avec un guide de culture, livrées partout au Sénégal.</p>
+      </div>
+      <div>
+        <h2>Le site</h2>
+        <ul><li><a href="index.html">Accueil</a></li><li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li><li><a href="conseils.html">Conseils</a></li><li><a href="boutique.html">Boutique</a></li></ul>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><span><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Dakar, Sénégal</span></li>
+          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>WhatsApp</a></li>
+          <li><a href="mailto:contact@pepix.sn"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>contact@pepix.sn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="conteneur pied-bas">
+      <span>© 2026 Pépix · Projet d'école, site de démonstration</span>
+      <span>Wave · Orange Money · Paiement à la livraison</span>
     </div>
   </footer>
 
