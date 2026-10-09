@@ -462,7 +462,8 @@ fieldset.champ { border: 0; padding: 0; margin: 0; }
 }
 
 /* ---------- Page 404 ---------- */
-.introuvable { padding-top: 80px; padding-bottom: 96px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.introuvable { padding-top: 64px; padding-bottom: 96px; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.introuvable .code-404 { margin: 0; font-family: Fredoka, sans-serif; font-weight: 600; font-size: clamp(96px, 18vw, 200px); line-height: .9; color: var(--vert); }
 .introuvable .grand-titre { max-width: none; }
 .introuvable p { color: var(--texte-doux); font-size: 17px; max-width: 460px; }
 
@@ -472,3 +473,9 @@ body.bloque { overflow: hidden; }
 .photo-apropos { margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .photo-apropos img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 55%; border-radius: 10px; background: var(--kraft); }
 .photo-apropos figcaption { font-size: 13px; color: var(--terre); }
+
+.sachet-contenu { padding-bottom: 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px 48px; align-items: start; }
+.sachet-contenu h2 { font-size: 28px; }
+.sachet-contenu ul { margin: 0; padding: 0; list-style: none; border-top: 3px solid var(--vert-fonce); }
+.sachet-contenu li { padding: 14px 0; border-bottom: 1px solid var(--filet); font-size: 17px; line-height: 1.55; }
+@media (max-width: 760px) { .sachet-contenu { grid-template-columns: 1fr; } }
