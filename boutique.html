@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Boutique · Pépix</title>
   <meta name="description" content="Achetez nos semences maraîchères en sachets de 5 g : oignon, tomate, chou et piment.">
+  <meta name="theme-color" content="#1B3A22">
+  <meta property="og:title" content="Boutique · Pépix">
+  <meta property="og:description" content="Achetez nos semences maraîchères en sachets de 5 g : oignon, tomate, chou et piment.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="img/piment.webp">
   <link rel="icon" href="img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,33 +18,35 @@
   <script src="js/main.js" defer></script>
 </head>
 <body>
+  <a class="evitement" href="#contenu">Aller au contenu</a>
 
   <!-- En-tête (identique sur toutes les pages) -->
   <header class="entete">
     <div class="conteneur">
-      <a class="logo" href="index.html" aria-label="Accueil Pépix"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <a class="logo" href="index.html" aria-label="Pépix, retour à l'accueil"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
       <nav class="menu" aria-label="Navigation principale">
         <a href="index.html">Accueil</a>
         <a href="qui-sommes-nous.html">Qui sommes-nous</a>
         <a href="conseils.html">Conseils</a>
         <a href="boutique.html" aria-current="page">Boutique</a>
       </nav>
-      <button class="btn-panier" aria-label="Panier, 0 article">Panier<span class="compteur">0</span></button>
+      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier<span class="compteur">0</span></button>
     </div>
   </header>
 
-  <main>
+  <main id="contenu" tabindex="-1">
 
     <section class="conteneur boutique-intro">
       <div>
         <span class="surtitre">Boutique</span>
         <h1 class="grand-titre">Semences maraîchères</h1>
       </div>
-      <div class="note">Semences conditionnées par Pépix. Livraison 24–48 h à Dakar.</div>
+      <div class="note"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg><span>Semences conditionnées par Pépix. Livraison 24–48 h à Dakar.</span></div>
     </section>
 
-    <section class="conteneur" style="padding-top:24px;padding-bottom:64px">
+    <section class="conteneur" style="padding-top:24px;padding-bottom:64px" aria-label="Produits">
       <!-- Cartes générées par js/main.js -->
+      <h2 class="sr-only">Nos sachets de semences</h2>
       <div class="produits" id="produits-boutique"></div>
       <div class="paiements">
         <b>Paiement :</b>
@@ -50,9 +57,28 @@
 
   <!-- Pied de page -->
   <footer class="pied">
-    <div class="conteneur">
-      <div><strong>PÉPIX</strong><span>Tout commence par une <span class="jaune">graine.</span></span></div>
-      <div class="infos"><span>www.pepix.sn</span><span>Dakar, Sénégal</span></div>
+    <div class="conteneur pied-haut">
+      <div class="pied-marque">
+        <strong>PÉPIX</strong>
+        <span>Tout commence par une <span class="jaune">graine.</span></span>
+        <p>Semences maraîchères en sachets refermables, avec un guide de culture, livrées partout au Sénégal.</p>
+      </div>
+      <div>
+        <h2>Le site</h2>
+        <ul><li><a href="index.html">Accueil</a></li><li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li><li><a href="conseils.html">Conseils</a></li><li><a href="boutique.html">Boutique</a></li></ul>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><span><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Dakar, Sénégal</span></li>
+          <li><a href="https://wa.me/?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." target="_blank" rel="noopener"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>WhatsApp</a></li>
+          <li><a href="mailto:contact@pepix.sn"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>contact@pepix.sn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="conteneur pied-bas">
+      <span>© 2026 Pépix · Projet d'école, site de démonstration</span>
+      <span>Wave · Orange Money · Paiement à la livraison</span>
     </div>
   </footer>
 
