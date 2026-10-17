@@ -22,6 +22,16 @@ const dateLongue = iso => new Date(iso).toLocaleDateString('fr-FR', { weekday: '
 const pastilleStatut = s => `<span class="statut statut-${s}">${STATUTS[s] || s}</span>`;
 const articles = c => (c.lignes || []).map(l => `${l.qte} × ${l.nom}`).join(', ');
 const nbSachets = c => (c.lignes || []).reduce((a, l) => a + l.qte, 0);
+// Téléphone lisible "77 123 45 67" (affichage seulement ; liens tel: et wa.me gardent la valeur brute)
+const telLisible = tel => {
+  const chiffres = String(tel).replace(/\D/g, '').replace(/^(00)?221/, '');
+  return chiffres.length === 9 ? chiffres.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '$1\u00A0$2\u00A0$3\u00A0$4') : String(tel);
+};
+// Aide sous le champ prix : ce que le site affichera
+const prixAffiche = v => {
+  const n = Number(v);
+  return v !== '' && Number.isFinite(n) && n > 0 ? `Affiché : ${prix(n)} FCFA` : 'Affiché : saisissez un prix';
+};
 const telSansIndicatif = t => String(t).replace(/[\s.-]/g, '').replace(/^(\+221|00221)/, '');
 
 /* ---------- Connexion ---------- */
@@ -116,7 +126,7 @@ function vueTableau() {
 
   rendre(`
     <div class="admin-entete">
-      <div><h1>Tableau de bord</h1><p>${valides.length} commande${valides.length > 1 ? 's' : ''} valide${valides.length > 1 ? 's' : ''}, annulées exclues.</p></div>
+      <div><h1>Tableau de bord</h1><p>${resumeCommandes(toutes.length, toutes.length - valides.length)}</p></div>
       <div class="admin-actions"><a class="btn btn-sombre btn-petit" href="#commandes">Voir les commandes</a></div>
     </div>
 
@@ -203,6 +213,13 @@ function etatVide() {
 }
 
 /* ---------- Commandes ---------- */
+// "12 commandes, dont 1 annulée (exclue des montants)" : même chiffre que la tuile
+function resumeCommandes(nb, annulees) {
+  const s = n => n > 1 ? 's' : '';
+  const base = `${nb} commande${s(nb)}`;
+  return annulees ? `${base}, dont ${annulees} annulée${s(annulees)} (exclue${s(annulees)} des montants)` : base;
+}
+
 function listeCommandes(liste) {
   if (!liste.length) return '<p class="vide">Aucune commande ne correspond.</p>';
   const exemple = c => c.exemple ? '<span class="etiquette-exemple">exemple</span>' : '';
@@ -292,7 +309,7 @@ function ouvrirCommande(numero) {
         <h3>Client</h3>
         <dl class="detail-infos">
           <dt>Nom</dt><dd>${echapper(c.nom)}</dd>
-          <dt>Téléphone</dt><dd><a href="tel:+221${echapper(tel)}">${echapper(c.tel)}</a></dd>
+          <dt>Téléphone</dt><dd><a href="tel:+221${echapper(tel)}">${echapper(telLisible(c.tel))}</a></dd>
           <dt>Livraison</dt><dd>${echapper(c.adresse)}</dd>
           <dt>Paiement</dt><dd>${echapper(c.paiement)}</dd>
         </dl>
@@ -380,7 +397,8 @@ function vueProduits() {
             </div>
             <div class="champ">
               <label for="prix-${p.id}">Prix (FCFA)</label>
-              <input id="prix-${p.id}" name="prix" type="number" inputmode="numeric" min="100" max="100000" step="50" value="${p.prix}" required aria-describedby="e-prix-${p.id}">
+              <input id="prix-${p.id}" name="prix" type="number" inputmode="numeric" min="100" max="100000" step="50" value="${p.prix}" required aria-describedby="a-prix-${p.id} e-prix-${p.id}">
+              <span class="aide" id="a-prix-${p.id}">${prixAffiche(p.prix)}</span>
               <span class="msg-erreur" id="e-prix-${p.id}">Entre 100 et 100 000 FCFA.</span>
             </div>
           </div>
@@ -417,7 +435,7 @@ function enregistrerProduit(form) {
 /* ---------- Textes du site ---------- */
 const CHAMPS_TEXTES = [
   { titre: 'Annonce en haut du site', champs: [
-    { cle: 'annonce', label: 'Message', aide: 'Laissez vide pour ne rien afficher. Exemple : Livraison offerte ce week-end à Dakar.', max: 120 },
+    { cle: 'annonce', label: 'Message', aide: 'Laissez vide pour ne rien afficher. Exemple : Livraison offerte ce week-end à Dakar. Si vous annoncez la livraison offerte, mettez aussi les frais de livraison à 0 ci-dessous.', max: 120 },
   ] },
   { titre: "Accueil, haut de page", champs: [
     { cle: 'herosTitre', label: 'Titre', aide: 'Le dernier mot passe en jaune.', max: 60, requis: true },
@@ -577,6 +595,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   $('#vue').addEventListener('input', e => {
     if (e.target.getAttribute('aria-invalid') === 'true') e.target.removeAttribute('aria-invalid');
+    // Prix d'un produit : l'aide montre en direct le prix tel que le site l'affichera
+    if (e.target.name === 'prix' && e.target.form && e.target.form.dataset.produit) {
+      $(`#a-prix-${e.target.form.dataset.produit}`).textContent = prixAffiche(e.target.value);
+    }
   });
 
   // Tiroir de détail

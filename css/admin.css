@@ -127,6 +127,8 @@ body.admin { background: #F3EEE2; }
 .carte-commande b { font-size: 16px; }
 .carte-commande span:not(.statut) { font-size: 14px; color: var(--terre); }
 .carte-commande .num { font-weight: 800; text-align: right; }
+/* La pastille garde sa hauteur même quand le résumé passe sur deux lignes */
+.carte-commande .statut { align-self: start; justify-self: end; }
 
 /* Statuts : toujours un libellé, la couleur n'est qu'un renfort */
 .statut { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap; }
@@ -227,6 +229,8 @@ body.admin { background: #F3EEE2; }
   .tableau-defile { display: none; }
   .cartes-commandes { display: flex; }
   .toast { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  /* La barre Enregistrer se pose au-dessus de la navigation du bas */
+  .form-textes .barre-enregistrer { bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
 }
 .admin-haut-mobile img { width: 44px; height: auto; }
 .admin-haut-mobile a, .admin-haut-mobile button { font: inherit; font-size: 14px; font-weight: 700; background: none; border: 0; color: var(--vert-fonce); text-decoration: underline; text-underline-offset: 3px; min-height: 44px; padding: 0 4px; }

@@ -44,6 +44,11 @@ const prix = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const $ = sel => document.querySelector(sel);
 // Tout texte saisi (admin ou client) est échappé avant d'aller dans du HTML
 const echapper = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// Téléphone lisible "77 123 45 67", insécable (affichage seulement, la valeur saisie reste intacte)
+const telLisible = tel => {
+  const chiffres = String(tel).replace(/\D/g, '').replace(/^(00)?221/, '');
+  return chiffres.length === 9 ? chiffres.replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '$1\u00A0$2\u00A0$3\u00A0$4') : String(tel);
+};
 const livraisonTexte = () => FRAIS_LIVRAISON ? `${prix(FRAIS_LIVRAISON)} FCFA` : 'offerte';
 const produit = id => PRODUITS.find(p => p.id === id);
 
@@ -254,7 +259,7 @@ function ouvrirFiche(id) {
           <strong id="fiche-qte" aria-live="polite">1</strong>
           <button type="button" data-plus aria-label="Augmenter la quantité">${icone('plus')}</button>
         </div>
-        <button type="button" class="btn btn-vert" data-valider>Ajouter pour <span id="fiche-total">${prix(p.prix)}</span>&nbsp;FCFA</button>
+        <button type="button" class="btn btn-jaune" data-valider><span>Ajouter pour <span id="fiche-total">${prix(p.prix)}</span>&nbsp;FCFA</span></button>
       </div>
     </div>`;
   ouvrir('#voile-fiche');
@@ -267,9 +272,15 @@ function majQuantite() {
 }
 
 /* ---------- Tiroir panier ---------- */
+// Titre du tiroir selon l'étape : l'utilisateur sait où il en est
+const TITRES_PANIER = { lignes: 'Panier', formulaire: 'Vos coordonnées (2/2)', confirmation: 'Commande enregistrée' };
+
 function afficherPanier() {
   const zone = $('#panier-zone');
   const lignes = PRODUITS.filter(p => panier[p.id]);
+  const vueAffichee = vuePanier === 'confirmation' && derniereCommande ? 'confirmation'
+    : vuePanier === 'formulaire' && lignes.length ? 'formulaire' : 'lignes';
+  $('#panier-titre').textContent = TITRES_PANIER[vueAffichee];
 
   if (vuePanier === 'confirmation' && derniereCommande) {
     const c = derniereCommande;
@@ -277,7 +288,7 @@ function afficherPanier() {
       <div class="panier-message" tabindex="-1" id="confirmation">
         <span class="grand-icone ok">${icone('check')}</span>
         <strong>Jërëjëf, ${echapper(c.nom.split(' ')[0])} !</strong>
-        <span>Commande de démonstration <b>${c.numero}</b> enregistrée. Ce site est un projet d'école : rien n'est envoyé et personne ne vous appellera. Sur le vrai site, Pépix vous appellerait au ${echapper(c.tel)} pour confirmer la livraison.</span>
+        <span>Commande de démonstration <b>${c.numero}</b> enregistrée. Ce site est un projet d'école : rien n'est envoyé et personne ne vous appellera. Sur le vrai site, Pépix vous appellerait au ${echapper(telLisible(c.tel))} pour confirmer la livraison.</span>
         <div class="recap">
           <div><span>Articles</span><span>${c.articles}</span></div>
           <div><span>Livraison</span><span>${echapper(c.adresse)}</span></div>
@@ -302,15 +313,16 @@ function afficherPanier() {
   }
 
   const st = sousTotal();
+  const total = `${prix(st + FRAIS_LIVRAISON)} FCFA`;
   const recapTotal = `
     <div class="panier-total">
       <div><span>Sous-total</span><span>${prix(st)} FCFA</span></div>
       <div><span>Livraison</span><span>${livraisonTexte()}</span></div>
-      <div class="total"><span>Total</span><span>${prix(st + FRAIS_LIVRAISON)} FCFA</span></div>
+      <div class="total"><span>Total</span><span>${total}</span></div>
       ${vuePanier === 'lignes'
-        ? `<button type="button" class="btn btn-sombre" data-etape-formulaire>Commander</button>
+        ? `<button type="button" class="btn btn-sombre" data-etape-formulaire>Commander · ${total}</button>
            <small>Wave, Orange Money ou paiement à la livraison</small>`
-        : `<button type="submit" form="form-commande" class="btn btn-sombre">Confirmer la commande</button>`}
+        : `<button type="submit" form="form-commande" class="btn btn-sombre">Confirmer · ${total}</button>`}
     </div>`;
 
   if (vuePanier === 'formulaire') {
@@ -354,14 +366,14 @@ function afficherPanier() {
         <div class="ligne">
           <div class="ligne-info">
             <span class="ligne-vignette photo-${p.id}" aria-hidden="true"></span>
-            <div><strong>${p.nom}</strong><span>${echapper(p.variete)}, ${prix(p.prix)} F</span></div>
+            <div><strong>${p.nom}</strong><span>${echapper(p.variete)}, ${prix(p.prix)} FCFA</span></div>
           </div>
           <div class="ligne-qte">
             <button type="button" data-retirer="${p.id}" aria-label="Retirer un ${p.nom}">${icone('moins')}</button>
             <strong aria-label="${panier[p.id]} sachet${panier[p.id] > 1 ? 's' : ''}">${panier[p.id]}</strong>
             <button type="button" data-remettre="${p.id}" aria-label="Ajouter un ${p.nom}">${icone('plus')}</button>
           </div>
-          <strong>${prix(p.prix * panier[p.id])} F</strong>
+          <strong>${prix(p.prix * panier[p.id])} FCFA</strong>
         </div>`).join('')}
     </div>` + recapTotal;
 }

@@ -188,6 +188,8 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
     min-height: calc(100vh - 128px); min-height: calc(100svh - 128px);
     padding-top: 150px; align-items: flex-end;
   }
+  /* Avec le bandeau d'annonce (43 px), le héros tient toujours dans l'écran */
+  body:has(.annonce) .heros-video { min-height: calc(100vh - 171px); min-height: calc(100svh - 171px); }
   .heros-video::before {
     content: ""; position: absolute; inset: 0 0 auto; height: 96px; z-index: 0; pointer-events: none;
     background: linear-gradient(rgba(0, 0, 0, .35), transparent);
@@ -324,7 +326,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .ligne-cal .mois { text-align: center; font-weight: 700; color: var(--terre); padding: 2px 0; border-radius: 4px; }
 .ligne-cal .mois.actuel { background: var(--vert-fonce); color: var(--papier); }
 .ligne-cal strong { font-size: 15px; }
-.case { position: relative; height: 28px; border-radius: 4px; background: #EFE7D3; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.case { position: relative; height: 28px; border-radius: 4px; background: #EFE7D3; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
 .case.s { background: var(--vert); color: #fff; }
 .case.r { background: var(--jaune); }
 .case.sr { background: linear-gradient(90deg, var(--vert) 50%, var(--jaune) 50%); }
@@ -381,6 +383,8 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .pied ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; font-size: 15px; }
 .pied ul a, .pied ul span { display: inline-block; padding: 6px 0; opacity: .9; }
 .pied ul a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
+/* WhatsApp : seul contact de la boutique, il doit ressembler à un lien et ne pas se couper */
+.pied ul a[data-wa] { white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; opacity: 1; }
 .pied-bas { border-top: 1px solid rgba(250, 246, 236, .15); padding-top: 18px; padding-bottom: 22px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; opacity: .75; }
 
 /* ---------- Fenêtres (fiche produit, panier) ---------- */
@@ -407,7 +411,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .modale .reperes { grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .modale .repere { padding: 10px 12px; }
 .modale .repere span { font-size: 12px; }
-.modale .repere b { font-size: 13px; }
+.modale .repere b { font-size: 15px; }
 .livraison { font-size: 14px; color: var(--vert); font-weight: 700; }
 .modale-lien { font-size: 14px; color: var(--vert); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; align-self: flex-start; }
 .modale-actions { display: flex; align-items: center; gap: 14px; margin-top: auto; padding-top: 8px; flex-wrap: wrap; }
@@ -416,7 +420,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .quantite button:hover { background: var(--kraft); }
 .quantite button:disabled { opacity: .35; cursor: not-allowed; background: none; }
 .quantite strong { min-width: 28px; text-align: center; }
-.modale-actions .btn-vert { flex: 1; white-space: nowrap; padding: 14px 18px; font-size: 15px; }
+.modale-actions .btn { flex: 1; white-space: nowrap; padding: 14px 18px; font-size: 15px; }
 
 .panier {
   background: var(--papier); width: min(100%, 420px); height: 100%; display: flex; flex-direction: column;
@@ -451,7 +455,10 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .panier-total > div { display: flex; justify-content: space-between; }
 .panier-total .total { font-size: 18px; font-weight: 700; padding-top: 6px; }
 .panier-total .btn { margin-top: 10px; width: 100%; }
-.panier-total small { font-size: 12px; color: var(--terre); text-align: center; }
+.panier-total small { font-size: 14px; color: var(--terre); text-align: center; }
+/* Étape coordonnées : seuls le total et le bouton restent (le détail a été vu à l'étape panier) */
+.formulaire ~ .panier-total { padding-block: 12px 16px; }
+.formulaire ~ .panier-total > div:not(.total) { display: none; }
 
 /* Formulaire de commande */
 .formulaire { flex: 1; overflow: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
@@ -566,6 +573,17 @@ body.bloque { overflow: hidden; }
 @media (max-width: 720px) {
   .pied ul a, .pied ul span { padding: 0; min-height: 44px; display: inline-flex; align-items: center; }
   .repere span { font-size: 14px; }
+  /* Fiche produit : image réduite et action collée en bas, le prix se voit sans défiler */
+  .modale .modale-image { min-height: 0; height: 200px; background-size: contain; background-color: #F3EEE6; } /* fond du visuel, sans bandes */
+  .modale-corps { padding: 20px; }
+  .modale h2 { font-size: 30px; }
+  .modale .repere span { font-size: 14px; }
+  .modale-actions {
+    position: sticky; bottom: 0; z-index: 1;
+    background: var(--blanc); padding: 12px 0; border-top: 1px solid var(--filet);
+  }
+  /* Conseils : même bouton d'ajout que dans la boutique */
+  .fiche-pied .btn { width: 100%; min-height: 48px; font-size: 16px; }
 }
 
 /* Visuels sachets : même règle partout (cartes, fiche, panier, conseils) */
@@ -584,7 +602,7 @@ body.bloque { overflow: hidden; }
 .pied ul a, .pied ul span { min-height: 44px; display: inline-flex; align-items: center; padding: 0; }
 .lien-admin { display: inline-flex; align-items: center; min-height: 44px; }
 .modale-lien { display: inline-flex; align-items: center; min-height: 44px; }
-.legende i { font-size: 11px; }
+.legende i { font-size: 12px; }
 /* 4 produits : 2 colonnes, puis 4 dès qu'il y a la place (jamais 3 + 1 orphelin) */
 .produits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (min-width: 960px) { .produits { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
