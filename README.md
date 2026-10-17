@@ -42,7 +42,8 @@ puis aller sur http://localhost:8000.
 
 ## Mise en ligne
 
-Hébergé sur Netlify (site statique, pas d'étape de build, voir `netlify.toml`).
+Hébergé sur Cloudflare Pages : https://pepix-site.pages.dev. Chaque push sur `main` déploie le site.
+Pas d'étape de build, le dossier est publié tel quel. Les en-têtes HTTP sont dans `_headers`.
 
 ## Crédits
 

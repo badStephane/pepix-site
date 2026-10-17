@@ -1,0 +1,12 @@
+# Cloudflare Pages : en-têtes HTTP (remplace netlify.toml)
+
+# Images : cache d'une semaine
+/img/*
+  Cache-Control: public, max-age=604800
+
+# L'espace admin ne doit pas apparaître dans les moteurs de recherche
+# (Cloudflare sert admin.html à l'adresse /admin)
+/admin
+  X-Robots-Tag: noindex, nofollow
+/admin.html
+  X-Robots-Tag: noindex, nofollow
