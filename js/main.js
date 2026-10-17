@@ -42,6 +42,9 @@ const icone = (nom, classe = 'icone') =>
 // Format "1 500"
 const prix = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const $ = sel => document.querySelector(sel);
+// Tout texte saisi (admin ou client) est échappé avant d'aller dans du HTML
+const echapper = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const livraisonTexte = () => FRAIS_LIVRAISON ? `${prix(FRAIS_LIVRAISON)} FCFA` : 'offerte';
 const produit = id => PRODUITS.find(p => p.id === id);
 
 /* ---------- Panier (sauvegardé dans le navigateur) ---------- */
@@ -113,7 +116,7 @@ function carteProduit(p, avecLivraison) {
       <div class="carte-image photo-${p.id}" role="img" aria-label="Sachet de semences ${p.nom} Pépix"></div>
       <div class="carte-corps">
         <h3><button type="button" class="carte-ouvrir" data-ouvrir="${p.id}" aria-label="${p.nom}, voir la fiche">${p.nom}</button></h3>
-        <span class="variete">${p.variete}, sachet de 5 g</span>
+        <span class="variete">${echapper(p.variete)}, sachet de 5 g</span>
         <dl class="carte-reperes">
           <div><dt>Semis</dt><dd>${p.semis.replace(' (pépinière)', '')}</dd></div>
           <div><dt>Cycle</dt><dd>${p.cycle}</dd></div>
@@ -139,7 +142,6 @@ function afficherProduits(conteneur, avecLivraison) {
 }
 
 /* ---------- Textes réglés dans l'admin ---------- */
-const echapper = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 function appliquerReglages() {
   document.querySelectorAll('[data-reglage]').forEach(el => {
@@ -152,7 +154,7 @@ function appliquerReglages() {
       const i = t.lastIndexOf(' ');
       el.innerHTML = i > 0 ? `${echapper(t.slice(0, i))} <span class="jaune">${echapper(t.slice(i + 1))}</span>` : echapper(t);
     } else if (cle === 'fraisLivraison') {
-      el.textContent = FRAIS_LIVRAISON ? `${prix(FRAIS_LIVRAISON)} FCFA` : 'offerte';
+      el.textContent = livraisonTexte();
     } else {
       el.textContent = valeur;
     }
@@ -201,7 +203,7 @@ function afficherFiches(conteneur) {
       <div class="fiche-haut">
         <div>
           <span class="fiche-vignette photo-${p.id}" aria-hidden="true"></span>
-          <div><h2>${p.nom}</h2><span class="variete-fiche">${p.variete}</span></div>
+          <div><h2>${p.nom}</h2><span class="variete-fiche">${echapper(p.variete)}</span></div>
         </div>
       </div>
       <div class="reperes">
@@ -237,7 +239,7 @@ function ouvrirFiche(id) {
         <button type="button" class="btn-rond" data-fermer aria-label="Fermer">${icone('x')}</button>
       </div>
       <h2 id="fiche-titre">${p.nom}</h2>
-      <span class="variete">Variété ${p.variete}, sachet de 5 g</span>
+      <span class="variete">Variété ${echapper(p.variete)}, sachet de 5 g</span>
       <div class="reperes">
         <div class="repere"><span>Semis</span><b>${p.semis}</b></div>
         <div class="repere"><span>Cycle</span><b>${p.cycle}</b></div>
@@ -274,15 +276,14 @@ function afficherPanier() {
     zone.innerHTML = `
       <div class="panier-message" tabindex="-1" id="confirmation">
         <span class="grand-icone ok">${icone('check')}</span>
-        <strong>Jërëjëf, ${c.nom.split(' ')[0]} !</strong>
-        <span>Votre commande <b>${c.numero}</b> est enregistrée. Nous vous appelons au ${c.tel} pour confirmer la livraison.</span>
+        <strong>Jërëjëf, ${echapper(c.nom.split(' ')[0])} !</strong>
+        <span>Commande de démonstration <b>${c.numero}</b> enregistrée. Ce site est un projet d'école : rien n'est envoyé et personne ne vous appellera. Sur le vrai site, Pépix vous appellerait au ${echapper(c.tel)} pour confirmer la livraison.</span>
         <div class="recap">
           <div><span>Articles</span><span>${c.articles}</span></div>
-          <div><span>Livraison</span><span>${c.adresse}</span></div>
-          <div><span>Paiement</span><span>${c.paiement}</span></div>
+          <div><span>Livraison</span><span>${echapper(c.adresse)}</span></div>
+          <div><span>Paiement</span><span>${echapper(c.paiement)}</span></div>
           <div><b>Total</b><b>${prix(c.total)} FCFA</b></div>
         </div>
-        <span style="font-size:13px">Site de démonstration (projet d'école) : aucune commande n'est réellement envoyée.</span>
         <button type="button" class="btn btn-vert" data-fermer>Continuer mes achats</button>
       </div>`;
     $('#confirmation').focus();
@@ -304,7 +305,7 @@ function afficherPanier() {
   const recapTotal = `
     <div class="panier-total">
       <div><span>Sous-total</span><span>${prix(st)} FCFA</span></div>
-      <div><span>Livraison</span><span>${prix(FRAIS_LIVRAISON)} FCFA</span></div>
+      <div><span>Livraison</span><span>${livraisonTexte()}</span></div>
       <div class="total"><span>Total</span><span>${prix(st + FRAIS_LIVRAISON)} FCFA</span></div>
       ${vuePanier === 'lignes'
         ? `<button type="button" class="btn btn-sombre" data-etape-formulaire>Commander</button>
@@ -353,7 +354,7 @@ function afficherPanier() {
         <div class="ligne">
           <div class="ligne-info">
             <span class="ligne-vignette photo-${p.id}" aria-hidden="true"></span>
-            <div><strong>${p.nom}</strong><span>${p.variete}, ${prix(p.prix)} F</span></div>
+            <div><strong>${p.nom}</strong><span>${echapper(p.variete)}, ${prix(p.prix)} F</span></div>
           </div>
           <div class="ligne-qte">
             <button type="button" data-retirer="${p.id}" aria-label="Retirer un ${p.nom}">${icone('moins')}</button>
@@ -566,6 +567,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const fiches = $('#fiches');
   if (fiches) afficherFiches(fiches);
+
+  // Lien « Aller au contenu » : focus direct, sinon la balise <base> de la 404 renvoie vers l'accueil
+  const evitement = $('.evitement');
+  if (evitement) evitement.addEventListener('click', e => {
+    const cible = $(evitement.getAttribute('href'));
+    if (cible) { e.preventDefault(); cible.focus(); }
+  });
 
   // Bouton panier de l'en-tête
   document.querySelectorAll('.btn-panier').forEach(b => {
