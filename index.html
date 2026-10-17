@@ -9,13 +9,13 @@
   <meta property="og:title" content="Pépix, semences maraîchères au Sénégal">
   <meta property="og:description" content="Semences d'oignon, tomate, chou et piment en sachets de 5 g, livrées à Dakar en 24 à 48 h, avec un guide de culture.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://pepix-site.netlify.app/img/partage.jpg">
+  <meta property="og:image" content="https://pepix-site.pages.dev/img/partage.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Les quatre sachets de semences Pépix : oignon, tomate, chou et piment">
   <meta property="og:locale" content="fr_SN">
   <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:url" content="https://pepix-site.netlify.app/">
+  <meta property="og:url" content="https://pepix-site.pages.dev/">
   <link rel="icon" href="img/favicon-64.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,41 +58,67 @@
             <a class="lien-clair" href="conseils.html">Calendrier de semis</a>
           </div>
         </div>
+        <!-- Les quatre sachets en éventail : décoratifs, les mêmes sont présentés juste en dessous -->
+        <div class="heros-sachets" aria-hidden="true">
+          <img src="img/sachet-oignon-detoure.webp" alt="" width="267" height="440">
+          <img src="img/sachet-tomate-detoure.webp" alt="" width="223" height="440">
+          <img src="img/sachet-chou-detoure.webp" alt="" width="261" height="440">
+          <img src="img/sachet-piment-detoure.webp" alt="" width="231" height="440">
+        </div>
       </div>
       <button type="button" class="video-bouton" aria-pressed="false" aria-label="Mettre la vidéo en pause" hidden></button>
       <small class="video-credit">Vidéo : Frank Meriño, Pexels</small>
     </section>
 
-    <!-- Les quatre sachets (générés par js/main.js) -->
-    <section class="conteneur section" aria-labelledby="t-semences">
-      <div class="section-titre">
-        <h2 id="t-semences">Quatre semences pour la saison sèche</h2>
+    <!-- Ce mois-ci : l'almanach (texte calculé par js/main.js) mène directement aux sachets -->
+    <section class="conteneur section mois" aria-labelledby="almanach-titre">
+      <div class="mois-tete">
+        <div class="mois-texte">
+          <p class="mois-pastille"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg><span id="almanach-mois">Octobre</span></p>
+          <h2 id="almanach-titre">Lancez vos pépinières de saison sèche.</h2>
+          <p id="almanach-detail">Oignon, tomate, chou et piment se sèment tous en pépinière à partir d'octobre. Préparez vos planches à l'ombre et repiquez 4 à 8 semaines plus tard selon l'espèce.</p>
+        </div>
         <a class="lien" href="boutique.html">Toute la boutique</a>
       </div>
-      <div class="produits" id="produits-accueil"></div>
+      <div class="produits defile-mobile" id="produits-accueil"></div>
     </section>
 
-    <!-- Réassurance : des faits déjà écrits ailleurs sur le site, aucun avis ni chiffre inventé -->
-    <section class="reassurance-section" aria-labelledby="t-reassurance">
-      <div class="conteneur">
-        <h2 id="t-reassurance" class="sr-only">Pourquoi choisir Pépix</h2>
-        <ul class="reassurance">
-          <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg><strong>Germination testée</strong><span>Chaque lot est mis à germer avant l'ensachage.</span></li>
-          <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg><strong>Fiche de culture</strong><span>Un QR code au dos du sachet ouvre la fiche.</span></li>
-          <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg><strong>Livré en 24 à 48 h</strong><span>À Dakar. 3 à 5 jours en région.</span></li>
-          <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg><strong>Paiement simple</strong><span>Wave, Orange Money ou à la livraison.</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Comment ça marche : reprend le contenu de l'ancienne colonne « Commander » -->
+    <!-- Comment ça marche : chaque étape porte ses garanties (faits déjà écrits ailleurs, aucun avis ni chiffre inventé) -->
     <section class="comment" aria-labelledby="t-comment">
       <div class="conteneur">
         <h2 id="t-comment">Comment ça marche</h2>
         <ol class="etapes-achat">
-          <li><span class="etape-num" aria-hidden="true">1</span><div><strong>Choisissez vos sachets</strong><p>Oignon, tomate, chou ou piment : ajoutez-les au panier.</p></div></li>
-          <li><span class="etape-num" aria-hidden="true">2</span><div><strong>Recevez-les chez vous</strong><p>On vous appelle pour confirmer, puis on livre : 24 à 48 h à Dakar, 3 à 5 jours en région.</p></div></li>
-          <li><span class="etape-num" aria-hidden="true">3</span><div><strong>Cultivez avec la fiche</strong><p>Scannez le QR code du sachet : semis, repiquage, arrosage et récolte, étape par étape.</p></div></li>
+          <li>
+            <span class="etape-num" aria-hidden="true">1</span>
+            <div>
+              <strong>Choisissez vos sachets</strong>
+              <p>Oignon, tomate, chou ou piment, en sachets de 5 g.</p>
+              <ul class="etape-preuves">
+                <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>Chaque lot est testé en germination</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="etape-num" aria-hidden="true">2</span>
+            <div>
+              <strong>Recevez-les chez vous</strong>
+              <p>On vous appelle pour confirmer, puis on livre.</p>
+              <ul class="etape-preuves">
+                <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>24 à 48 h à Dakar, 3 à 5 jours en région</li>
+                <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>Wave, Orange Money ou à la livraison</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="etape-num" aria-hidden="true">3</span>
+            <div>
+              <strong>Cultivez avec la fiche</strong>
+              <p>Semis, repiquage, arrosage et récolte, étape par étape.</p>
+              <ul class="etape-preuves">
+                <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>QR code au dos du sachet</li>
+              </ul>
+            </div>
+          </li>
         </ol>
         <a class="btn btn-jaune" href="boutique.html">Voir les semences<svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
       </div>
@@ -111,18 +137,6 @@
         <p data-reglage="bandeauTexte">Au dos du sachet, un QR code ouvre la fiche de culture de la variété.</p>
       </div>
       <small class="bandeau-credit">Photo : Nikolett Emmert, Pexels</small>
-    </section>
-
-    <!-- Almanach : le mois en cours, calculé par js/main.js -->
-    <section class="almanach">
-      <div class="conteneur almanach-grille">
-        <p class="almanach-mois" id="almanach-mois">Octobre</p>
-        <div class="almanach-texte">
-          <h2 id="almanach-titre">Lancez vos pépinières de saison sèche.</h2>
-          <p id="almanach-detail">Oignon, tomate, chou et piment se sèment tous en pépinière à partir d'octobre. Préparez vos planches à l'ombre et repiquez 4 à 8 semaines plus tard selon l'espèce.</p>
-          <a class="lien" href="conseils.html">Voir le calendrier complet</a>
-        </div>
-      </div>
     </section>
 
     <!-- Une question : la colonne « Commander » est reprise par « Comment ça marche » -->

@@ -309,40 +309,28 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .photo-chou   { background-image: url(../img/sachet-chou.webp); }
 .photo-piment { background-image: url(../img/sachet-piment.webp); }
 
-/* ---------- Accueil : almanach du mois ---------- */
-.almanach { background: var(--kraft); }
-.almanach-grille { padding-block: var(--section); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 56px; align-items: end; }
-.almanach-mois {
-  font-family: var(--titre); font-weight: 800; font-size: clamp(64px, 10vw, 150px); line-height: .82;
-  color: var(--vert-fonce); letter-spacing: -.02em;
+/* ---------- Accueil : ce mois-ci (almanach + sachets) ---------- */
+.mois-tete { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--e-4) var(--e-6); flex-wrap: wrap; margin-bottom: var(--e-6); }
+.mois-texte { display: flex; flex-direction: column; gap: var(--e-3); max-width: 40em; }
+.mois-pastille {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  background: var(--jaune); color: var(--vert-fonce); border-radius: 999px; padding: 6px 14px 6px 10px;
+  font-size: var(--t-label); font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
 }
-.almanach-texte { display: flex; flex-direction: column; gap: 14px; max-width: 34em; }
-.almanach-texte h2 { font-size: clamp(26px, 3vw, 34px); text-wrap: balance; }
-.almanach-texte p { font-size: 17px; line-height: 1.65; color: var(--texte-doux); }
-.almanach-texte .lien { align-self: flex-start; color: var(--vert-fonce); }
-@media (max-width: 760px) { .almanach-grille { grid-template-columns: 1fr; gap: 20px; } }
+.mois-pastille .icone { width: 18px; height: 18px; }
+.mois-texte h2 { font-size: var(--t-h2); line-height: 1.1; text-wrap: balance; }
+.mois-texte h2 + p { font-size: 17px; line-height: 1.6; color: var(--texte-doux); text-wrap: pretty; }
+.mois-tete .lien { white-space: nowrap; }
 
-/* ---------- Accueil : réassurance (4 faits déjà écrits sur le site) ---------- */
-.reassurance-section { border-top: 1px solid var(--filet); }   /* suit les semences ; « Comment ça marche » porte le filet suivant */
-.reassurance {
-  list-style: none; margin: 0; padding: var(--e-5) 0;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e-4);
-}
-.reassurance li { display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: var(--e-2); row-gap: 2px; align-items: start; }
-.reassurance .icone { width: 24px; height: 24px; color: var(--vert); }
-.reassurance strong { font-size: 16px; font-weight: 800; line-height: 1.3; }
-.reassurance span { grid-column: 1 / -1; font-size: var(--t-petit); line-height: 1.45; color: var(--texte-doux); }
-
-/* ---------- Accueil : comment ça marche ---------- */
-.comment { background: var(--blanc); border-block: 1px solid var(--filet); }
-.comment .conteneur { padding-block: var(--section); display: flex; flex-direction: column; gap: var(--e-5); align-items: flex-start; }
+/* ---------- Accueil : comment ça marche (étapes et garanties) ---------- */
+.comment { background: var(--kraft); }
+.comment .conteneur { padding-block: var(--section); display: flex; flex-direction: column; gap: var(--e-6); align-items: flex-start; }
 .comment h2 { font-size: var(--t-h2); line-height: 1.1; }
-.etapes-achat { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.etapes-achat li { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--e-4); padding-bottom: var(--e-5); }
-.etapes-achat li:last-child { padding-bottom: 0; }
-/* Filet pointillé entre les pastilles numérotées */
-.etapes-achat li:not(:last-child)::before {
-  content: ""; position: absolute; left: 19px; top: 44px; bottom: 4px; border-left: 2px dashed var(--filet);
+.etapes-achat { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: var(--e-3); }
+.etapes-achat > li {
+  display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--e-4);
+  background: var(--blanc); border-radius: var(--r-carte); padding: var(--e-5);
+  box-shadow: 0 1px 0 rgba(91, 63, 38, .12);
 }
 .etape-num {
   width: 40px; height: 40px; border-radius: 50%; background: var(--jaune); color: var(--vert-fonce);
@@ -350,6 +338,12 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 }
 .etapes-achat strong { display: block; font-size: 18px; font-weight: 800; line-height: 1.3; padding-top: 7px; }
 .etapes-achat p { margin-top: var(--e-1); font-size: var(--t-corps); line-height: 1.55; color: var(--texte-doux); max-width: 34em; }
+.etape-preuves {
+  list-style: none; margin: var(--e-4) 0 0; padding: var(--e-3) 0 0; border-top: 1px dashed var(--filet);
+  display: flex; flex-direction: column; gap: var(--e-2);
+}
+.etape-preuves li { display: flex; align-items: flex-start; gap: var(--e-2); font-size: var(--t-petit); font-weight: 700; line-height: 1.4; color: var(--vert-fonce); }
+.etape-preuves .icone { flex: none; width: 18px; height: 18px; color: var(--vert); }
 
 /* ---------- Accueil : une question sur vos cultures ---------- */
 .question { padding-block: var(--section); display: flex; flex-direction: column; align-items: flex-start; gap: var(--e-4); }
@@ -745,13 +739,9 @@ body.bloque { overflow: hidden; }
 .produits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (min-width: 960px) {
   .produits { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  /* Accueil : réassurance sur une ligne, étapes sur 3 colonnes séparées par un filet,
-     question sur une ligne (texte à gauche, bouton à droite) */
-  .reassurance { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--e-6); padding-block: var(--e-6); }
-  .etapes-achat { flex-direction: row; }
-  .etapes-achat li { flex: 1; grid-template-columns: 1fr; align-content: start; padding: 0 var(--e-6); border-left: 1px solid var(--filet); }
-  .etapes-achat li:first-child { padding-left: 0; border-left: 0; }
-  .etapes-achat li:not(:last-child)::before { display: none; }
+  /* Accueil : étapes sur 3 colonnes, question sur une ligne (texte à gauche, bouton à droite) */
+  .etapes-achat { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e-5); }
+  .etapes-achat > li { grid-template-columns: 1fr; align-content: start; padding: var(--e-6); }
   .etapes-achat strong { padding-top: 0; }
   .question { flex-direction: row; justify-content: space-between; align-items: center; gap: var(--e-7); }
   .introuvable .illu-graine { width: 128px; height: 128px; }
@@ -794,3 +784,69 @@ body.bloque { overflow: hidden; }
   background-size: 40px; background-position: center; background-repeat: no-repeat;
 }
 .charge.modale-image { background-color: #F3EEE6; }  /* fond du visuel, sans bandes */
+
+/* ---------- Accueil : sachets en éventail dans le héros ---------- */
+/* Grand écran : l'étiquette à gauche, les sachets à droite. Tablette : masqués (pas la place).
+   Mobile : posés sur le bord haut de l'étiquette, devant la vidéo. */
+.heros-sachets { display: none; pointer-events: none; }
+.heros-sachets img { width: auto; filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .38)); animation: sachet-entree 700ms var(--courbe) both; }
+.heros-sachets img:nth-child(1) { --r: -9deg; transform: rotate(var(--r)); animation-delay: 80ms; }
+.heros-sachets img:nth-child(2) { --r: -3deg; transform: rotate(var(--r)) translateY(-14px); animation-delay: 160ms; z-index: 1; }
+.heros-sachets img:nth-child(3) { --r: 3deg;  transform: rotate(var(--r)) translateY(-10px); animation-delay: 240ms; }
+.heros-sachets img:nth-child(4) { --r: 9deg;  transform: rotate(var(--r)); animation-delay: 320ms; }
+@keyframes sachet-entree { from { opacity: 0; translate: 0 24px; } }
+@media (min-width: 1000px) {
+  .heros-cadre { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--e-5); }
+  .etiquette { flex: 0 1 600px; }
+  .heros-sachets { display: flex; align-items: flex-end; padding: 0 var(--e-4) 40px 0; }
+  .heros-sachets img { height: clamp(200px, 18vw, 260px); }
+  .heros-sachets img + img { margin-left: -28px; }
+  /* Crédit et bouton pause en haut à droite, loin des sachets (comme sur tablette) */
+  .video-bouton { top: 16px; bottom: auto; right: 16px; }
+  .video-credit { top: 28px; bottom: auto; right: 72px; }
+}
+@media (max-width: 720px) {
+  .heros-cadre { position: relative; }
+  .heros-sachets {
+    display: flex; justify-content: center; align-items: flex-end;
+    position: absolute; left: 0; right: 0; top: 0; z-index: 2; transform: translateY(calc(-100% + 18px));
+  }
+  .heros-sachets img { height: 128px; }
+  .heros-sachets img + img { margin-left: -26px; }
+  .heros-fond { min-height: 200px; }
+  .video-credit { font-size: 11px; opacity: .85; }
+}
+
+/* ---------- Cartes produit : une teinte douce par légume, le sachet détouré dessus ---------- */
+.carte[data-id="oignon"] { --teinte: #F5E8CC; }
+.carte[data-id="tomate"] { --teinte: #F6E0D6; }
+.carte[data-id="chou"]   { --teinte: #E3ECD4; }
+.carte[data-id="piment"] { --teinte: #F7E3CF; }
+.carte .carte-image { background-color: var(--teinte, var(--kraft)); border-bottom: 0; }
+.carte .carte-image.charge { background-size: auto 84%; background-position: center 62%; transition: background-size var(--normal) var(--courbe); }
+.carte .carte-image.photo-oignon.charge { background-image: url(../img/sachet-oignon-detoure.webp); }
+.carte .carte-image.photo-tomate.charge { background-image: url(../img/sachet-tomate-detoure.webp); }
+.carte .carte-image.photo-chou.charge   { background-image: url(../img/sachet-chou-detoure.webp); }
+.carte .carte-image.photo-piment.charge { background-image: url(../img/sachet-piment-detoure.webp); }
+.carte { transition: border-color var(--rapide), transform var(--rapide) var(--courbe), box-shadow var(--rapide); }
+@media (hover: hover) {
+  .carte:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(27, 58, 34, .14); }
+  .carte:hover .carte-image.charge { background-size: auto 90%; }
+}
+
+/* ---------- Accueil mobile : les sachets défilent à l'horizontale ---------- */
+/* La carte suivante dépasse à droite : on comprend qu'on peut glisser. */
+@media (max-width: 720px) {
+  .produits.defile-mobile:not(.produits-vide) {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 74%; gap: var(--e-3);
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(-1 * var(--gouttiere)); padding: var(--e-1) var(--gouttiere) var(--e-4);
+    scroll-padding-inline: var(--gouttiere);
+  }
+  .produits.defile-mobile::-webkit-scrollbar { display: none; }
+  .defile-mobile > .carte { scroll-snap-align: start; }
+  .defile-mobile .carte-image { aspect-ratio: 1 / 1; }
+  .defile-mobile .carte-reperes { grid-template-columns: 1fr 1fr; }
+  /* Bouton sous le prix, pleine largeur : il dépasse déjà sur la carte suivante, on l'atteint sans glisser */
+  .defile-mobile .carte-pied .btn { flex-basis: 100%; }
+}

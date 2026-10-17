@@ -182,13 +182,15 @@ function chargerVisuels(racine = document) {
   racine.querySelectorAll('.carte-image, .modale-image, .fiche-vignette, .ligne-vignette').forEach(el => {
     const id = (el.className.match(/\bphoto-([a-z]+)/) || [])[1];
     if (!id) return;
-    if (!visuels[id]) {
+    // Les cartes montrent le sachet détouré sur une teinte, les autres zones la photo d'origine
+    const fichier = el.classList.contains('carte-image') ? `sachet-${id}-detoure` : `sachet-${id}`;
+    if (!visuels[fichier]) {
       const img = new Image();
-      img.src = `img/sachet-${id}.webp`;
-      visuels[id] = (img.decode ? img.decode() : Promise.resolve()).then(() => true, () => false);
+      img.src = `img/${fichier}.webp`;
+      visuels[fichier] = (img.decode ? img.decode() : Promise.resolve()).then(() => true, () => false);
     }
     // En cas d'erreur, le fond kraft et la pousse restent (le nom du sachet est dans aria-label)
-    visuels[id].then(ok => { if (ok) el.classList.add('charge'); });
+    visuels[fichier].then(ok => { if (ok) el.classList.add('charge'); });
   });
 }
 
