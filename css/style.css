@@ -428,25 +428,30 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .ligne-cal .actuel::before { content: ""; position: absolute; inset: -5px -2px; z-index: -1; background: var(--surligne); }
 .ligne-cal .mois.actuel { background: var(--vert-fonce); color: var(--papier); }
 .ligne-cal strong { font-size: 15px; }
+.lien-cal { color: inherit; text-decoration: underline dotted var(--vert); text-underline-offset: 4px; display: inline-flex; align-items: center; min-height: 32px; }
+.lien-cal:hover { color: var(--vert); }
 .case { position: relative; height: 28px; border-radius: 4px; background: #EFE7D3; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
 .case.s { background: var(--vert); color: #fff; }
 .case.r { background: var(--jaune); }
 .case.sr { background: linear-gradient(90deg, var(--vert) 50%, var(--jaune) 50%); }
 .case.actuel { outline: 2px solid var(--vert-fonce); outline-offset: 1px; }
 
-.bases { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--e-6); padding-block: var(--e-6) var(--e-4); }
-.base { border-top: 3px solid var(--vert-fonce); padding-top: 16px; display: flex; flex-direction: column; gap: 8px; }
-.base h2 { font-size: var(--t-h3); }
-.par-culture { padding-top: var(--e-7); }
+.bases-section { padding-top: var(--section); display: flex; flex-direction: column; gap: var(--e-5); }
+.bases-section > h2 { font-size: var(--t-h2); line-height: 1.1; }
+.bases { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--e-4); }
+.base { background: var(--kraft); border-radius: var(--r-carte); padding: var(--e-5); display: flex; flex-direction: column; gap: var(--e-2); }
+.base-picto { width: 48px; height: 48px; border-radius: 50%; background: var(--blanc); color: var(--vert); display: flex; align-items: center; justify-content: center; margin-bottom: var(--e-1); }
+.base-picto .icone { width: 26px; height: 26px; }
+.base h3 { font-size: 20px; }
+.par-culture { padding-top: var(--section); }
 .par-culture h2 { font-size: var(--t-h2); line-height: 1.1; }
 .base p { font-size: 15px; line-height: 1.6; color: var(--texte-doux); }
 
-.fiches { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr)); gap: 20px; padding-top: var(--e-5); align-items: start; }
-.fiche { background: var(--blanc); border: 1px solid var(--filet); border-radius: var(--r-carte); padding: 26px; display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 110px; }
-.fiche:target { border-color: var(--vert-fonce); box-shadow: inset 0 0 0 1px var(--vert-fonce); }
-.fiche-haut > div { display: flex; align-items: center; gap: 14px; }
-.fiche-vignette { width: 56px; height: 64px; border-radius: var(--r-petit); flex-shrink: 0; }
-.fiche h2 { font-size: var(--t-h3); }
+.fiches { display: flex; flex-direction: column; gap: var(--e-5); padding-top: var(--e-5); }
+.fiche { background: var(--blanc); border: 1px solid var(--filet); border-radius: var(--r-carte); padding: 26px; display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 170px; }  /* en-tête + choix de la culture, collants */
+.fiche-haut { display: flex; align-items: center; gap: var(--e-4); }
+.fiche-vignette { width: 72px; height: 84px; border-radius: var(--r-petit); flex-shrink: 0; }
+.fiche h3 { font-size: clamp(26px, 3.4vw, 34px); }
 .variete-fiche { font-size: 14px; color: var(--terre); display: block; }
 .reperes { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
 .repere { background: var(--papier); border-radius: var(--r-petit); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
@@ -460,7 +465,7 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 /* « Pour quelle surface ? » : fiche produit et fiches de culture */
 .surface { background: var(--papier); border-radius: var(--r-petit); padding: 14px; display: flex; flex-direction: column; gap: var(--e-2); }
 .surface-haut { display: flex; justify-content: space-between; align-items: center; gap: var(--e-3); flex-wrap: wrap; }
-.surface h3 { font-size: 16px; font-weight: 800; }
+.surface :is(h3, h4) { font-size: 16px; font-weight: 800; }
 .indicatif { border: 1px solid var(--terre); color: var(--terre); border-radius: 4px; padding: 0 6px; font-size: var(--t-label); font-weight: 700; }
 .surface dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-3); }
 .surface dt { font-size: var(--t-label); color: var(--terre); }
@@ -969,3 +974,45 @@ body.bloque { overflow: hidden; }
   .atouts li { padding: 0; border: 0; background: none; border-radius: 0; align-items: flex-start; }
   .atouts .icone { margin-top: 1px; }
 }
+
+/* ---------- Conseils : choix de la culture, une fiche à la fois ---------- */
+.choix-culture {
+  position: sticky; top: 72px; z-index: 5; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--e-2);
+  padding-block: var(--e-2); background: var(--papier);
+}
+.choix {
+  display: flex; align-items: center; justify-content: center; gap: var(--e-2); min-height: 56px; padding: 6px 12px 6px 6px; cursor: pointer;
+  border: 1.5px solid var(--filet); border-radius: 999px; background: var(--blanc); color: var(--vert-fonce); font: inherit; font-weight: 800; font-size: 16px;
+  transition: border-color var(--rapide), background-color var(--rapide);
+}
+.choix:hover { border-color: var(--vert); }
+.choix[aria-pressed="true"] { background: var(--vert-fonce); border-color: var(--vert-fonce); color: var(--papier); }
+.choix-vignette { width: 40px; height: 44px; flex: none; border-radius: 50%; background-color: var(--teinte, var(--kraft)); }
+.fiche[hidden] { display: none; }
+.fiche { animation: apparition 350ms var(--courbe) both; }
+/* Fiches de culture : sachet détouré sur la teinte du légume */
+.fiche-vignette, .choix-vignette { background-color: var(--teinte, var(--kraft)); }
+:is(.fiche-vignette, .choix-vignette).charge { background-size: auto 86%; background-position: center; }
+:is(.fiche-vignette, .choix-vignette).photo-oignon.charge { background-image: url(../img/sachet-oignon-detoure.webp); }
+:is(.fiche-vignette, .choix-vignette).photo-tomate.charge { background-image: url(../img/sachet-tomate-detoure.webp); }
+:is(.fiche-vignette, .choix-vignette).photo-chou.charge   { background-image: url(../img/sachet-chou-detoure.webp); }
+:is(.fiche-vignette, .choix-vignette).photo-piment.charge { background-image: url(../img/sachet-piment-detoure.webp); }
+/* Grand écran : repères et surface à gauche, étapes à droite */
+@media (min-width: 960px) {
+  .fiche { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--e-7); row-gap: var(--e-4); align-items: start; padding: var(--e-6); }
+  .fiche > :not(.fiche-etapes) { grid-column: 1; }
+  .fiche-etapes { grid-column: 2; grid-row: 1 / span 4; display: flex; flex-direction: column; gap: var(--e-3); }
+}
+@media (max-width: 720px) {
+  .choix-culture { top: 60px; gap: 6px; }
+  .choix { flex-direction: column; gap: 2px; min-height: 0; padding: 6px 2px 8px; border-radius: var(--r-carte); font-size: 14px; }
+  .choix-vignette { width: 36px; height: 40px; }
+  .fiche { padding: var(--e-5) var(--e-4); }
+  .fiche-vignette { width: 60px; height: 70px; }
+}
+.fiche-etapes { display: flex; flex-direction: column; gap: var(--e-3); }
+
+/* ---------- Conseils : après la FAQ ---------- */
+.faq-suite { display: flex; flex-direction: column; align-items: flex-start; gap: var(--e-3); margin-top: var(--e-4); padding: var(--e-5); background: var(--kraft); border-radius: var(--r-carte); }
+.faq-suite p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--vert-fonce); font-weight: 700; max-width: none; }
+@media (max-width: 720px) { .faq-suite .btn { width: 100%; min-height: 52px; } }

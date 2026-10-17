@@ -21,6 +21,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <!-- Scripts chargés plus bas dans la page : téléchargés dès maintenant, ils sont prêts
+       avant le premier affichage (pas de décalage quand le contenu généré apparaît) -->
+  <link rel="preload" href="js/donnees.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body>
   <a class="evitement" href="#contenu">Aller au contenu</a>
@@ -43,8 +47,11 @@
 
     <section class="conteneur intro">
       <h1 class="grand-titre">Fiches de culture</h1>
-      <p>Les repères pour réussir chaque culture. Le QR code de chaque sachet renvoie vers la fiche correspondante.</p>
+      <p>Quand semer, comment repiquer, quand récolter. Le QR code au dos de chaque sachet ouvre directement sa fiche.</p>
     </section>
+
+    <script src="js/donnees.js"></script>
+    <script src="js/main.js"></script>
 
     <!-- Calendrier (lignes générées par js/main.js) -->
     <section class="conteneur section-cal" aria-labelledby="t-cal">
@@ -59,21 +66,26 @@
         </div>
       </div>
     </section>
-    <!-- Script chargé ici, et pas en tête avec defer : le calendrier est rempli avant le premier
-         affichage, la suite de la page n'est donc jamais poussée vers le bas -->
-    <script src="js/donnees.js"></script>
-    <script src="js/main.js"></script>
 
-    <section class="conteneur bases" aria-label="Les bases">
-      <div class="base"><h2>Préparer le sol</h2><p>Ameublir sur 25 à 30 cm, retirer les cailloux et incorporer du fumier bien décomposé deux semaines avant le semis.</p></div>
-      <div class="base"><h2>Réussir la pépinière</h2><p>Semer en planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer en fin de journée.</p></div>
-      <div class="base"><h2>Arroser au bon moment</h2><p>Tôt le matin ou en fin d'après-midi, au pied des plants. Pailler pour limiter l'évaporation.</p></div>
+    <!-- Par culture : un sélecteur et une fiche à la fois (générés par js/main.js).
+         Le QR code du sachet mène à conseils.html#fiche-<légume>, qui ouvre la bonne fiche. -->
+    <section class="conteneur par-culture" aria-labelledby="t-par-culture">
+      <h2 class="titre" id="t-par-culture">Par culture</h2>
+      <div class="fiches" id="fiches"></div>
     </section>
+    <!-- Calendrier et fiches remplis ici, dès leur lecture : pas d'affichage intermédiaire vide,
+         donc rien n'est poussé vers le bas ensuite (scripts chargés juste avant le calendrier) -->
+    <script>rendreZones();</script>
 
-    <section class="conteneur par-culture">
-      <h2 class="titre">Par culture</h2>
+    <!-- Les bases, valables pour les quatre cultures -->
+    <section class="conteneur bases-section" aria-labelledby="t-bases">
+      <h2 id="t-bases">Les bases, pour toutes les cultures</h2>
+      <div class="bases">
+        <div class="base"><span class="base-picto"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v7"/><path d="m9 7 3 3 3-3"/><path d="M3 14h18"/><ellipse cx="12" cy="18" rx="2.5" ry="1.5"/></svg></span><h3>Préparer le sol</h3><p>Ameublir sur 25 à 30 cm, retirer les cailloux et incorporer du fumier bien décomposé deux semaines avant le semis.</p></div>
+        <div class="base"><span class="base-picto"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 15h18l-1.5 5h-15z"/><path d="M12 15V9"/><path d="M12 10.5c0-2 1.3-3.5 3.5-3.5 0 2-1.3 3.5-3.5 3.5z"/><path d="M12 12c0-2-1.3-3.5-3.5-3.5 0 2 1.3 3.5 3.5 3.5z"/><path d="M6 15v-3"/><path d="M18 15v-3"/></svg></span><h3>Réussir la pépinière</h3><p>Semer en planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer en fin de journée.</p></div>
+        <div class="base"><span class="base-picto"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 10h9v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M5 12a2.5 2.5 0 0 0 0 5"/><path d="m14 13 5-6"/><path d="m17.5 5.5 3 2.5"/><path d="M21 11v.01"/><path d="M22 14v.01"/></svg></span><h3>Arroser au bon moment</h3><p>Tôt le matin ou en fin d'après-midi, au pied des plants. Pailler pour limiter l'évaporation.</p></div>
+      </div>
     </section>
-    <section class="conteneur fiches" id="fiches" aria-label="Fiches par culture"></section>
 
     <section class="conteneur faq" aria-labelledby="t-faq">
       <h2 id="t-faq">Questions fréquentes</h2>
@@ -82,6 +94,11 @@
         <details><summary>Comment conserver les graines restantes ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Dans le sachet refermé, au sec, à l'abri de la lumière et de la chaleur.</p></details>
         <details><summary>Livrez-vous en dehors de Dakar ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Oui, dans toutes les régions en 3 à 5 jours.</p></details>
         <details><summary>Puis-je commander en grande quantité ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Oui. Écrivez-nous sur WhatsApp pour un tarif producteur.</p></details>
+      </div>
+      <!-- Pas de cul-de-sac : la question qui n'est pas dans la liste part sur WhatsApp -->
+      <div class="faq-suite">
+        <p>Votre question n'est pas dans la liste&nbsp;? L'équipe répond sur WhatsApp, en français ou en wolof.</p>
+        <a class="btn btn-sombre" href="https://wa.me/221771786915?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." data-wa target="_blank" rel="noopener"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Écrire sur WhatsApp</a>
       </div>
     </section>
   </main>

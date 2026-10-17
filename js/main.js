@@ -189,11 +189,11 @@ function bandeauSaison(zone) {
 // Une seule promesse par visuel : la carte, la fiche et le panier partagent le même chargement
 const visuels = {};
 function chargerVisuels(racine = document) {
-  racine.querySelectorAll('.carte-image, .modale-image, .fiche-vignette, .ligne-vignette').forEach(el => {
+  racine.querySelectorAll('.carte-image, .modale-image, .fiche-vignette, .choix-vignette, .ligne-vignette').forEach(el => {
     const id = (el.className.match(/\bphoto-([a-z]+)/) || [])[1];
     if (!id) return;
-    // Cartes et fiche produit : sachet détouré sur une teinte ; panier et conseils : photo d'origine
-    const detoure = el.classList.contains('carte-image') || el.classList.contains('modale-image');
+    // Cartes, fiche produit et fiches de culture : sachet détouré sur une teinte ; panier : photo d'origine
+    const detoure = ['carte-image', 'modale-image', 'fiche-vignette', 'choix-vignette'].some(c => el.classList.contains(c));
     const fichier = detoure ? `sachet-${id}-detoure` : `sachet-${id}`;
     if (!visuels[fichier]) {
       const img = new Image();
@@ -308,6 +308,8 @@ function blocSurface(p, contexte) {
   const s = surfaceSachet(p);
   if (!s) return '';
   const id = `surface-${contexte}-${p.id}`;
+  // Dans les fiches de culture, le bloc est sous le titre h3 de la fiche
+  const titre = contexte === 'fiche' ? 'h4' : 'h3';
   const corps = s.plants
     ? `<dl>
         <div><dt>Jusqu'à</dt><dd>${nombre(s.plants)} plants</dd></div>
@@ -317,7 +319,7 @@ function blocSurface(p, contexte) {
     : `<p>Planté à ${s.a} × ${s.b} cm : environ ${nombre(s.parM2)} plant${s.parM2 > 1 ? 's' : ''} par m².</p>`;
   return `
     <div class="surface" role="group" aria-labelledby="${id}">
-      <div class="surface-haut"><h3 id="${id}">Pour quelle surface ?</h3><span class="indicatif">Indicatif</span></div>
+      <div class="surface-haut"><${titre} id="${id}">Pour quelle surface&nbsp;?</${titre}><span class="indicatif">Indicatif</span></div>
       ${corps}
     </div>`;
 }
@@ -341,7 +343,7 @@ function etapesIllustrees(p) {
   const etapes = etapesDe(p);
   if (!etapes) return `<ol class="fiche-conseils">${p.conseils.map(c => `<li>${c}</li>`).join('')}</ol>`;
   return `
-    <h3 class="etapes-titre">Les étapes</h3>
+    <h4 class="etapes-titre">Les étapes</h4>
     <ol class="etapes">
       ${ETAPES.map((e, i) => `
         <li>
@@ -444,7 +446,7 @@ function afficherCalendrier(conteneur) {
     MOIS.map((m, i) => `<span class="mois${i === ceMois ? ' actuel' : ''}">${m}</span>`).join('') + '</div>';
   for (const p of PRODUITS) {
     const c = CALENDRIER[p.id];
-    html += `<div class="ligne-cal"><strong>${p.nom}</strong>`;
+    html += `<div class="ligne-cal"><strong><a class="lien-cal" href="#fiche-${p.id}">${p.nom}</a></strong>`;
     MOIS.forEach((m, i) => {
       const s = c.s.includes(i), r = c.r.includes(i);
       const classe = (s && r ? 'sr' : s ? 's' : r ? 'r' : '') + (i === ceMois ? ' actuel' : '');
@@ -469,13 +471,18 @@ function afficherFiches(conteneur) {
     conteneur.innerHTML = '<p class="etat-vide">Les fiches reviennent avec les semences.</p>';
     return;
   }
-  conteneur.innerHTML = PRODUITS.map(p => `
-    <article class="fiche" id="fiche-${p.id}">
+  conteneur.innerHTML = `
+    <div class="choix-culture" role="group" aria-label="Choisir une culture">
+      ${PRODUITS.map(p => `
+        <button type="button" class="choix" data-culture="${p.id}" aria-pressed="false" aria-controls="fiche-${p.id}">
+          <span class="choix-vignette photo-${p.id}" aria-hidden="true"></span>${echapper(p.nom)}
+        </button>`).join('')}
+    </div>
+    ${PRODUITS.map(p => `
+    <article class="fiche" id="fiche-${p.id}" aria-labelledby="t-fiche-${p.id}">
       <div class="fiche-haut">
-        <div>
-          <span class="fiche-vignette photo-${p.id}" aria-hidden="true"></span>
-          <div><h2>${p.nom}</h2><span class="variete-fiche">${echapper(p.variete)}</span></div>
-        </div>
+        <span class="fiche-vignette photo-${p.id}" aria-hidden="true"></span>
+        <div><h3 id="t-fiche-${p.id}">${echapper(p.nom)}</h3><span class="variete-fiche">${echapper(p.variete)}</span></div>
       </div>
       <div class="reperes">
         <div class="repere"><span>Semis</span><b>${p.semis}</b></div>
@@ -483,16 +490,44 @@ function afficherFiches(conteneur) {
         <div class="repere"><span>Espacement</span><b>${p.espacement}</b></div>
       </div>
       ${blocSurface(p, 'fiche')}
-      ${etapesIllustrees(p)}
+      <div class="fiche-etapes">${etapesIllustrees(p)}</div>
       <div class="fiche-pied">
         <strong>Sachet de 5 g, ${prix(p.prix)} FCFA</strong>
-        ${p.enStock ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter au panier : ${p.nom}">Ajouter au panier</button>` : '<span class="epuise">Épuisé</span>'}
+        ${p.enStock ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter au panier : ${echapper(p.nom)}">Ajouter au panier</button>` : '<span class="epuise">Épuisé</span>'}
       </div>
-    </article>`).join('');
+    </article>`).join('')}`;
   chargerVisuels(conteneur);
+
+  // Une fiche à la fois. L'ancre de l'adresse (#fiche-tomate, depuis le QR code) choisit la fiche.
+  const idDepuisAncre = () => (location.hash.match(/^#fiche-([a-z]+)$/) || [])[1];
+  const montrer = id => {
+    const p = produit(id) || PRODUITS[0];
+    conteneur.querySelectorAll('.fiche').forEach(f => { f.hidden = f.id !== `fiche-${p.id}`; });
+    conteneur.querySelectorAll('[data-culture]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.culture === p.id)));
+    return p;
+  };
+  const { aSemer } = saison();
+  const depart = idDepuisAncre() || (aSemer[0] || PRODUITS[0]).id;
+  montrer(depart);
+  if (idDepuisAncre()) requestAnimationFrame(() => $(`#fiche-${depart}`)?.scrollIntoView());
+
   conteneur.addEventListener('click', e => {
+    const choix = e.target.closest('[data-culture]');
+    if (choix) {
+      const p = montrer(choix.dataset.culture);
+      // L'adresse suit le choix (partage du lien), sans saut de page
+      history.replaceState(null, '', `#fiche-${p.id}`);
+      return;
+    }
     const bouton = e.target.closest('[data-ajouter]');
     if (bouton) ajouter(bouton.dataset.ajouter, 1, bouton);
+  });
+  // Liens #fiche-… dans la page (noms du calendrier) : on affiche la fiche, puis le navigateur y descend
+  window.addEventListener('hashchange', () => {
+    const id = idDepuisAncre();
+    if (!id) return;
+    montrer(id);
+    $(`#fiche-${id}`)?.scrollIntoView();
   });
 }
 
