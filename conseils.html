@@ -16,13 +16,11 @@
   <meta property="og:locale" content="fr_SN">
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:url" content="https://pepix-site.netlify.app/conseils.html">
-  <link rel="icon" href="img/logo.png">
+  <link rel="icon" href="img/favicon-64.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/donnees.js" defer></script>
-  <script src="js/main.js" defer></script>
 </head>
 <body>
   <a class="evitement" href="#contenu">Aller au contenu</a>
@@ -37,7 +35,7 @@
         <a href="conseils.html" aria-current="page">Conseils</a>
         <a href="boutique.html">Boutique</a>
       </nav>
-      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier<span class="compteur">0</span></button>
+      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier <span class="compteur">0</span></button>
     </div>
   </header>
 
@@ -45,22 +43,26 @@
 
     <section class="conteneur intro">
       <h1 class="grand-titre">Fiches de culture</h1>
-      <p style="max-width:620px">Les repères pour réussir chaque culture. Le QR code de chaque sachet renvoie vers la fiche correspondante.</p>
+      <p>Les repères pour réussir chaque culture. Le QR code de chaque sachet renvoie vers la fiche correspondante.</p>
     </section>
 
     <!-- Calendrier (lignes générées par js/main.js) -->
-    <section class="conteneur" style="padding-top:16px;padding-bottom:16px" aria-labelledby="t-cal">
+    <section class="conteneur section-cal" aria-labelledby="t-cal">
       <div class="calendrier" id="calendrier">
-        <div class="calendrier-haut">
-          <h2 id="t-cal">Calendrier de semis et de récolte</h2>
-          <div class="legende">
-            <span><i style="background:#3D7322;color:#fff">S</i>Semis</span>
-            <span><i style="background:#F2B817">R</i>Récolte</span>
-            <span><i class="maintenant"></i>Ce mois-ci</span>
-          </div>
+        <h2 id="t-cal">Calendrier de semis et de récolte</h2>
+        <!-- L'encart du mois en cours est ajouté ici par js/main.js -->
+        <div class="legende">
+          <span><i class="case s" aria-hidden="true">S</i>Semis</span>
+          <span><i class="case r" aria-hidden="true">R</i>Récolte</span>
+          <span><i class="case sr" aria-hidden="true">S·R</i>Semis et récolte</span>
+          <span><i class="maintenant" aria-hidden="true"></i>Ce mois-ci</span>
         </div>
       </div>
     </section>
+    <!-- Script chargé ici, et pas en tête avec defer : le calendrier est rempli avant le premier
+         affichage, la suite de la page n'est donc jamais poussée vers le bas -->
+    <script src="js/donnees.js"></script>
+    <script src="js/main.js"></script>
 
     <section class="conteneur bases" aria-label="Les bases">
       <div class="base"><h2>Préparer le sol</h2><p>Ameublir sur 25 à 30 cm, retirer les cailloux et incorporer du fumier bien décomposé deux semaines avant le semis.</p></div>
@@ -68,15 +70,15 @@
       <div class="base"><h2>Arroser au bon moment</h2><p>Tôt le matin ou en fin d'après-midi, au pied des plants. Pailler pour limiter l'évaporation.</p></div>
     </section>
 
-    <section class="conteneur" style="padding-top:32px">
-      <h2 class="titre" style="font-size:32px">Par culture</h2>
+    <section class="conteneur par-culture">
+      <h2 class="titre">Par culture</h2>
     </section>
     <section class="conteneur fiches" id="fiches" aria-label="Fiches par culture"></section>
 
     <section class="conteneur faq" aria-labelledby="t-faq">
       <h2 id="t-faq">Questions fréquentes</h2>
       <div class="faq-liste">
-        <details><summary>Combien de plants avec un sachet de 5 g ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Selon l'espèce : environ 1 000 plants pour la tomate et le piment, davantage pour l'oignon. Le détail figure sur chaque fiche.</p></details>
+        <details><summary>Combien de plants avec un sachet de 5 g ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Selon l'espèce, de 650 graines environ pour le piment à 1 500 pour la tomate. Le détail figure sur chaque fiche, rubrique « Pour quelle surface ? ».</p></details>
         <details><summary>Comment conserver les graines restantes ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Dans le sachet refermé, au sec, à l'abri de la lumière et de la chaleur.</p></details>
         <details><summary>Livrez-vous en dehors de Dakar ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Oui, dans toutes les régions en 3 à 5 jours.</p></details>
         <details><summary>Puis-je commander en grande quantité ? <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></summary><p>Oui. Écrivez-nous sur WhatsApp pour un tarif producteur.</p></details>

@@ -16,13 +16,11 @@
   <meta property="og:locale" content="fr_SN">
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:url" content="https://pepix-site.netlify.app/boutique.html">
-  <link rel="icon" href="img/logo.png">
+  <link rel="icon" href="img/favicon-64.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/donnees.js" defer></script>
-  <script src="js/main.js" defer></script>
 </head>
 <body>
   <a class="evitement" href="#contenu">Aller au contenu</a>
@@ -37,7 +35,7 @@
         <a href="conseils.html">Conseils</a>
         <a href="boutique.html" aria-current="page">Boutique</a>
       </nav>
-      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier<span class="compteur">0</span></button>
+      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier <span class="compteur">0</span></button>
     </div>
   </header>
 
@@ -48,10 +46,15 @@
       <p class="note">Sachets de 5 g conditionnés par Pépix. Livraison en 24 à 48 h à Dakar, 3 à 5 jours en région, <span data-reglage="fraisLivraison">1 000 FCFA</span>.</p>
     </section>
 
-    <section class="conteneur" style="padding-top:16px;padding-bottom:64px" aria-label="Produits">
+    <section class="conteneur section section-suite" aria-label="Produits">
       <h2 class="sr-only">Nos sachets de semences</h2>
-      <!-- Cartes générées par js/main.js -->
+      <!-- Bandeau de saison et cartes générés par js/main.js -->
+      <p class="saison" id="saison" role="note" hidden></p>
       <div class="produits" id="produits-boutique"></div>
+      <!-- Script chargé ici, et pas en tête avec defer : la grille est rempli avant le premier
+         affichage, la suite de la page n'est donc jamais poussée vers le bas -->
+    <script src="js/donnees.js"></script>
+    <script src="js/main.js"></script>
       <p class="paiements">Paiement par Wave, Orange Money ou en espèces à la livraison.</p>
     </section>
   </main>

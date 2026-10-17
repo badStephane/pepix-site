@@ -18,7 +18,8 @@ const CALENDRIER = {
   chou:   { s: [9, 10, 11, 0], r: [0, 1, 2, 3] },
   piment: { s: [9, 10, 11, 0, 1, 2], r: [0, 1, 2, 3, 4, 5] },
 };
-const MOIS = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+// En-têtes du calendrier sur 3 lettres : lève l'ambiguïté J / J / J et M / M
+const MOIS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 const MOIS_LONGS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 const FRAIS_LIVRAISON = Math.max(0, Number(REGLAGES.fraisLivraison) || 0);
 
@@ -35,12 +36,46 @@ const ICONES = {
   pause: '<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
   lecture: '<polygon points="6 3 20 12 6 21 6 3"/>',
   alerte: '<circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>',
+  // Réassurance et saison (Lucide, licence ISC)
+  pousse: '<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>',
+  calendrier: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+  // Étapes de culture (dessinées pour Pépix, même trait que Lucide)
+  semis: '<path d="M12 3v7"/><path d="m9 7 3 3 3-3"/><path d="M3 14h18"/><ellipse cx="12" cy="18" rx="2.5" ry="1.5"/>',
+  pepiniere: '<path d="M3 15h18l-1.5 5h-15z"/><path d="M12 15V9"/><path d="M12 10.5c0-2 1.3-3.5 3.5-3.5 0 2-1.3 3.5-3.5 3.5z"/><path d="M12 12c0-2-1.3-3.5-3.5-3.5 0 2 1.3 3.5 3.5 3.5z"/><path d="M6 15v-3"/><path d="M18 15v-3"/>',
+  repiquage: '<path d="M3 20h18"/><path d="M15 20v-6"/><path d="M15 15.5c0-2 1.3-3.5 3.5-3.5 0 2-1.3 3.5-3.5 3.5z"/><path d="M15 17c0-2-1.3-3.5-3.5-3.5 0 2 1.3 3.5 3.5 3.5z"/><path d="M4 10c2-4 6-5 9-3"/><path d="m10 4 3 3-3 2"/>',
+  // Arrosoir simplifié après contrôle à 24 px : anse sur le côté (l'anse en arche faisait penser à un cadenas)
+  arrosoir: '<path d="M5 10h9v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M5 12a2.5 2.5 0 0 0 0 5"/><path d="m14 13 5-6"/><path d="m17.5 5.5 3 2.5"/><path d="M21 11v.01"/><path d="M22 14v.01"/>',
+  panier: '<path d="M3 10h18l-2 9a2 2 0 0 1-2 1.6H7A2 2 0 0 1 5 19z"/><path d="m8 10 3-6"/><path d="m16 10-3-6"/><path d="M9 14v3"/><path d="M12 14v3"/><path d="M15 14v3"/>',
 };
+// Les 5 étapes de culture, dans l'ordre des textes de PRODUITS_BASE[].etapes
+const ETAPES = [
+  { icone: 'semis', nom: 'Semis' },
+  { icone: 'pepiniere', nom: 'Pépinière' },
+  { icone: 'repiquage', nom: 'Repiquage' },
+  { icone: 'arrosoir', nom: 'Entretien' },
+  { icone: 'panier', nom: 'Récolte' },
+];
+// Illustration des états vides (panier vide, 404) : une graine en terre qui germe
+const ILLU_GRAINE = `<svg class="illu-graine" viewBox="0 0 96 96" width="96" height="96" aria-hidden="true" focusable="false">
+  <circle cx="48" cy="48" r="46" fill="#E9DCC3"/>
+  <path d="M14 62h68" stroke="#5B3F26" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M24 72h10M44 76h8M62 72h10" stroke="#5B3F26" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
+  <ellipse cx="48" cy="70" rx="7" ry="4.5" transform="rotate(-20 48 70)" fill="#5B3F26"/>
+  <g class="illu-pousse">
+    <path d="M48 66V46" stroke="#3D7322" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M48 50c0-7 5-11 12-11 0 7-5 11-12 11z" fill="#3D7322"/>
+    <path d="M48 54c0-6-4-9-10-9 0 6 4 9 10 9z" fill="#3D7322"/>
+  </g>
+</svg>`;
 const icone = (nom, classe = 'icone') =>
   `<svg class="${classe}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONES[nom]}</svg>`;
 
 // Format "1 500"
 const prix = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+// Même format avec une espace insécable : "1 500 plants" ne se coupe pas
+const nombre = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0');
+// "oignon, tomate et chou"
+const liste = l => l.length > 1 ? l.slice(0, -1).join(', ') + ' et ' + l[l.length - 1] : (l[0] || '');
 const $ = sel => document.querySelector(sel);
 // Tout texte saisi (admin ou client) est échappé avant d'aller dans du HTML
 const echapper = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -90,10 +125,16 @@ function ajouter(id, qte = 1, bouton) {
 // Le bouton « Ajouter » affiche « Ajouté » quelques instants
 function confirmerBouton(bouton) {
   if (!bouton.dataset.texte) bouton.dataset.texte = bouton.innerHTML;
+  if (!bouton.dataset.libelle) bouton.dataset.libelle = bouton.getAttribute('aria-label') || '';
   bouton.innerHTML = icone('check') + 'Ajouté';
+  bouton.setAttribute('aria-label', 'Ajouté au panier');
   bouton.classList.add('ajoute');
   clearTimeout(bouton._t);
-  bouton._t = setTimeout(() => { bouton.innerHTML = bouton.dataset.texte; bouton.classList.remove('ajoute'); }, 1400);
+  bouton._t = setTimeout(() => {
+    bouton.innerHTML = bouton.dataset.texte;
+    if (bouton.dataset.libelle) bouton.setAttribute('aria-label', bouton.dataset.libelle); else bouton.removeAttribute('aria-label');
+    bouton.classList.remove('ajoute');
+  }, 1400);
 }
 
 function changerQuantite(id, qte) {
@@ -112,15 +153,56 @@ function notifier(texte) {
   minuteur = setTimeout(() => t.classList.remove('visible'), 3200);
 }
 
+/* ---------- Saison : ce qui se sème ce mois-ci (d'après CALENDRIER) ---------- */
+function saison() {
+  const mois = new Date().getMonth();
+  const aSemer = PRODUITS.filter(p => CALENDRIER[p.id].s.includes(mois));
+  // Toutes les semences affichées sont à semer : un seul message, pas de pastille (des pastilles identiques ne diraient rien)
+  const tous = aSemer.length > 0 && aSemer.length === PRODUITS.length;
+  return { mois, nomMois: MOIS_LONGS[mois], aSemer, tous, pastille: aSemer.length > 0 && !tous };
+}
+
+// Bandeau de la boutique, au-dessus de la grille
+function bandeauSaison(zone) {
+  if (!PRODUITS.length) { zone.hidden = true; return; }
+  const { nomMois, aSemer, tous } = saison();
+  const texte = tous
+    ? `En ${nomMois}, ${PRODUITS.length === 4 ? 'les quatre semences se sèment' : 'toutes nos semences se sèment'}. C'est le bon moment pour commander.`
+    : aSemer.length
+      ? `À semer en ${nomMois} : ${liste(aSemer.map(p => p.nom.toLowerCase()))}.`
+      : `Pas de semis en ${nomMois}. Les semis reprennent en octobre : commandez en septembre pour être prêt.`;
+  zone.innerHTML = `${icone('calendrier')}<span>${texte}</span>`;
+  zone.hidden = false;
+}
+
+/* ---------- Visuels des sachets : fond kraft tant que l'image n'est pas chargée ---------- */
+// Une seule promesse par visuel : la carte, la fiche et le panier partagent le même chargement
+const visuels = {};
+function chargerVisuels(racine = document) {
+  racine.querySelectorAll('.carte-image, .modale-image, .fiche-vignette, .ligne-vignette').forEach(el => {
+    const id = (el.className.match(/\bphoto-([a-z]+)/) || [])[1];
+    if (!id) return;
+    if (!visuels[id]) {
+      const img = new Image();
+      img.src = `img/sachet-${id}.webp`;
+      visuels[id] = (img.decode ? img.decode() : Promise.resolve()).then(() => true, () => false);
+    }
+    // En cas d'erreur, le fond kraft et la pousse restent (le nom du sachet est dans aria-label)
+    visuels[id].then(ok => { if (ok) el.classList.add('charge'); });
+  });
+}
+
 /* ---------- Cartes produit (accueil et boutique) ---------- */
-function carteProduit(p, avecLivraison) {
+function carteProduit(p, avecSaison) {
   // Carte façon sachet : photo, nom, variété, repères de culture, prix.
   // Toute la carte ouvre la fiche grâce au bouton du titre (étendu en CSS).
+  // La pastille de saison est hors de l'image (role="img" masquerait son texte)
   return `
     <article class="carte${p.enStock ? '' : ' carte-epuisee'}" data-id="${p.id}">
       <div class="carte-image photo-${p.id}" role="img" aria-label="Sachet de semences ${p.nom} Pépix"></div>
       <div class="carte-corps">
         <h3><button type="button" class="carte-ouvrir" data-ouvrir="${p.id}" aria-label="${p.nom}, voir la fiche">${p.nom}</button></h3>
+        ${avecSaison ? `<p class="pastille-saison">${icone('calendrier')}À semer en ${MOIS_LONGS[new Date().getMonth()]}</p>` : ''}
         <span class="variete">${echapper(p.variete)}, sachet de 5 g</span>
         <dl class="carte-reperes">
           <div><dt>Semis</dt><dd>${p.semis.replace(' (pépinière)', '')}</dd></div>
@@ -136,14 +218,92 @@ function carteProduit(p, avecLivraison) {
     </article>`;
 }
 
-function afficherProduits(conteneur, avecLivraison) {
-  conteneur.innerHTML = PRODUITS.map(p => carteProduit(p, avecLivraison)).join('');
+function afficherProduits(conteneur) {
+  if (!PRODUITS.length) {
+    // Tous les produits masqués depuis l'admin
+    conteneur.classList.add('produits-vide');
+    conteneur.innerHTML = `
+      <div class="etat-vide">
+        <p>Les semences reviennent bientôt. Écrivez-nous sur WhatsApp pour être prévenu.</p>
+        <a class="btn btn-sombre" href="${echapper(Pepix.lienWhatsApp("Bonjour Pépix, j'ai une question sur mes cultures."))}" target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+      </div>`;
+    return;
+  }
+  const { aSemer, pastille } = saison();
+  conteneur.innerHTML = PRODUITS.map(p => carteProduit(p, pastille && aSemer.includes(p))).join('');
+  chargerVisuels(conteneur);
   conteneur.addEventListener('click', e => {
     const bouton = e.target.closest('[data-ajouter]');
     if (bouton) { ajouter(bouton.dataset.ajouter, 1, bouton); return; }
     const carte = e.target.closest('.carte');
     if (carte) ouvrirFiche(carte.dataset.id);
   });
+}
+
+/* ---------- « Pour quelle surface ? » (fiche produit et fiches de culture) ---------- */
+// Formule, entrées et sources : voir le commentaire de PRODUITS_BASE (js/donnees.js)
+const arrondiBas = n => n < 100 ? Math.floor(n) : n < 1000 ? Math.floor(n / 10) * 10 : Math.floor(n / 100) * 100;
+
+function surfaceSachet(p) {
+  const m = String(p.espacement || '').match(/(\d+)\s*×\s*(\d+)/);
+  if (!m) return null;                       // espacement illisible : rien n'est affiché
+  const a = Number(m[1]), b = Number(m[2]);
+  if (!a || !b) return null;
+  if (!(Number(p.grainesParGramme) > 0)) {
+    // Repli sans nombre de graines : seulement ce que donne l'espacement
+    return { a, b, parM2: Math.max(1, Math.floor(10000 / (a * b))) };
+  }
+  const graines = GRAMMES_SACHET * Number(p.grainesParGramme);
+  const plants = arrondiBas(graines);        // plafond : 1 graine = 1 plant au mieux
+  const surface = arrondiBas(plants * a * b / 10000);
+  return { a, b, graines, plants, surface };
+}
+
+function blocSurface(p, contexte) {
+  const s = surfaceSachet(p);
+  if (!s) return '';
+  const id = `surface-${contexte}-${p.id}`;
+  const corps = s.plants
+    ? `<dl>
+        <div><dt>Jusqu'à</dt><dd>${nombre(s.plants)} plants</dd></div>
+        <div><dt>Jusqu'à</dt><dd>${nombre(s.surface)} m²</dd></div>
+      </dl>
+      <p>Un sachet de ${GRAMMES_SACHET} g, environ ${nombre(s.graines)} graines, plantées à ${s.a} × ${s.b} cm. Comptez des pertes à la levée et au repiquage.</p>`
+    : `<p>Planté à ${s.a} × ${s.b} cm : environ ${nombre(s.parM2)} plant${s.parM2 > 1 ? 's' : ''} par m².</p>`;
+  return `
+    <div class="surface" role="group" aria-labelledby="${id}">
+      <div class="surface-haut"><h3 id="${id}">Pour quelle surface ?</h3><span class="indicatif">Indicatif</span></div>
+      ${corps}
+    </div>`;
+}
+
+/* ---------- Étapes de culture : pictos toujours doublés d'un texte ---------- */
+const etapesDe = p => Array.isArray(p.etapes) && p.etapes.length === ETAPES.length ? p.etapes : null;
+
+// Version courte (fiche produit) : picto, nom de l'étape, valeur
+function etapesCourtes(p) {
+  const etapes = etapesDe(p);
+  if (!etapes) return '';
+  return `
+    <h3 class="etapes-titre">Les étapes</h3>
+    <ol class="etapes-courtes">
+      ${ETAPES.map((e, i) => `<li>${icone(e.icone)}<span class="etape-nom">${e.nom}</span><b>${echapper(etapes[i].court)}</b></li>`).join('')}
+    </ol>`;
+}
+
+// Version illustrée (fiches de culture) : numéro porté par la liste, picto, titre, texte
+function etapesIllustrees(p) {
+  const etapes = etapesDe(p);
+  if (!etapes) return `<ol class="fiche-conseils">${p.conseils.map(c => `<li>${c}</li>`).join('')}</ol>`;
+  return `
+    <h3 class="etapes-titre">Les étapes</h3>
+    <ol class="etapes">
+      ${ETAPES.map((e, i) => `
+        <li>
+          <span class="etape-picto">${icone(e.icone)}</span>
+          <div><strong class="etape-titre">${e.nom}</strong><p>${echapper(etapes[i].long)}</p></div>
+        </li>`).join('')}
+    </ol>`;
 }
 
 /* ---------- Textes réglés dans l'admin ---------- */
@@ -176,6 +336,16 @@ function appliquerReglages() {
 /* ---------- Page Conseils : calendrier et fiches ---------- */
 function afficherCalendrier(conteneur) {
   const ceMois = new Date().getMonth();
+  // Le mois en cours passe en tête, avant la légende
+  const aSemer = PRODUITS.filter(p => CALENDRIER[p.id].s.includes(ceMois)).map(p => p.nom.toLowerCase());
+  const aRecolter = PRODUITS.filter(p => CALENDRIER[p.id].r.includes(ceMois)).map(p => p.nom.toLowerCase());
+  const phrases = [
+    aSemer.length ? `À semer : ${aSemer.join(', ')}.` : '',
+    aRecolter.length ? `À récolter : ${aRecolter.join(', ')}.` : '',
+  ].filter(Boolean).join(' ') || 'Période de repos pour ces cultures.';
+  conteneur.querySelector('h2').insertAdjacentHTML('afterend',
+    `<p class="cal-mois">${icone('calendrier')}<span>Nous sommes en ${MOIS_LONGS[ceMois]}. ${phrases}</span></p>`);
+
   let html = '<p class="cal-glisser">Faites glisser le tableau pour voir toute l\'année.</p><div class="cal-defile" tabindex="0" role="region" aria-label="Calendrier, défilement horizontal"><div class="ligne-cal" aria-hidden="true"><span></span>' +
     MOIS.map((m, i) => `<span class="mois${i === ceMois ? ' actuel' : ''}">${m}</span>`).join('') + '</div>';
   for (const p of PRODUITS) {
@@ -191,18 +361,20 @@ function afficherCalendrier(conteneur) {
     html += '</div>';
   }
   html += '</div>';
-  // Conseil calculé pour le mois en cours
-  const aSemer = PRODUITS.filter(p => CALENDRIER[p.id].s.includes(ceMois)).map(p => p.nom.toLowerCase());
-  const aRecolter = PRODUITS.filter(p => CALENDRIER[p.id].r.includes(ceMois)).map(p => p.nom.toLowerCase());
-  const phrase = [
-    aSemer.length ? `à semer : ${aSemer.join(', ')}` : '',
-    aRecolter.length ? `à récolter : ${aRecolter.join(', ')}` : '',
-  ].filter(Boolean).join(', et ') || 'période de repos pour ces cultures';
-  html += `<p class="cal-note"><b>En ${MOIS_LONGS[ceMois]}</b>, ${phrase}.</p>`;
   conteneur.insertAdjacentHTML('beforeend', html);
+  // Sur petit écran, le calendrier défile : on amène le mois en cours dans la vue
+  const defile = conteneur.querySelector('.cal-defile');
+  const actuel = conteneur.querySelector('.mois.actuel');
+  if (defile && actuel && defile.scrollWidth > defile.clientWidth) {
+    defile.scrollLeft = Math.max(0, actuel.offsetLeft - defile.offsetLeft - defile.clientWidth / 2 + 60);
+  }
 }
 
 function afficherFiches(conteneur) {
+  if (!PRODUITS.length) {
+    conteneur.innerHTML = '<p class="etat-vide">Les fiches reviennent avec les semences.</p>';
+    return;
+  }
   conteneur.innerHTML = PRODUITS.map(p => `
     <article class="fiche" id="fiche-${p.id}">
       <div class="fiche-haut">
@@ -216,12 +388,14 @@ function afficherFiches(conteneur) {
         <div class="repere"><span>Cycle</span><b>${p.cycle}</b></div>
         <div class="repere"><span>Espacement</span><b>${p.espacement}</b></div>
       </div>
-      <ol>${p.conseils.map(c => `<li>${c}</li>`).join('')}</ol>
+      ${blocSurface(p, 'fiche')}
+      ${etapesIllustrees(p)}
       <div class="fiche-pied">
         <strong>Sachet de 5 g, ${prix(p.prix)} FCFA</strong>
-        ${p.enStock ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter au panier</button>` : '<span class="epuise">Épuisé</span>'}
+        ${p.enStock ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter au panier : ${p.nom}">Ajouter au panier</button>` : '<span class="epuise">Épuisé</span>'}
       </div>
     </article>`).join('');
+  chargerVisuels(conteneur);
   conteneur.addEventListener('click', e => {
     const bouton = e.target.closest('[data-ajouter]');
     if (bouton) ajouter(bouton.dataset.ajouter, 1, bouton);
@@ -245,11 +419,8 @@ function ouvrirFiche(id) {
       </div>
       <h2 id="fiche-titre">${p.nom}</h2>
       <span class="variete">Variété ${echapper(p.variete)}, sachet de 5 g</span>
-      <div class="reperes">
-        <div class="repere"><span>Semis</span><b>${p.semis}</b></div>
-        <div class="repere"><span>Cycle</span><b>${p.cycle}</b></div>
-        <div class="repere"><span>Espacement</span><b>${p.espacement}</b></div>
-      </div>
+      ${etapesCourtes(p)}
+      ${blocSurface(p, 'modale')}
       <span class="livraison">Livré en 24 à 48 h à Dakar</span>
       <a class="modale-lien" href="conseils.html#fiche-${p.id}">Voir la fiche de culture complète</a>
       ${p.enStock ? '' : '<p class="epuise-note">Épuisé pour le moment. Écrivez-nous sur WhatsApp pour être prévenu du retour en stock.</p>'}
@@ -262,6 +433,7 @@ function ouvrirFiche(id) {
         <button type="button" class="btn btn-jaune" data-valider><span>Ajouter pour <span id="fiche-total">${prix(p.prix)}</span>&nbsp;FCFA</span></button>
       </div>
     </div>`;
+  chargerVisuels($('#fiche-contenu'));
   ouvrir('#voile-fiche');
 }
 
@@ -305,8 +477,9 @@ function afficherPanier() {
     vuePanier = 'lignes';
     zone.innerHTML = `
       <div class="panier-message">
-        <span class="grand-icone">${icone('sac')}</span>
-        <span>Votre panier est vide.</span>
+        ${ILLU_GRAINE}
+        <strong class="panier-vide-titre">Votre panier est vide.</strong>
+        <span>Les semences d'octobre à mars se commandent ici.</span>
         <a class="btn btn-vert" href="boutique.html">Voir la boutique</a>
       </div>`;
     return;
@@ -376,6 +549,7 @@ function afficherPanier() {
           <strong>${prix(p.prix * panier[p.id])} FCFA</strong>
         </div>`).join('')}
     </div>` + recapTotal;
+  chargerVisuels(zone);
 }
 
 /* ---------- Formulaire de commande : vérification des champs ---------- */
@@ -485,7 +659,6 @@ function almanach() {
   const m = new Date().getMonth();
   const aSemer = PRODUITS.filter(p => CALENDRIER[p.id].s.includes(m)).map(p => p.nom.toLowerCase());
   const aRecolter = PRODUITS.filter(p => CALENDRIER[p.id].r.includes(m)).map(p => p.nom.toLowerCase());
-  const liste = l => l.length > 1 ? l.slice(0, -1).join(', ') + ' et ' + l[l.length - 1] : l[0];
   zone.textContent = MOIS_LONGS[m][0].toUpperCase() + MOIS_LONGS[m].slice(1);
   if (m === 9) return; // octobre : le texte écrit dans la page convient
   const titre = $('#almanach-titre'), detail = $('#almanach-detail');
@@ -544,6 +717,27 @@ function videoHeros() {
   }
 }
 
+/* ---------- Zones générées par le script ---------- */
+// Chaque zone n'est remplie qu'une fois. Sur la boutique et les conseils, le script est
+// chargé juste après la grille et le calendrier : ils sont remplis avant le premier
+// affichage, et le pied de page n'est plus poussé vers le bas (décalage de mise en page).
+const ZONES = {
+  'saison': bandeauSaison,
+  'produits-accueil': afficherProduits,
+  'produits-boutique': afficherProduits,
+  'calendrier': afficherCalendrier,
+  'fiches': afficherFiches,
+};
+function rendreZones() {
+  for (const [id, afficher] of Object.entries(ZONES)) {
+    const zone = document.getElementById(id);
+    if (!zone || zone.dataset.rendu) continue;
+    zone.dataset.rendu = '1';
+    afficher(zone);
+  }
+}
+if (document.readyState === 'loading') rendreZones();
+
 /* ---------- Démarrage ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   // Fenêtres communes à toutes les pages
@@ -562,23 +756,9 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>`);
 
-  // Contenus générés selon la page
-  const accueil = $('#produits-accueil');
-  if (accueil) afficherProduits(accueil, false);
-  const boutique = $('#produits-boutique');
-  if (boutique) afficherProduits(boutique, true);
-  const cal = $('#calendrier');
-  if (cal) {
-    afficherCalendrier(cal);
-    // Sur petit écran, le calendrier défile : on amène le mois en cours dans la vue
-    const defile = cal.querySelector('.cal-defile');
-    const actuel = cal.querySelector('.mois.actuel');
-    if (defile && actuel && defile.scrollWidth > defile.clientWidth) {
-      defile.scrollLeft = Math.max(0, actuel.offsetLeft - defile.offsetLeft - defile.clientWidth / 2 + 60);
-    }
-  }
-  const fiches = $('#fiches');
-  if (fiches) afficherFiches(fiches);
+  // Contenus générés selon la page (ceux qui ne l'ont pas déjà été pendant la lecture du HTML)
+  rendreZones();
+  chargerVisuels();
 
   // Lien « Aller au contenu » : focus direct, sinon la balise <base> de la 404 renvoie vers l'accueil
   const evitement = $('.evitement');
