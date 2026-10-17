@@ -346,10 +346,32 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .etape-preuves .icone { flex: none; width: 18px; height: 18px; color: var(--vert); }
 
 /* ---------- Accueil : une question sur vos cultures ---------- */
-.question { padding-block: var(--section); display: flex; flex-direction: column; align-items: flex-start; gap: var(--e-4); }
-.question > div { display: flex; flex-direction: column; gap: var(--e-3); }
+.question { padding-block: var(--section); }
+.question-carte {
+  background: var(--blanc); border: 1px solid var(--filet); border-radius: 16px;
+  padding: clamp(20px, 4vw, 40px); display: grid; gap: var(--e-6);
+}
 .question h2 { font-size: var(--t-h2); line-height: 1.1; }
-.question p { font-size: 16px; line-height: 1.65; color: var(--texte-doux); max-width: 34em; }
+.question-texte { display: flex; flex-direction: column; gap: var(--e-5); }
+/* Bulle façon message reçu : l'équipe parle la première */
+.bulle { display: flex; align-items: flex-end; gap: var(--e-3); }
+.bulle-avatar { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--vert-fonce); color: var(--jaune); display: flex; align-items: center; justify-content: center; }
+.bulle-avatar .icone { width: 24px; height: 24px; }
+.bulle p {
+  background: #E4F0D8; color: var(--vert-fonce); padding: 14px 16px; border-radius: 16px 16px 16px 4px;
+  font-size: 16px; line-height: 1.55; max-width: 32em;
+}
+.bulle [lang="wo"] { font-weight: 800; }
+.question-actions { display: flex; flex-direction: column; align-items: flex-start; gap: var(--e-3); }
+.question-sous { font-size: var(--t-label); font-weight: 800; color: var(--terre); }
+.question-sujets { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--e-2); }
+.question-sujets a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border-radius: 999px;
+  border: 1.5px solid var(--filet); background: var(--papier); color: var(--vert-fonce); font-weight: 700; font-size: 15px;
+  transition: border-color var(--rapide), background-color var(--rapide);
+}
+.question-sujets a:hover { border-color: var(--vert); background: var(--blanc); }
+.question-actions .btn { margin-top: var(--e-2); }
 
 /* ---------- Pages intérieures ---------- */
 .grille-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 48px; align-items: center; }
@@ -661,19 +683,6 @@ body.bloque { overflow: hidden; }
 @media (max-width: 760px) { .porteur { grid-template-columns: 1fr; } }
 
 /* Bandeau photo pleine largeur (accueil) */
-.bandeau { position: relative; display: flex; align-items: center; min-height: clamp(420px, 44vw, 640px); background: #2A1D12; color: #fff; overflow: hidden; }
-.bandeau picture, .bandeau img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.bandeau::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,14,8,.88) 0%, rgba(20,14,8,.6) 38%, rgba(20,14,8,0) 62%); }
-.bandeau-texte { position: relative; z-index: 1; width: 100%; padding-top: 72px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 14px; }
-.bandeau h2 { color: #fff; font-size: clamp(32px, 4.6vw, 60px); line-height: 1.02; max-width: 640px; }
-.bandeau-texte p { margin: 0; max-width: 440px; font-size: 18px; line-height: 1.55; color: rgba(255,255,255,.9); }
-.bandeau-texte .bandeau-sur { font-size: 14px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--jaune); }
-.bandeau-credit { position: absolute; right: 16px; bottom: 12px; z-index: 1; font-size: 12px; color: rgba(255,255,255,.8); }
-@media (max-width: 700px) {
-  .bandeau { align-items: flex-end; min-height: min(125vw, 620px); }
-  .bandeau::after { background: linear-gradient(0deg, rgba(20,14,8,.92) 0%, rgba(20,14,8,.65) 45%, rgba(20,14,8,0) 75%); }
-  .bandeau-texte { padding-bottom: 48px; }
-}
 
 /* ---------- Mobile : lisibilité et cibles tactiles ---------- */
 .lien, .lien-clair { display: inline-block; padding-block: 10px; }
@@ -739,22 +748,17 @@ body.bloque { overflow: hidden; }
 .produits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (min-width: 960px) {
   .produits { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  /* Accueil : étapes sur 3 colonnes, question sur une ligne (texte à gauche, bouton à droite) */
+  /* Accueil : étapes sur 3 colonnes, carte question sur deux colonnes */
   .etapes-achat { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e-5); }
   .etapes-achat > li { grid-template-columns: 1fr; align-content: start; padding: var(--e-6); }
   .etapes-achat strong { padding-top: 0; }
-  .question { flex-direction: row; justify-content: space-between; align-items: center; gap: var(--e-7); }
+  .question-carte { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center; gap: var(--e-8); }
   .introuvable .illu-graine { width: 128px; height: 128px; }
 }
 /* Tablette : crédit et bouton pause en haut, loin de l'étiquette */
 @media (min-width: 721px) and (max-width: 1100px) {
   .video-bouton { top: 16px; bottom: auto; right: 16px; }
   .video-credit { top: 28px; bottom: auto; right: 72px; }
-}
-/* Tablette : le titre du bandeau photo ne passe pas sur la graine */
-@media (min-width: 701px) and (max-width: 1100px) {
-  .bandeau h2 { max-width: 56vw; }
-  .bandeau-texte p { max-width: 48vw; }
 }
 
 /* ---------- Photos sans déformation sur tous les écrans ---------- */
@@ -850,3 +854,58 @@ body.bloque { overflow: hidden; }
   /* Bouton sous le prix, pleine largeur : il dépasse déjà sur la carte suivante, on l'atteint sans glisser */
   .defile-mobile .carte-pied .btn { flex-basis: 100%; }
 }
+
+/* ---------- Accueil : frise de culture ---------- */
+.frise { background: var(--vert-fonce); color: var(--papier); }
+.frise .conteneur { padding-block: var(--section); display: flex; flex-direction: column; gap: var(--e-4); }
+.frise-sur { font-size: var(--t-label); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--jaune); }
+.frise h2 { color: var(--papier); font-size: var(--t-h2); line-height: 1.1; max-width: 18em; text-wrap: balance; }
+.frise-intro { font-size: 17px; line-height: 1.6; color: rgba(250, 246, 236, .85); max-width: 38em; }
+#frise { display: flex; flex-direction: column; gap: var(--e-6); margin-top: var(--e-3); }
+.frise-choix { display: flex; flex-wrap: wrap; gap: var(--e-2); }
+.frise-onglet {
+  min-height: 44px; padding: 8px 18px; border-radius: 999px; cursor: pointer;
+  border: 1.5px solid rgba(250, 246, 236, .4); background: transparent; color: var(--papier); font: inherit; font-weight: 700;
+  transition: border-color var(--rapide), background-color var(--rapide);
+}
+.frise-onglet:hover { border-color: var(--papier); }
+.frise-onglet[aria-pressed="true"] { background: var(--jaune); border-color: var(--jaune); color: var(--vert-fonce); }
+/* Petit écran : les quatre légumes sur une ligne */
+@media (max-width: 520px) {
+  .frise-choix { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .frise-onglet { padding: 8px 4px; }
+}
+.frise-contenu { display: flex; flex-direction: column; align-items: flex-start; gap: var(--e-5); }
+/* Mobile : liste verticale reliée par un pointillé ; grand écran : 5 colonnes reliées à l'horizontale */
+.frise-etapes { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: var(--e-4); }
+.frise-etapes li {
+  position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: var(--e-4); row-gap: 2px; align-content: center;
+  animation: apparition 450ms var(--courbe) both; animation-delay: calc(var(--i, 0) * 60ms);
+}
+.frise-picto {
+  grid-row: span 2; position: relative; z-index: 1; width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--vert-fonce); border: 1.5px solid var(--jaune); color: var(--jaune);
+}
+.frise-picto .icone { width: 24px; height: 24px; }
+.frise-nom { font-size: var(--t-label); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: rgba(250, 246, 236, .8); align-self: end; }
+.frise-etapes b { font-size: 17px; line-height: 1.35; color: var(--papier); }
+.frise-etapes li:not(:last-child)::after {
+  content: ""; position: absolute; left: 23px; top: 48px; bottom: calc(-1 * var(--e-4)); border-left: 2px dashed rgba(250, 246, 236, .3);
+}
+@media (min-width: 900px) {
+  .frise-etapes { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--e-5); }
+  .frise-etapes li { grid-template-columns: 1fr; row-gap: var(--e-2); align-content: start; }
+  .frise-picto { grid-row: auto; width: 56px; height: 56px; margin-bottom: var(--e-2); }
+  .frise-etapes li:not(:last-child)::after { left: 64px; right: calc(-1 * var(--e-5) + 8px); top: 28px; bottom: auto; border-left: 0; border-top: 2px dashed rgba(250, 246, 236, .3); }
+}
+
+/* ---------- Accueil : carte question, mobile ---------- */
+@media (max-width: 720px) {
+  .question-actions .btn { width: 100%; min-height: 52px; }
+}
+
+/* ---------- Apparition au défilement (posée par js/main.js, jamais si les animations sont réduites) ---------- */
+.apparait:not(.vu) { opacity: 0; }
+.apparait.vu { animation: apparition 600ms var(--courbe) both; animation-delay: var(--delai, 0ms); }
+@keyframes apparition { from { opacity: 0; translate: 0 18px; } }

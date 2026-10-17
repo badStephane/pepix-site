@@ -441,9 +441,9 @@ const CHAMPS_TEXTES = [
     { cle: 'herosTitre', label: 'Titre', aide: 'Le dernier mot passe en jaune.', max: 60, requis: true },
     { cle: 'herosTexte', label: 'Texte sous le titre', max: 200, zone: true, requis: true },
   ] },
-  { titre: 'Accueil, bandeau photo', champs: [
-    { cle: 'bandeauTitre', label: 'Titre', max: 80, requis: true },
-    { cle: 'bandeauTexte', label: 'Texte', max: 160, zone: true, requis: true },
+  { titre: 'Accueil, frise de culture', champs: [
+    { cle: 'friseTitre', label: 'Titre', max: 80, requis: true },
+    { cle: 'friseTexte', label: 'Texte', max: 160, zone: true, requis: true },
   ] },
   { titre: 'Livraison et contact', champs: [
     { cle: 'fraisLivraison', label: 'Frais de livraison (FCFA)', aide: '0 pour une livraison offerte.', type: 'number' },

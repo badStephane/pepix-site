@@ -308,6 +308,54 @@ function etapesIllustrees(p) {
     </ol>`;
 }
 
+/* ---------- Accueil : frise de culture, un légume à la fois ---------- */
+function afficherFrise(zone) {
+  const avecEtapes = PRODUITS.filter(etapesDe);
+  if (!avecEtapes.length) { zone.closest('section').hidden = true; return; }
+  // La tomate d'abord : c'est la semence la plus demandée
+  const depart = avecEtapes.find(p => p.id === 'tomate') || avecEtapes[0];
+  zone.innerHTML = `
+    <div class="frise-choix" role="group" aria-label="Choisir un légume">
+      ${avecEtapes.map(p => `<button type="button" class="frise-onglet" data-frise="${p.id}" aria-pressed="false">${echapper(p.nom)}</button>`).join('')}
+    </div>
+    <div class="frise-contenu"></div>`;
+  const contenu = zone.querySelector('.frise-contenu');
+  const montrer = p => {
+    const etapes = etapesDe(p);
+    contenu.innerHTML = `
+      <ol class="frise-etapes" aria-label="Étapes de culture : ${echapper(p.nom)}">
+        ${ETAPES.map((e, i) => `<li style="--i: ${i}"><span class="frise-picto">${icone(e.icone)}</span><span class="frise-nom">${e.nom}</span><b>${echapper(etapes[i].court)}</b></li>`).join('')}
+      </ol>
+      <a class="lien-clair" href="conseils.html#fiche-${p.id}">Voir la fiche de culture complète</a>`;
+    zone.querySelectorAll('[data-frise]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.frise === p.id)));
+  };
+  zone.addEventListener('click', e => {
+    const bouton = e.target.closest('[data-frise]');
+    if (bouton) montrer(avecEtapes.find(p => p.id === bouton.dataset.frise));
+  });
+  montrer(depart);
+}
+
+/* ---------- Accueil : apparition douce au défilement ---------- */
+// Les enfants de chaque [data-apparition] montent en fondu, l'un après l'autre.
+// Rien ne bouge si le visiteur réduit les animations : le contenu est visible d'emblée.
+function apparitions() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  const DECALAGE_MS = 80, DECALAGE_MAX = 4;
+  const observateur = new IntersectionObserver(entrees => entrees.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.classList.add('vu');
+    observateur.unobserve(en.target);
+  }), { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('[data-apparition]').forEach(groupe => {
+    [...groupe.children].forEach((el, i) => {
+      el.style.setProperty('--delai', `${Math.min(i, DECALAGE_MAX) * DECALAGE_MS}ms`);
+      el.classList.add('apparait');
+      observateur.observe(el);
+    });
+  });
+}
+
 /* ---------- Textes réglés dans l'admin ---------- */
 
 function appliquerReglages() {
@@ -326,8 +374,9 @@ function appliquerReglages() {
       el.textContent = valeur;
     }
   });
+  // data-wa peut porter le message prérempli (sujets fréquents de l'accueil)
   document.querySelectorAll('a[data-wa]').forEach(a => {
-    a.href = Pepix.lienWhatsApp("Bonjour Pépix, j'ai une question sur mes cultures.");
+    a.href = Pepix.lienWhatsApp(a.dataset.wa || "Bonjour Pépix, j'ai une question sur mes cultures.");
   });
   const annonce = String(REGLAGES.annonce || '').trim();
   if (annonce) {
@@ -726,6 +775,7 @@ function videoHeros() {
 const ZONES = {
   'saison': bandeauSaison,
   'produits-accueil': afficherProduits,
+  'frise': afficherFrise,
   'produits-boutique': afficherProduits,
   'calendrier': afficherCalendrier,
   'fiches': afficherFiches,
@@ -816,4 +866,5 @@ document.addEventListener('DOMContentLoaded', () => {
   appliquerReglages();
   almanach();
   videoHeros();
+  apparitions();
 });

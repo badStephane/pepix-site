@@ -86,8 +86,8 @@ const REGLAGES_BASE = {
   annonce: '',
   herosTitre: 'Tout commence par une graine.',
   herosTexte: 'Oignon, tomate, chou et piment en sachets de 5 g. Livrés à Dakar en 24 à 48 h, avec la fiche de culture.',
-  bandeauTitre: "Chaque lot est mis à germer avant d'être ensaché.",
-  bandeauTexte: 'Au dos du sachet, un QR code ouvre la fiche de culture de la variété.',
+  friseTitre: 'De la graine à la récolte, on vous guide.',
+  friseTexte: 'Chaque sachet a sa fiche, ouverte par le QR code au dos. Voici les grandes étapes.',
   fraisLivraison: 1000,
   whatsapp: '221771786915',
 };
