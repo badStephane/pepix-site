@@ -98,6 +98,16 @@ let derniereCommande = null;
 function sauverPanier() {
   try { localStorage.setItem('pepix-panier', JSON.stringify(panier)); } catch (e) { /* navigation privée */ }
   majCompteur();
+  majPastillesPanier();
+}
+
+// Pastille « 2 dans le panier » sur les cartes (accueil et boutique)
+function majPastillesPanier() {
+  document.querySelectorAll('[data-dans-panier]').forEach(el => {
+    const n = panier[el.dataset.dansPanier] || 0;
+    el.hidden = !n;
+    el.lastChild.textContent = `${n} dans le panier`;
+  });
 }
 
 const nombreArticles = () => Object.values(panier).reduce((a, b) => a + b, 0);
@@ -182,8 +192,9 @@ function chargerVisuels(racine = document) {
   racine.querySelectorAll('.carte-image, .modale-image, .fiche-vignette, .ligne-vignette').forEach(el => {
     const id = (el.className.match(/\bphoto-([a-z]+)/) || [])[1];
     if (!id) return;
-    // Les cartes montrent le sachet détouré sur une teinte, les autres zones la photo d'origine
-    const fichier = el.classList.contains('carte-image') ? `sachet-${id}-detoure` : `sachet-${id}`;
+    // Cartes et fiche produit : sachet détouré sur une teinte ; panier et conseils : photo d'origine
+    const detoure = el.classList.contains('carte-image') || el.classList.contains('modale-image');
+    const fichier = detoure ? `sachet-${id}-detoure` : `sachet-${id}`;
     if (!visuels[fichier]) {
       const img = new Image();
       img.src = `img/${fichier}.webp`;
@@ -205,6 +216,7 @@ function carteProduit(p, avecSaison) {
       <div class="carte-corps">
         <h3><button type="button" class="carte-ouvrir" data-ouvrir="${p.id}" aria-label="${p.nom}, voir la fiche">${p.nom}</button></h3>
         ${avecSaison ? `<p class="pastille-saison">${icone('calendrier')}À semer en ${MOIS_LONGS[new Date().getMonth()]}</p>` : ''}
+        <p class="pastille-panier" data-dans-panier="${p.id}" hidden>${icone('check')}<span></span></p>
         <span class="variete">${echapper(p.variete)}, sachet de 5 g</span>
         <dl class="carte-reperes">
           <div><dt>Semis</dt><dd>${p.semis.replace(' (pépinière)', '')}</dd></div>
@@ -234,11 +246,42 @@ function afficherProduits(conteneur) {
   const { aSemer, pastille } = saison();
   conteneur.innerHTML = PRODUITS.map(p => carteProduit(p, pastille && aSemer.includes(p))).join('');
   chargerVisuels(conteneur);
+  majPastillesPanier();
   conteneur.addEventListener('click', e => {
     const bouton = e.target.closest('[data-ajouter]');
     if (bouton) { ajouter(bouton.dataset.ajouter, 1, bouton); return; }
     const carte = e.target.closest('.carte');
     if (carte) ouvrirFiche(carte.dataset.id);
+  });
+}
+
+/* ---------- Boutique : un sachet de chaque (total sans remise) ---------- */
+const LARGEUR_DETOURE = { oignon: 267, tomate: 223, chou: 261, piment: 231 };   // hauteur 440
+function afficherLot(zone) {
+  const dispo = PRODUITS.filter(p => p.enStock);
+  if (dispo.length < 2) { zone.closest('section').hidden = true; return; }
+  const total = dispo.reduce((somme, p) => somme + p.prix, 0);
+  zone.innerHTML = `
+    <div class="lot-visuel" aria-hidden="true">
+      ${dispo.map(p => `<img src="img/sachet-${p.id}-detoure.webp" alt="" width="${LARGEUR_DETOURE[p.id] || 240}" height="440" loading="lazy">`).join('')}
+    </div>
+    <div class="lot-texte">
+      <h2 id="t-lot">Un sachet de chaque</h2>
+      <p>${echapper(liste(dispo.map(p => p.nom)))} : de quoi varier vos planches cette saison.</p>
+    </div>
+    <div class="lot-action">
+      <strong>${prix(total)} FCFA</strong>
+      <button type="button" class="btn btn-jaune" data-lot aria-label="Tout ajouter : un sachet de chaque, ${prix(total)} FCFA">Tout ajouter</button>
+    </div>`;
+  zone.addEventListener('click', e => {
+    const bouton = e.target.closest('[data-lot]');
+    if (!bouton) return;
+    dispo.forEach(p => { panier[p.id] = (panier[p.id] || 0) + 1; });
+    vuePanier = 'lignes';
+    sauverPanier();
+    majCompteur(true);
+    notifier(`${dispo.length} sachets ajoutés au panier`);
+    confirmerBouton(bouton);
   });
 }
 
@@ -777,6 +820,7 @@ const ZONES = {
   'produits-accueil': afficherProduits,
   'frise': afficherFrise,
   'produits-boutique': afficherProduits,
+  'lot-boutique': afficherLot,
   'calendrier': afficherCalendrier,
   'fiches': afficherFiches,
 };
