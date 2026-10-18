@@ -1,7 +1,9 @@
 # Cloudflare Pages : en-têtes HTTP (remplace netlify.toml)
 
-# Images : cache d'une semaine
+# Images et police : cache d'une semaine
 /img/*
+  Cache-Control: public, max-age=604800
+/fonts/*
   Cache-Control: public, max-age=604800
 
 # L'espace admin ne doit pas apparaître dans les moteurs de recherche

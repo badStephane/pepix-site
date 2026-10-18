@@ -7,6 +7,17 @@
    qu'ombres, et de vraies informations à la place des décorations.
    ========================================================== */
 
+/* ---------- Police : Nunito Sans (licence OFL), hébergée sur le site ----------
+   Fichier variable, graisses 200 à 1000, jeu de caractères latin (celui que Google Fonts sert pour le français). */
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url(../fonts/nunito-sans-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ---------- Couleurs, polices, rythme ---------- */
 :root {
   --vert-fonce: #1B3A22;   /* vert Pépix (bandeau du sachet) */
@@ -1053,3 +1064,31 @@ body.bloque { overflow: hidden; }
   .porteur-carte { gap: var(--e-4); padding: var(--e-4); }
   .porteur-initiales { width: 52px; height: 52px; font-size: 19px; }
 }
+
+/* ---------- 404 : raccourcis vers les fiches de culture ---------- */
+.introuvable { padding-bottom: var(--e-7); }
+.raccourcis { padding-bottom: var(--section); display: flex; flex-direction: column; gap: var(--e-4); }
+.raccourcis h2 { font-size: var(--t-h3); }
+.raccourcis-liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--e-3); max-width: 720px; }
+.raccourcis-liste a {
+  display: flex; flex-direction: column; align-items: center; gap: var(--e-2); padding: var(--e-4) var(--e-2) var(--e-3);
+  border-radius: var(--r-carte); border: 1px solid var(--filet); background: var(--blanc); color: var(--vert-fonce); font-weight: 800;
+  transition: border-color var(--rapide), transform var(--rapide) var(--courbe);
+}
+.raccourcis-liste li:nth-child(1) a { background: #F5E8CC; }
+.raccourcis-liste li:nth-child(2) a { background: #F6E0D6; }
+.raccourcis-liste li:nth-child(3) a { background: #E3ECD4; }
+.raccourcis-liste li:nth-child(4) a { background: #F7E3CF; }
+.raccourcis-liste img { height: 96px; width: auto; filter: drop-shadow(0 6px 8px rgba(27, 58, 34, .2)); }
+@media (hover: hover) { .raccourcis-liste a:hover { border-color: var(--vert-fonce); transform: translateY(-3px); } }
+@media (max-width: 520px) {
+  .raccourcis-liste { gap: var(--e-2); }
+  .raccourcis-liste a { padding: var(--e-3) 2px var(--e-2); font-size: 14px; }
+  .raccourcis-liste img { height: 68px; }
+  .introuvable .boutons { width: 100%; }
+  .introuvable .boutons .btn { width: 100%; min-height: 52px; }
+}
+/* 404 : le chiffre et l'illustration plus compacts, les raccourcis visibles dès l'arrivée */
+.introuvable { padding-top: var(--e-7); gap: var(--e-4); }
+.introuvable .code-404 { font-size: clamp(80px, 11vw, 136px); }
+@media (min-width: 960px) { .introuvable .illu-graine { width: 104px; height: 104px; } }

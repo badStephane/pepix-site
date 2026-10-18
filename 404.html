@@ -17,9 +17,8 @@
   <meta property="og:locale" content="fr_SN">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="img/favicon-64.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Police hébergée sur le site et préchargée : elle arrive avec la page (pas de saut au changement de police) -->
+  <link rel="preload" href="fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/donnees.js" defer></script>
   <script src="js/main.js" defer></script>
@@ -58,6 +57,17 @@
         <a class="btn btn-vert" href="index.html">Retour à l'accueil</a>
         <a class="btn btn-contour" href="boutique.html">Voir les semences</a>
       </div>
+    </section>
+
+    <!-- Un lien cassé vient souvent d'un QR code ou d'une adresse de fiche mal recopiée : les fiches, directement -->
+    <section class="conteneur raccourcis" aria-labelledby="t-raccourcis">
+      <h2 id="t-raccourcis">Vous cherchiez une fiche de culture&nbsp;?</h2>
+      <ul class="raccourcis-liste">
+          <li><a href="conseils.html#fiche-oignon"><img src="img/sachet-oignon-detoure.webp" alt="" width="267" height="440" loading="lazy"><span>Oignon</span></a></li>
+          <li><a href="conseils.html#fiche-tomate"><img src="img/sachet-tomate-detoure.webp" alt="" width="223" height="440" loading="lazy"><span>Tomate</span></a></li>
+          <li><a href="conseils.html#fiche-chou"><img src="img/sachet-chou-detoure.webp" alt="" width="261" height="440" loading="lazy"><span>Chou</span></a></li>
+          <li><a href="conseils.html#fiche-piment"><img src="img/sachet-piment-detoure.webp" alt="" width="231" height="440" loading="lazy"><span>Piment</span></a></li>
+      </ul>
     </section>
   </main>
 
