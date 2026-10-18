@@ -1,0 +1,6 @@
+# Pépix : tout le site public peut être exploré.
+# L'admin n'est pas bloqué ici exprès : son en-tête X-Robots-Tag (noindex) doit rester lisible par les robots.
+User-agent: *
+Allow: /
+
+Sitemap: https://pepix.pages.dev/sitemap.xml
