@@ -68,6 +68,12 @@ body.admin { background: #F3EEE2; }
 .chiffre strong { font-size: clamp(24px, 2.4vw, 30px); font-weight: 800; letter-spacing: -0.01em; }
 .chiffre small { font-size: 14px; color: var(--texte-doux); }
 .chiffre.alerte { border-color: var(--jaune); box-shadow: inset 4px 0 0 var(--jaune); }
+/* Cartes qui mènent à la liste filtrée */
+.chiffre-lien { color: inherit; transition: border-color var(--rapide), transform var(--rapide) var(--courbe); }
+.chiffre-lien small { display: inline-flex; align-items: center; gap: 4px; }
+.chiffre-lien .icone { width: 16px; height: 16px; }
+@media (hover: hover) { .chiffre-lien:hover { border-color: var(--vert-fonce); transform: translateY(-2px); } }
+.chiffre-lien.alerte:hover { border-color: var(--jaune); }
 
 /* Graphique en barres (une seule série : pas de légende) */
 .graphe { position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 8px; }
@@ -170,7 +176,13 @@ body.admin { background: #F3EEE2; }
 .produits-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 16px; }
 .produit-admin { background: var(--blanc); border: 1px solid var(--filet); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
 .produit-admin-haut { display: flex; gap: 14px; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--filet); }
-.produit-admin-haut .vignette { width: 54px; height: 64px; border-radius: 6px; background-color: #F4EEE7; flex-shrink: 0; }
+.produit-admin-haut .vignette { width: 54px; height: 64px; border-radius: 6px; background-color: var(--teinte, #F4EEE7); flex-shrink: 0; }
+/* Sachet détouré sur la teinte du légume, comme sur le site */
+.vignette.photo-oignon { background-image: url(../img/sachet-oignon-detoure.webp); }
+.vignette.photo-tomate { background-image: url(../img/sachet-tomate-detoure.webp); }
+.vignette.photo-chou   { background-image: url(../img/sachet-chou-detoure.webp); }
+.vignette.photo-piment { background-image: url(../img/sachet-piment-detoure.webp); }
+.produit-admin-haut .vignette { background-size: auto 86%; }
 .produit-admin-haut h2 { font-size: 20px; }
 .produit-admin-haut .statut { margin-top: 4px; }
 .produit-admin form { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 14px; flex: 1; }

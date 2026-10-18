@@ -13,6 +13,7 @@ const ICONES = {
   x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
   loupe: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   check: '<path d="M20 6 9 17l-5-5"/>',
+  fleche: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
 };
 const icone = nom => `<svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONES[nom]}</svg>`;
 
@@ -58,8 +59,14 @@ let recherche = '';
 
 function router() {
   if (!connecte()) { afficherConnexion(); return; }
-  const nom = (location.hash || '#tableau').slice(1).split('/')[0];
+  const [nom, filtre] = (location.hash || '#tableau').slice(1).split('/');
   const vue = VUES[nom] ? nom : 'tableau';
+  // #commandes/nouvelle (cartes du tableau de bord) : ouvre la liste filtrée, puis l'adresse redevient
+  // #commandes pour qu'un rendu ultérieur ne réimpose pas ce filtre
+  if (vue === 'commandes' && filtre && (filtre === 'toutes' || STATUTS[filtre])) {
+    filtreStatut = filtre;
+    history.replaceState(null, '', '#commandes');
+  }
   document.querySelectorAll('.admin-nav a').forEach(a => {
     if (a.dataset.vue === vue) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
@@ -132,8 +139,10 @@ function vueTableau() {
 
     <section class="chiffres" aria-label="Chiffres clés">
       <div class="chiffre"><span>Chiffre d'affaires</span><strong>${prix(ca)} F</strong><small>livraison comprise</small></div>
-      <div class="chiffre"><span>Commandes</span><strong>${toutes.length}</strong><small>${toutes.filter(c => c.statut === 'livree').length} livrées</small></div>
-      <div class="chiffre${nouvelles ? ' alerte' : ''}"><span>À traiter</span><strong>${nouvelles}</strong><small>${nouvelles ? 'à confirmer par téléphone' : 'rien en attente'}</small></div>
+      <a class="chiffre chiffre-lien" href="#commandes/toutes"><span>Commandes</span><strong>${toutes.length}</strong><small>${toutes.filter(c => c.statut === 'livree').length} livrées</small></a>
+      ${nouvelles
+        ? `<a class="chiffre chiffre-lien alerte" href="#commandes/nouvelle"><span>À traiter</span><strong>${nouvelles}</strong><small>à confirmer par téléphone ${icone('fleche')}</small></a>`
+        : '<div class="chiffre"><span>À traiter</span><strong>0</strong><small>rien en attente</small></div>'}
       <div class="chiffre"><span>Panier moyen</span><strong>${prix(moyen)} F</strong><small>${(valides.reduce((a, c) => a + nbSachets(c), 0) / (valides.length || 1)).toFixed(1).replace('.', ',')} sachets par commande</small></div>
     </section>
 
@@ -569,7 +578,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sortir = () => { try { sessionStorage.removeItem('pepix-admin'); } catch (e) { /* rien */ } fermerCommande(); afficherConnexion(); };
   $('#deconnexion').addEventListener('click', sortir);
 
-  window.addEventListener('hashchange', () => { fermerCommande(); router(); $('#vue').focus(); });
+  // Nouvelle section : on repart du haut (sinon elle s'ouvre à la position de défilement de la précédente)
+  window.addEventListener('hashchange', () => { fermerCommande(); router(); scrollTo({ top: 0, behavior: 'instant' }); $('#vue').focus({ preventScroll: true }); });
 
   // Clics dans la vue (délégation)
   $('#vue').addEventListener('click', e => {
