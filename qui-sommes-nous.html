@@ -57,23 +57,52 @@
       </figure>
     </section>
 
+    <!-- Comparatif : uniquement ce que le texte ci-dessus affirme déjà -->
+    <section class="conteneur comparaison" aria-labelledby="t-comparaison">
+      <h2 id="t-comparaison">Ce qui change</h2>
+      <table class="comparatif">
+        <thead>
+          <tr><td></td><th scope="col">Au marché</th><th scope="col" class="col-pepix">Avec Pépix</th></tr>
+        </thead>
+        <tbody data-apparition>
+          <tr><th scope="row">Variété</th><td>Souvent sans nom</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Nommée sur l'étiquette</td></tr>
+          <tr><th scope="row">Quantité</th><td>Au poids</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Sachet de 5 g</td></tr>
+          <tr><th scope="row">Levée</th><td>On sème, on attend, parfois rien ne lève</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Chaque lot testé en germination</td></tr>
+          <tr><th scope="row">Mode d'emploi</th><td>À deviner</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Fiche de culture par QR code</td></tr>
+        </tbody>
+      </table>
+    </section>
+
     <section class="conteneur sachet-contenu" aria-labelledby="t-sachet">
+      <figure class="sachet-visuel">
+        <img src="img/sachet-tomate-detoure.webp" width="223" height="440" loading="lazy"
+             alt="Le sachet de tomate Pépix, variété Marmande, avec le QR code du guide de culture">
+      </figure>
+      <div class="sachet-texte">
       <h2 id="t-sachet">Dans un sachet</h2>
-      <ul>
+      <ul data-apparition>
         <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v7"/><path d="m9 7 3 3 3-3"/><path d="M3 14h18"/><ellipse cx="12" cy="18" rx="2.5" ry="1.5"/></svg><span><strong>5 g de graines</strong> d'une seule variété, nommée sur l'étiquette.</span></li>
         <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg><span><strong>Un lot testé</strong> en germination avant l'ensachage.</span></li>
         <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg><span><strong>Un QR code</strong> qui ouvre la fiche : semis, repiquage, arrosage, récolte.</span></li>
       </ul>
+      </div>
     </section>
 
     <section class="conteneur porteur" aria-labelledby="t-porteur">
       <h2 id="t-porteur">Qui porte le projet</h2>
-      <p><strong>Yannick Felix Viera MOREIRA</strong>, étudiant à l'ISM. Pépix est son projet d'école : une marque de semences maraîchères pensée pour les producteurs du Sénégal.</p>
+      <div class="porteur-carte">
+        <span class="porteur-initiales" aria-hidden="true">YM</span>
+        <div>
+          <p class="porteur-nom">Yannick Felix Viera MOREIRA</p>
+          <p class="porteur-role">Étudiant à l'ISM</p>
+          <p class="porteur-texte">Pépix est son projet d'école : une marque de semences maraîchères pensée pour les producteurs du Sénégal.</p>
+        </div>
+      </div>
     </section>
 
     <section class="conteneur feuille-route" aria-labelledby="t-route">
       <h2 id="t-route">Où nous en sommes</h2>
-      <ol class="phases">
+      <ol class="phases" data-apparition>
         <li class="phase">
           <p class="phase-etat">Phase 1, terminée</p>
           <h3>Sélection partenaire</h3>
@@ -95,6 +124,10 @@
           <div><dt>WhatsApp</dt><dd><a href="https://wa.me/221771786915?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." data-wa target="_blank" rel="noopener">+221 77 178 69 15</a></dd></div>
           <div><dt>Livraison</dt><dd>24 à 48 h à Dakar, 3 à 5 jours en région</dd></div>
         </dl>
+        <div class="contacts-actions">
+          <a class="btn btn-sombre" href="https://wa.me/221771786915?text=Bonjour%20P%C3%A9pix%2C%20j%27ai%20une%20question%20sur%20mes%20cultures." data-wa target="_blank" rel="noopener"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>Écrire sur WhatsApp</a>
+          <a class="btn btn-jaune" href="boutique.html">Voir les semences<svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
       </div>
     </section>
   </main>

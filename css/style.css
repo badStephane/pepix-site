@@ -406,6 +406,8 @@ h1, h2, h3, .titre { font-family: var(--titre); font-weight: 800; margin: 0; lin
 .contacts dt { font-size: 14px; color: var(--terre); }
 .contacts dd { margin: 2px 0 0; font-size: 18px; font-weight: 700; }
 .contacts dd a { text-decoration: underline; text-underline-offset: 4px; }
+.contacts-actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-3); }
+@media (max-width: 520px) { .contacts-actions .btn { width: 100%; min-height: 52px; } }
 
 /* Conseils : calendrier */
 .section-cal { padding-block: 0 var(--e-5); }
@@ -681,15 +683,25 @@ body.bloque { overflow: hidden; }
 
 /* Photo de la page Qui sommes-nous */
 
-.sachet-contenu { padding-block: 0 var(--section); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px 48px; align-items: start; }
-.sachet-contenu h2 { font-size: var(--t-h2); line-height: 1.1; }
+.sachet-contenu { padding-block: 0 var(--section); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px 48px; align-items: center; }
+.sachet-contenu h2 { font-size: var(--t-h2); line-height: 1.1; margin-bottom: var(--e-5); }
+/* Le sachet de tomate sur sa teinte, comme dans la boutique */
+.sachet-visuel { margin: 0; display: flex; justify-content: center; align-items: center; aspect-ratio: 1; border-radius: 50%; background: #F6E0D6; }
+.sachet-visuel img { height: 82%; width: auto; filter: drop-shadow(0 14px 18px rgba(27, 58, 34, .22)); transform: rotate(-4deg); }
 .sachet-contenu ul { margin: 0; padding: 0; list-style: none; border-top: 3px solid var(--vert-fonce); }
 .sachet-contenu li { padding: 14px 0; border-bottom: 1px solid var(--filet); font-size: 17px; line-height: 1.55; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: var(--e-3); align-items: start; }
 .sachet-contenu li .icone { width: 24px; height: 24px; color: var(--vert); margin-top: 1px; }
-@media (max-width: 760px) { .sachet-contenu { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .sachet-contenu { grid-template-columns: 1fr; } .sachet-visuel { width: min(72%, 280px); justify-self: center; } }
 .porteur { padding-block: 0 var(--section); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 16px 48px; align-items: start; }
 .porteur h2 { font-size: var(--t-h2); line-height: 1.1; }
-.porteur p { margin: 0; font-size: 18px; line-height: 1.6; border-left: 3px solid var(--jaune); padding-left: 20px; }
+.porteur-carte { display: flex; align-items: flex-start; gap: var(--e-5); background: var(--blanc); border: 1px solid var(--filet); border-radius: var(--r-carte); padding: var(--e-5); }
+.porteur-initiales {
+  flex: none; width: 72px; height: 72px; border-radius: 50%; background: var(--vert-fonce); color: var(--jaune);
+  display: flex; align-items: center; justify-content: center; font-family: var(--titre); font-weight: 800; font-size: 26px; letter-spacing: .02em;
+}
+.porteur-nom { font-size: 20px; font-weight: 800; line-height: 1.3; }
+.porteur-role { margin-top: 2px; font-size: var(--t-petit); font-weight: 700; color: var(--terre); }
+.porteur-texte { margin-top: var(--e-3); font-size: 17px; line-height: 1.6; color: var(--texte-doux); }
 @media (max-width: 760px) { .porteur { grid-template-columns: 1fr; } }
 
 /* Bandeau photo pleine largeur (accueil) */
@@ -1016,3 +1028,28 @@ body.bloque { overflow: hidden; }
 .faq-suite { display: flex; flex-direction: column; align-items: flex-start; gap: var(--e-3); margin-top: var(--e-4); padding: var(--e-5); background: var(--kraft); border-radius: var(--r-carte); }
 .faq-suite p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--vert-fonce); font-weight: 700; max-width: none; }
 @media (max-width: 720px) { .faq-suite .btn { width: 100%; min-height: 52px; } }
+
+/* ---------- Qui sommes-nous : comparatif « Au marché / Avec Pépix » ---------- */
+.comparaison { padding-block: 0 var(--section); display: flex; flex-direction: column; gap: var(--e-5); }
+.comparaison h2 { font-size: var(--t-h2); line-height: 1.1; }
+.comparatif { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 16px; line-height: 1.45; }
+.comparatif th, .comparatif td { padding: var(--e-4); text-align: left; vertical-align: top; border-bottom: 1px solid var(--filet); }
+.comparatif thead th { font-size: var(--t-label); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--terre); border-bottom: 0; }
+.comparatif thead td { border-bottom: 0; }
+.comparatif tbody th { width: 22%; font-size: var(--t-petit); font-weight: 800; color: var(--vert-fonce); }
+.comparatif tbody td { color: var(--texte-doux); }
+/* Colonne Pépix : bande verte continue, du titre à la dernière ligne */
+.comparatif .col-pepix { background: var(--vert-fonce); color: var(--papier); font-weight: 700; border-bottom-color: rgba(250, 246, 236, .15); }
+.comparatif thead .col-pepix { color: var(--jaune); border-radius: var(--r-carte) var(--r-carte) 0 0; }
+.comparatif tbody tr:last-child .col-pepix { border-radius: 0 0 var(--r-carte) var(--r-carte); border-bottom: 0; }
+.comparatif td.col-pepix .icone { width: 18px; height: 18px; color: var(--jaune); display: inline-block; vertical-align: -3px; margin-right: var(--e-2); }
+@media (max-width: 560px) {
+  .comparatif { font-size: 14px; }
+  .comparatif th, .comparatif td { padding: var(--e-3) var(--e-2); }
+  .comparatif tbody th { width: 26%; }
+  .comparatif td.col-pepix .icone { display: none; }
+}
+@media (max-width: 520px) {
+  .porteur-carte { gap: var(--e-4); padding: var(--e-4); }
+  .porteur-initiales { width: 52px; height: 52px; font-size: 19px; }
+}
