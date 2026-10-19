@@ -18,6 +18,7 @@
   <meta property="og:url" content="https://pepix.pages.dev/boutique">
   <link rel="canonical" href="https://pepix.pages.dev/boutique">
   <link rel="icon" href="img/favicon-64.png" type="image/png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <!-- Police hébergée sur le site et préchargée : elle arrive avec la page (pas de saut au changement de police) -->
   <link rel="preload" href="fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
@@ -25,6 +26,86 @@
        avant le premier affichage (pas de décalage quand le contenu généré apparaît) -->
   <link rel="preload" href="js/donnees.js" as="script">
   <link rel="preload" href="js/main.js" as="script">
+  <!-- Données structurées (schema.org) lues par les moteurs de recherche -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        "name": "Semences d’oignon",
+        "description": "Sachet de 5 g de semences de oignon, variété Jaune Paille.",
+        "sku": "oignon",
+        "image": "https://pepix.pages.dev/img/sachet-oignon.webp",
+        "brand": {
+          "@type": "Brand",
+          "name": "Pépix"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": 1500,
+          "priceCurrency": "XOF",
+          "availability": "https://schema.org/InStock",
+          "url": "https://pepix.pages.dev/boutique"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Semences de tomate",
+        "description": "Sachet de 5 g de semences de tomate, variété Marmande.",
+        "sku": "tomate",
+        "image": "https://pepix.pages.dev/img/sachet-tomate.webp",
+        "brand": {
+          "@type": "Brand",
+          "name": "Pépix"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": 1800,
+          "priceCurrency": "XOF",
+          "availability": "https://schema.org/InStock",
+          "url": "https://pepix.pages.dev/boutique"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Semences de chou",
+        "description": "Sachet de 5 g de semences de chou, variété Cœur de bœuf.",
+        "sku": "chou",
+        "image": "https://pepix.pages.dev/img/sachet-chou.webp",
+        "brand": {
+          "@type": "Brand",
+          "name": "Pépix"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": 1200,
+          "priceCurrency": "XOF",
+          "availability": "https://schema.org/InStock",
+          "url": "https://pepix.pages.dev/boutique"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Semences de piment",
+        "description": "Sachet de 5 g de semences de piment, variété Super Cayenne.",
+        "sku": "piment",
+        "image": "https://pepix.pages.dev/img/sachet-piment.webp",
+        "brand": {
+          "@type": "Brand",
+          "name": "Pépix"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": 1500,
+          "priceCurrency": "XOF",
+          "availability": "https://schema.org/InStock",
+          "url": "https://pepix.pages.dev/boutique"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="evitement" href="#contenu">Aller au contenu</a>

@@ -18,11 +18,34 @@
   <meta property="og:url" content="https://pepix.pages.dev/">
   <link rel="canonical" href="https://pepix.pages.dev/">
   <link rel="icon" href="img/favicon-64.png" type="image/png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <!-- Police hébergée sur le site et préchargée : elle arrive avec la page (pas de saut au changement de police) -->
   <link rel="preload" href="fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/donnees.js" defer></script>
   <script src="js/main.js" defer></script>
+  <!-- Données structurées (schema.org) lues par les moteurs de recherche -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Pépix",
+    "url": "https://pepix.pages.dev/",
+    "logo": "https://pepix.pages.dev/img/logo.png",
+    "slogan": "Tout commence par une graine.",
+    "description": "Semences maraîchères en sachets de 5 g, livrées à Dakar en 24 à 48 h, avec un guide de culture.",
+    "areaServed": {
+      "@type": "City",
+      "name": "Dakar"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+221771786915",
+      "contactType": "customer service",
+      "availableLanguage": "fr"
+    }
+  }
+  </script>
 </head>
 <body>
   <a class="evitement" href="#contenu">Aller au contenu</a>
