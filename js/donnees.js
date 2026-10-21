@@ -6,33 +6,40 @@
    - commandes : enregistrées au moment où le client valide
    ========================================================== */
 
-/* « Pour quelle surface ? » (fiche produit et fiches de culture)
-   grainesParGramme : bas de la fourchette des catalogues publics, pour ne pas promettre trop.
-     Oignon 250 : 100 graines = 0,356 g, soit environ 280/g (Wikifarmer, graines d'oignon) ;
-                  « environ 250 dans un gramme » (référence horticole française).
-     Tomate 300 : 75 graines pour 0,2 g (375/g, San Marzano) et 500 pour 1 g (tomate cerise),
-                  catalogue Truffaut ; la Marmande a de grosses graines, d'où 300.
-     Chou   200 : 600 graines pour 3 g, chou cabus « Cœur de bœuf » (même variété), catalogue Truffaut.
-     Piment 130 : 20 graines pour 0,15 g, Capsicum annuum (ProSpecieRara, graines en grandes portions).
-   Calcul (fonction surfaceSachet de js/main.js) :
-     [a, b]  = espacement lu dans « 50 × 70 cm » (en cm ; illisible : le bloc n'est pas affiché)
-     graines = GRAMMES_SACHET (5) × grainesParGramme
-     plants  = arrondiBas(graines)                  plafond : 1 graine = 1 plant au mieux
-     surface = arrondiBas(plants × a × b / 10 000)  en m², depuis les plants affichés
-     arrondiBas(n) = n < 100 : à l'unité ; n < 1 000 : à la dizaine ; sinon à la centaine, vers le bas
-   Pas de taux de germination publié par Pépix : on affiche « Jusqu'à » et la mention « Indicatif ».
-   Valeurs à faire relire par le porteur du projet (ISM). Spec : docs/squad/02-design-evolution.md §6.
+/* Formats vendus (business plan, § 6.1) : 500 g, 2,5 kg et 5 kg, selon les références des fournisseurs.
+   prix : un prix par format, en FCFA. PRIX PROVISOIRES de démonstration, à remplacer par les prix
+   négociés avec les fournisseurs (modifiables dans l'espace admin, rubrique Produits).
+
+   doseHa : grammes de semences pour un hectare, semis en pépinière puis repiquage
+   (fourchettes courantes des fiches maraîchères d'Afrique de l'Ouest, prises dans le haut pour ne pas manquer) :
+     Oignon 4 000 g, tomate 250 g, chou 400 g, piment 500 g.
+   Contrôle avec l'espacement et le nombre de graines par gramme (catalogues publics) :
+     Oignon  10 × 20 cm = 500 000 plants/ha, 250 graines/g : 4 kg = 1 000 000 graines, marge × 2
+     Tomate  50 × 70 cm =  28 500 plants/ha, 300 graines/g : 250 g =  75 000 graines, marge × 2,6
+     Chou    50 × 60 cm =  33 300 plants/ha, 200 graines/g : 400 g =  80 000 graines, marge × 2,4
+     Piment  40 × 60 cm =  41 600 plants/ha, 130 graines/g : 500 g =  65 000 graines, marge × 1,6
+   La marge couvre les pertes à la levée, en pépinière et au repiquage. Valeurs à faire relire
+   par le porteur du projet ; elles alimentent le calculateur (js/main.js, besoinSemences).
+
+   pepiniereSemaines : [min, max] entre le semis et le repiquage, pour le plan de culture daté (js/plan.js).
+     Repris des fiches (oignon 6 à 8, tomate 3 à 4, piment 4 à 6 semaines). Chou : la fiche dit « 4 à 5 feuilles »,
+     soit environ 4 à 6 semaines (hypothèse). Valeurs à faire relire par le porteur du projet.
 
    etapes : 5 étapes dans l'ordre Semis, Pépinière, Repiquage, Entretien, Récolte.
      court : la valeur affichée dans la fiche produit ; long : le texte des fiches de culture. */
-const GRAMMES_SACHET = 5;
+const FORMATS = [
+  { id: '500g', grammes: 500, nom: '500 g' },
+  { id: '2500g', grammes: 2500, nom: '2,5 kg' },
+  { id: '5000g', grammes: 5000, nom: '5 kg' },
+];
 
 const PRODUITS_BASE = [
   {
-    id: 'oignon', nom: 'Oignon', variete: 'Jaune Paille', prix: 1500,
+    id: 'oignon', nom: 'Oignon', variete: 'Jaune Paille', prix: { '500g': 20000, '2500g': 92000, '5000g': 175000 },
     semis: 'Oct. – Déc. (pépinière)', cycle: '120–150 jours', espacement: '10 × 20 cm',
     conseils: ['Semer en pépinière, repiquer à 6–8 semaines', "Arrêter l'arrosage 2 semaines avant récolte", "Sécher les bulbes à l'ombre avant stockage"],
-    grainesParGramme: 250,
+    doseHa: 4000,
+    pepiniereSemaines: [6, 8],
     etapes: [
       { court: 'oct. à déc.', long: 'Oct. à déc., en pépinière.' },
       { court: '6 à 8 semaines', long: 'Planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer 6 à 8 semaines après le semis.' },
@@ -42,10 +49,11 @@ const PRODUITS_BASE = [
     ],
   },
   {
-    id: 'tomate', nom: 'Tomate', variete: 'Marmande', prix: 1800,
+    id: 'tomate', nom: 'Tomate', variete: 'Marmande', prix: { '500g': 40000, '2500g': 184000, '5000g': 350000 },
     semis: 'Oct. – Févr.', cycle: '70–90 jours', espacement: '50 × 70 cm',
     conseils: ['Semis en pépinière 3–4 semaines avant repiquage', 'Tuteurer dès 20 cm de hauteur', 'Supprimer les gourmands régulièrement'],
-    grainesParGramme: 300,
+    doseHa: 250,
+    pepiniereSemaines: [3, 4],
     etapes: [
       { court: 'oct. à févr.', long: 'Oct. à févr., en pépinière.' },
       { court: '3 à 4 semaines', long: 'Planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer 3 à 4 semaines après le semis.' },
@@ -55,10 +63,11 @@ const PRODUITS_BASE = [
     ],
   },
   {
-    id: 'chou', nom: 'Chou', variete: 'Cœur de bœuf', prix: 1200,
+    id: 'chou', nom: 'Chou', variete: 'Cœur de bœuf', prix: { '500g': 27500, '2500g': 126500, '5000g': 240000 },
     semis: 'Oct. – Janv.', cycle: '80–100 jours', espacement: '50 × 60 cm',
     conseils: ['Repiquer à 4–5 feuilles', 'Arrosage régulier, sans excès', 'Surveiller les chenilles en début de cycle'],
-    grainesParGramme: 200,
+    doseHa: 400,
+    pepiniereSemaines: [4, 6],
     etapes: [
       { court: 'oct. à janv.', long: 'Oct. à janv., en pépinière.' },
       { court: "jusqu'à 4 à 5 feuilles", long: 'Planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer quand le plant a 4 à 5 feuilles.' },
@@ -68,10 +77,11 @@ const PRODUITS_BASE = [
     ],
   },
   {
-    id: 'piment', nom: 'Piment', variete: 'Super Cayenne', prix: 1500,
+    id: 'piment', nom: 'Piment', variete: 'Super Cayenne', prix: { '500g': 35000, '2500g': 161000, '5000g': 305000 },
     semis: 'Oct. – Mars', cycle: '90–120 jours', espacement: '40 × 60 cm',
     conseils: ['Semis en pépinière 4–6 semaines avant repiquage', 'Repiquer à 4–6 feuilles vraies', "Éviter l'excès d'eau au pied"],
-    grainesParGramme: 130,
+    doseHa: 500,
+    pepiniereSemaines: [4, 6],
     etapes: [
       { court: 'oct. à mars', long: 'Oct. à mars, en pépinière.' },
       { court: '4 à 6 semaines', long: 'Planche ombragée, terreau fin, arrosage léger matin et soir. Repiquer 4 à 6 semaines après le semis.' },
@@ -85,9 +95,9 @@ const PRODUITS_BASE = [
 const REGLAGES_BASE = {
   annonce: '',
   herosTitre: 'Tout commence par une graine.',
-  herosTexte: 'Oignon, tomate, chou et piment en sachets de 5 g. Livrés à Dakar en 24 à 48 h, avec la fiche de culture.',
+  herosTexte: 'Oignon, tomate, chou et piment en 500 g, 2,5 kg et 5 kg. Indiquez votre surface : on calcule la quantité, on vous livre.',
   friseTitre: 'De la graine à la récolte, on vous guide.',
-  friseTexte: 'Chaque sachet a sa fiche, ouverte par le QR code au dos. Voici les grandes étapes.',
+  friseTexte: 'Chaque semence a sa fiche de culture, en ligne. Voici les grandes étapes.',
   fraisLivraison: 1000,
   whatsapp: '221771786915',
 };
@@ -108,10 +118,15 @@ const Pepix = {
   },
 
   // Produits : chaque produit garde ses valeurs par défaut, l'admin ne modifie
-  // que variété, prix, disponibilité et affichage.
+  // que variété, prix (un par format), disponibilité et affichage.
   produits() {
     const modifs = this.lire('pepix-produits', {});
-    return PRODUITS_BASE.map(p => ({ ...p, enStock: true, visible: true, ...(modifs[p.id] || {}) }));
+    return PRODUITS_BASE.map(p => {
+      // Un prix enregistré avant les formats (un seul nombre) est ignoré
+      const { prix: prixModifies, ...autres } = modifs[p.id] || {};
+      const prix = prixModifies && typeof prixModifies === 'object' ? { ...p.prix, ...prixModifies } : p.prix;
+      return { ...p, enStock: true, visible: true, ...autres, prix };
+    });
   },
   sauverProduit(id, champs) {
     const modifs = this.lire('pepix-produits', {});

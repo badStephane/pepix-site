@@ -7,7 +7,7 @@
   <title>Page introuvable, Pépix</title>
   <meta name="description" content="Cette page n'existe pas.">
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#1B3A22">
+  <meta name="theme-color" content="#3C572C">
   <meta property="og:title" content="Page introuvable, Pépix">
   <meta property="og:description" content="Cette page n'existe pas.">
   <meta property="og:type" content="website">
@@ -21,6 +21,7 @@
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <!-- Police hébergée sur le site et préchargée : elle arrive avec la page (pas de saut au changement de police) -->
   <link rel="preload" href="fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/montserrat-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/donnees.js" defer></script>
   <script src="js/main.js" defer></script>
@@ -31,14 +32,14 @@
   <!-- En-tête (identique sur toutes les pages) -->
   <header class="entete">
     <div class="conteneur">
-      <a class="logo" href="index.html" aria-label="Pépix, retour à l'accueil"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <a class="logo" href="index.html" aria-label="Pépix, retour à l'accueil"><img src="img/logo.webp" alt="Pépix" width="120" height="108"></a>
       <nav class="menu" aria-label="Navigation principale">
         <a href="index.html">Accueil</a>
         <a href="qui-sommes-nous.html">Qui sommes-nous</a>
         <a href="conseils.html">Conseils</a>
         <a href="boutique.html">Boutique</a>
       </nav>
-      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier <span class="compteur">0</span></button>
+      <button type="button" class="btn-panier" aria-label="Panier 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier <span class="compteur">0</span></button>
     </div>
   </header>
 
@@ -61,7 +62,7 @@
       </div>
     </section>
 
-    <!-- Un lien cassé vient souvent d'un QR code ou d'une adresse de fiche mal recopiée : les fiches, directement -->
+    <!-- Un lien cassé vient souvent d'une adresse de fiche mal recopiée : les fiches, directement -->
     <section class="conteneur raccourcis" aria-labelledby="t-raccourcis">
       <h2 id="t-raccourcis">Vous cherchiez une fiche de culture&nbsp;?</h2>
       <ul class="raccourcis-liste">
@@ -77,9 +78,8 @@
   <footer class="pied">
     <div class="conteneur pied-haut">
       <div class="pied-marque">
-        <strong>PÉPIX</strong>
-        <span>Tout commence par une <span class="jaune">graine.</span></span>
-        <p>Semences maraîchères en sachets de 5 g, testées en germination, livrées partout au Sénégal.</p>
+        <img class="pied-logo" src="img/logo-blanc.webp" alt="Pépix, tout commence par une graine." width="160" height="143" loading="lazy">
+        <p>Semences maraîchères en 500 g, 2,5 kg et 5 kg, dans la quantité qui correspond à votre surface. Livrées partout au Sénégal.</p>
       </div>
       <div>
         <h2>Le site</h2>
@@ -105,6 +105,7 @@
     <a href="boutique.html"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Boutique</span></a>
     <a href="conseils.html"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v15H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 0 6 21.5h14"/><path d="M9 8h7"/></svg><span>Conseils</span></a>
     <a href="qui-sommes-nous.html"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5"/><path d="M12 8h.01"/></svg><span>À propos</span></a>
+    <button type="button" class="btn-panier nav-bas-panier" aria-label="Panier 0 article"><span class="nav-bas-icone"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></span><span>Panier</span> <span class="compteur">0</span></button>
   </nav>
 
 </body>

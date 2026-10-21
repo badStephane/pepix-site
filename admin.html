@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Espace admin, Pépix</title>
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#1B3A22">
+  <meta name="theme-color" content="#3C572C">
   <link rel="icon" href="img/favicon-64.png" type="image/png">
   <!-- Police hébergée sur le site et préchargée : elle arrive avec la page (pas de saut au changement de police) -->
   <link rel="preload" href="fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/montserrat-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/admin.css">
   <script src="js/donnees.js" defer></script>
@@ -20,7 +21,7 @@
   <!-- Connexion (démo : code gardé dans le navigateur, pas une vraie sécurité) -->
   <div class="connexion" id="connexion" hidden>
     <form class="connexion-carte" id="form-connexion" novalidate>
-      <img src="img/logo.webp" alt="Pépix" width="74" height="66">
+      <img src="img/logo.webp" alt="Pépix" width="120" height="108">
       <h1>Espace admin</h1>
       <div class="champ">
         <label for="code">Code d'accès</label>
@@ -37,7 +38,7 @@
   <!-- Interface admin -->
   <div class="admin-cadre" id="admin" hidden>
     <aside class="admin-barre">
-      <a class="admin-logo" href="#tableau"><img src="img/logo.webp" alt="" width="40" height="36"><span>Pépix <small>admin</small></span></a>
+      <a class="admin-logo" href="#tableau"><img src="img/logo-blanc.webp" alt="Pépix" width="120" height="108"><small>Espace admin</small></a>
       <nav class="admin-nav" aria-label="Sections de l'admin">
         <a href="#tableau" data-vue="tableau"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 16v-4"/><path d="M12 16V8"/><path d="M17 16v-7"/></svg><span>Tableau de bord</span></a>
         <a href="#commandes" data-vue="commandes"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Commandes</span><b class="pastille" id="pastille-nouvelles" hidden></b></a>

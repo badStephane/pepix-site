@@ -21,8 +21,13 @@ const dateCourte = iso => new Date(iso).toLocaleDateString('fr-FR', { day: 'nume
 const heure = iso => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 const dateLongue = iso => new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const pastilleStatut = s => `<span class="statut statut-${s}">${STATUTS[s] || s}</span>`;
-const articles = c => (c.lignes || []).map(l => `${l.qte} × ${l.nom}`).join(', ');
-const nbSachets = c => (c.lignes || []).reduce((a, l) => a + l.qte, 0);
+// Une ligne de commande porte son format (500 g, 2,5 kg, 5 kg) ; les commandes d'avant les formats n'en ont pas
+const nomLigne = l => l.format ? `${l.nom} ${l.format}` : l.nom;
+const articles = c => (c.lignes || []).map(l => `${l.qte} × ${nomLigne(l)}`).join(', ');
+const nbArticles = c => (c.lignes || []).reduce((a, l) => a + l.qte, 0);
+const PRIX_MIN = 100, PRIX_MAX = 2000000;
+// "12,5 kg"
+const kilos = g => `${String(Math.round(g / 100) / 10).replace('.', ',')}\u00A0kg`;
 // Téléphone lisible "77 123 45 67" (affichage seulement ; liens tel: et wa.me gardent la valeur brute)
 const telLisible = tel => {
   const chiffres = String(tel).replace(/\D/g, '').replace(/^(00)?221/, '');
@@ -125,9 +130,10 @@ function vueTableau() {
   const max = Math.max(...jours.map(j => j.total), 1);
   const pas = arrondiGraphe(max);
 
-  // Sachets vendus par produit
+  // Semences vendues par produit, en grammes (les anciennes lignes sans format comptaient des sachets de 5 g)
+  const GRAMMES_ANCIEN_SACHET = 5;
   const parProduit = {};
-  for (const c of valides) for (const l of c.lignes || []) parProduit[l.nom] = (parProduit[l.nom] || 0) + l.qte;
+  for (const c of valides) for (const l of c.lignes || []) parProduit[l.nom] = (parProduit[l.nom] || 0) + l.qte * (l.grammes || GRAMMES_ANCIEN_SACHET);
   const classement = Object.entries(parProduit).sort((a, b) => b[1] - a[1]);
   const maxProduit = Math.max(...classement.map(x => x[1]), 1);
 
@@ -143,7 +149,7 @@ function vueTableau() {
       ${nouvelles
         ? `<a class="chiffre chiffre-lien alerte" href="#commandes/nouvelle"><span>À traiter</span><strong>${nouvelles}</strong><small>à confirmer par téléphone ${icone('fleche')}</small></a>`
         : '<div class="chiffre"><span>À traiter</span><strong>0</strong><small>rien en attente</small></div>'}
-      <div class="chiffre"><span>Panier moyen</span><strong>${prix(moyen)} F</strong><small>${(valides.reduce((a, c) => a + nbSachets(c), 0) / (valides.length || 1)).toFixed(1).replace('.', ',')} sachets par commande</small></div>
+      <div class="chiffre"><span>Panier moyen</span><strong>${prix(moyen)} F</strong><small>${(valides.reduce((a, c) => a + nbArticles(c), 0) / (valides.length || 1)).toFixed(1).replace('.', ',')} articles par commande</small></div>
     </section>
 
     <div class="grille-bas">
@@ -161,10 +167,10 @@ function vueTableau() {
       </section>
 
       <section class="bloc" aria-labelledby="t-produits">
-        <div class="bloc-tete"><h2 id="t-produits">Sachets vendus</h2><a class="lien" href="#produits">Produits</a></div>
+        <div class="bloc-tete"><h2 id="t-produits">Semences vendues</h2><a class="lien" href="#produits">Produits</a></div>
         ${classement.length ? `<ol class="palmares">
-          ${classement.map(([nom, n]) => `<li><span>${echapper(nom)}</span><span class="piste" aria-hidden="true"><i style="width:${(n / maxProduit) * 100}%"></i></span><b>${n}</b></li>`).join('')}
-        </ol>` : '<p>Aucun sachet vendu.</p>'}
+          ${classement.map(([nom, n]) => `<li><span>${echapper(nom)}</span><span class="piste" aria-hidden="true"><i style="width:${(n / maxProduit) * 100}%"></i></span><b>${kilos(n)}</b></li>`).join('')}
+        </ol>` : '<p>Aucune semence vendue.</p>'}
       </section>
     </div>
 
@@ -326,7 +332,7 @@ function ouvrirCommande(numero) {
       <section>
         <h3>Articles</h3>
         <ul class="detail-lignes">
-          ${(c.lignes || []).map(l => `<li><b>${l.qte} × ${echapper(l.nom)}</b><span>${prix(l.qte * l.prix)} F</span></li>`).join('')}
+          ${(c.lignes || []).map(l => `<li><b>${l.qte} × ${echapper(nomLigne(l))}</b><span>${prix(l.qte * l.prix)} F</span></li>`).join('')}
         </ul>
         <div class="detail-total">
           <div><span>Sous-total</span><span>${prix(c.sousTotal)} F</span></div>
@@ -388,7 +394,7 @@ function vueProduits() {
   const produits = Pepix.produits();
   rendre(`
     <div class="admin-entete">
-      <div><h1>Produits</h1><p>Prix, variété et disponibilité. Les changements s'appliquent au site dès l'enregistrement.</p></div>
+      <div><h1>Produits</h1><p>Prix par format, variété et disponibilité. Les changements s'appliquent au site dès l'enregistrement. Les prix d'origine sont provisoires : remplacez-les par vos prix fournisseurs.</p></div>
       <div class="admin-actions"><button type="button" class="btn btn-contour btn-petit" data-reinit-produits>Rétablir les valeurs d'origine</button></div>
     </div>
     <div class="produits-admin">
@@ -399,18 +405,20 @@ function vueProduits() {
           <div><h2>${p.nom}</h2>${!p.visible ? '<span class="statut statut-annulee">Masqué</span>' : !p.enStock ? '<span class="statut statut-nouvelle">Épuisé</span>' : '<span class="statut statut-confirmee">En vente</span>'}</div>
         </div>
         <form data-produit="${p.id}" novalidate>
-          <div class="champ-ligne">
-            <div class="champ">
-              <label for="var-${p.id}">Variété</label>
-              <input id="var-${p.id}" name="variete" value="${echapper(p.variete)}" maxlength="40" required>
-            </div>
-            <div class="champ">
-              <label for="prix-${p.id}">Prix (FCFA)</label>
-              <input id="prix-${p.id}" name="prix" type="number" inputmode="numeric" min="100" max="100000" step="50" value="${p.prix}" required aria-describedby="a-prix-${p.id} e-prix-${p.id}">
-              <span class="aide" id="a-prix-${p.id}">${prixAffiche(p.prix)}</span>
-              <span class="msg-erreur" id="e-prix-${p.id}">Entre 100 et 100 000 FCFA.</span>
-            </div>
+          <div class="champ">
+            <label for="var-${p.id}">Variété</label>
+            <input id="var-${p.id}" name="variete" value="${echapper(p.variete)}" maxlength="40" required>
           </div>
+          <fieldset class="champ-ligne champ-prix">
+            <legend>Prix par format (FCFA)</legend>
+            ${FORMATS.map(f => `
+            <div class="champ">
+              <label for="prix-${p.id}-${f.id}">${f.nom}</label>
+              <input id="prix-${p.id}-${f.id}" name="prix-${f.id}" type="number" inputmode="numeric" min="${PRIX_MIN}" max="${PRIX_MAX}" step="50" value="${p.prix[f.id] ?? ''}" required aria-describedby="a-prix-${p.id}-${f.id} e-prix-${p.id}-${f.id}">
+              <span class="aide" id="a-prix-${p.id}-${f.id}">${prixAffiche(p.prix[f.id] ?? '')}</span>
+              <span class="msg-erreur" id="e-prix-${p.id}-${f.id}">Entre ${prix(PRIX_MIN)} et ${prix(PRIX_MAX)} FCFA.</span>
+            </div>`).join('')}
+          </fieldset>
           <label class="interrupteur"><span>En stock<small>Sinon la carte affiche « Épuisé »</small></span><input type="checkbox" name="enStock" ${p.enStock ? 'checked' : ''}></label>
           <label class="interrupteur"><span>Affiché sur le site<small>Masqué : retiré de la boutique et des conseils</small></span><input type="checkbox" name="visible" ${p.visible ? 'checked' : ''}></label>
           <button type="submit" class="btn btn-sombre btn-petit">Enregistrer</button>
@@ -421,17 +429,20 @@ function vueProduits() {
 
 function enregistrerProduit(form) {
   const id = form.dataset.produit;
-  const prixChamp = form.elements.prix;
   const variete = form.elements.variete;
-  const valeur = Number(prixChamp.value);
-  const prixOk = Number.isFinite(valeur) && valeur >= 100 && valeur <= 100000;
-  prixChamp.setAttribute('aria-invalid', prixOk ? 'false' : 'true');
+  const champsPrix = FORMATS.map(f => ({ f, champ: form.elements[`prix-${f.id}`] }));
+  const fautifs = champsPrix.filter(({ champ }) => {
+    const valeur = Number(champ.value);
+    const ok = champ.value !== '' && Number.isFinite(valeur) && valeur >= PRIX_MIN && valeur <= PRIX_MAX;
+    champ.setAttribute('aria-invalid', ok ? 'false' : 'true');
+    return !ok;
+  });
   variete.setAttribute('aria-invalid', variete.value.trim() ? 'false' : 'true');
-  if (!prixOk) { prixChamp.focus(); return; }
   if (!variete.value.trim()) { variete.focus(); return; }
+  if (fautifs.length) { fautifs[0].champ.focus(); return; }
   Pepix.sauverProduit(id, {
     variete: variete.value.trim(),
-    prix: Math.round(valeur),
+    prix: Object.fromEntries(champsPrix.map(({ f, champ }) => [f.id, Math.round(Number(champ.value))])),
     enStock: form.elements.enStock.checked,
     visible: form.elements.visible.checked,
   });
@@ -533,7 +544,10 @@ function chargerExemples() {
   for (let i = 0; i < 12; i++) {
     const [nom, tel, adresse] = clients[i % clients.length];
     const choix = produits.filter((_, k) => (i + k) % 3 !== 0).slice(0, 1 + (i % 3));
-    const lignes = choix.map((p, k) => ({ id: p.id, nom: p.nom, variete: p.variete, prix: p.prix, qte: 1 + ((i + k) % 4) }));
+    const lignes = choix.map((p, k) => {
+      const f = FORMATS[(i + k) % FORMATS.length];
+      return { id: p.id, nom: p.nom, variete: p.variete, format: f.nom, grammes: f.grammes, prix: Number(p.prix[f.id]) || 0, qte: 1 + ((i + k) % 3) };
+    });
     const st = lignes.reduce((a, l) => a + l.qte * l.prix, 0);
     const d = new Date(); d.setDate(d.getDate() - Math.floor(i * 1.1)); d.setHours(8 + (i * 3) % 11, (i * 17) % 60, 0, 0);
     nouvelles.push({
@@ -606,8 +620,8 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#vue').addEventListener('input', e => {
     if (e.target.getAttribute('aria-invalid') === 'true') e.target.removeAttribute('aria-invalid');
     // Prix d'un produit : l'aide montre en direct le prix tel que le site l'affichera
-    if (e.target.name === 'prix' && e.target.form && e.target.form.dataset.produit) {
-      $(`#a-prix-${e.target.form.dataset.produit}`).textContent = prixAffiche(e.target.value);
+    if (e.target.name.startsWith('prix-') && e.target.form && e.target.form.dataset.produit) {
+      $(`#a-${e.target.id}`).textContent = prixAffiche(e.target.value);
     }
   });
 

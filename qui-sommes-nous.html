@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Qui sommes-nous, Pépix</title>
-  <meta name="description" content="Pépix sélectionne et conditionne des semences maraîchères adaptées au climat du Sénégal.">
-  <meta name="theme-color" content="#1B3A22">
+  <meta name="description" content="Pépix vend en ligne des semences maraîchères au Sénégal, avec un calculateur de quantité et des fiches de culture, pour les débutants comme pour les maraîchers.">
+  <meta name="theme-color" content="#3C572C">
   <meta property="og:title" content="Qui sommes-nous, Pépix">
-  <meta property="og:description" content="Pépix sélectionne et conditionne des semences maraîchères adaptées au climat du Sénégal.">
+  <meta property="og:description" content="Pépix vend en ligne des semences maraîchères au Sénégal, avec un calculateur de quantité et des fiches de culture, pour les débutants comme pour les maraîchers.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://pepix.pages.dev/img/partage.jpg">
   <meta property="og:image:width" content="1200">
@@ -21,6 +21,7 @@
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <!-- Police hébergée sur le site et préchargée : elle arrive avec la page (pas de saut au changement de police) -->
   <link rel="preload" href="fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/montserrat-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/donnees.js" defer></script>
   <script src="js/main.js" defer></script>
@@ -31,14 +32,14 @@
   <!-- En-tête (identique sur toutes les pages) -->
   <header class="entete">
     <div class="conteneur">
-      <a class="logo" href="index.html" aria-label="Pépix, retour à l'accueil"><img src="img/logo.webp" alt="Pépix" width="58" height="52"></a>
+      <a class="logo" href="index.html" aria-label="Pépix, retour à l'accueil"><img src="img/logo.webp" alt="Pépix" width="120" height="108"></a>
       <nav class="menu" aria-label="Navigation principale">
         <a href="index.html">Accueil</a>
         <a href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
         <a href="conseils.html">Conseils</a>
         <a href="boutique.html">Boutique</a>
       </nav>
-      <button type="button" class="btn-panier" aria-label="Panier, 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier <span class="compteur">0</span></button>
+      <button type="button" class="btn-panier" aria-label="Panier 0 article"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Panier <span class="compteur">0</span></button>
     </div>
   </header>
 
@@ -46,9 +47,9 @@
 
     <section class="conteneur grille-2 apropos">
       <div class="apropos-texte">
-        <h1 class="grand-titre">Des graines qui lèvent, avec le mode d'emploi.</h1>
-        <p class="texte-long">Au marché, les graines se vendent souvent au poids, sans nom de variété ni date. On les sème, on attend, et parfois rien ne lève. Pépix part de là.</p>
-        <p class="texte-long">On vend quatre espèces, pas plus : oignon, tomate, chou, piment. Chaque lot est mis à germer avant d'être ensaché, et le sachet renvoie vers une fiche de culture.</p>
+        <h1 class="grand-titre">Des semences de qualité, dans la bonne quantité.</h1>
+        <p class="texte-long">Au Sénégal, beaucoup de producteurs peinent à trouver vite des semences de qualité. Ceux qui débutent ne savent pas toujours quoi acheter, en quelle quantité, ni à quelle période semer. Pépix part de là.</p>
+        <p class="texte-long">Pépix vend des semences maraîchères en ligne, en commençant par quatre cultures : oignon, tomate, chou et piment. Chaque semence a sa variété indiquée et sa fiche de culture, et un calculateur donne la quantité à prévoir selon la surface du terrain.</p>
       </div>
       <figure class="photo-apropos">
         <img src="img/germination-1200.webp" srcset="img/germination-700.webp 700w, img/germination-1200.webp 1200w"
@@ -66,10 +67,10 @@
           <tr><td></td><th scope="col">Au marché</th><th scope="col" class="col-pepix">Avec Pépix</th></tr>
         </thead>
         <tbody data-apparition>
-          <tr><th scope="row">Variété</th><td>Souvent sans nom</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Nommée sur l'étiquette</td></tr>
-          <tr><th scope="row">Quantité</th><td>Au poids</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Sachet de 5 g</td></tr>
-          <tr><th scope="row">Levée</th><td>On sème, on attend, parfois rien ne lève</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Chaque lot testé en germination</td></tr>
-          <tr><th scope="row">Mode d'emploi</th><td>À deviner</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Fiche de culture par QR code</td></tr>
+          <tr><th scope="row">Variété</th><td>Pas toujours indiquée</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Indiquée pour chaque semence</td></tr>
+          <tr><th scope="row">Quantité</th><td>À estimer soi-même</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Calculée selon votre surface</td></tr>
+          <tr><th scope="row">Achat</th><td>Se déplacer, chercher le bon vendeur</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>En ligne, livré chez vous</td></tr>
+          <tr><th scope="row">Mode d'emploi</th><td>À deviner</td><td class="col-pepix"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Une fiche de culture par espèce</td></tr>
         </tbody>
       </table>
     </section>
@@ -77,16 +78,40 @@
     <section class="conteneur sachet-contenu" aria-labelledby="t-sachet">
       <figure class="sachet-visuel">
         <img src="img/sachet-tomate-detoure.webp" width="223" height="440" loading="lazy"
-             alt="Le sachet de tomate Pépix, variété Marmande, avec le QR code du guide de culture">
+             alt="Sachet de semences de tomate Pépix, variété Marmande : l'emballage prévu pour la marque">
       </figure>
       <div class="sachet-texte">
-      <h2 id="t-sachet">Dans un sachet</h2>
+      <h2 id="t-sachet">Ce que propose Pépix</h2>
       <ul data-apparition>
-        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v7"/><path d="m9 7 3 3 3-3"/><path d="M3 14h18"/><ellipse cx="12" cy="18" rx="2.5" ry="1.5"/></svg><span><strong>5 g de graines</strong> d'une seule variété, nommée sur l'étiquette.</span></li>
-        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg><span><strong>Un lot testé</strong> en germination avant l'ensachage.</span></li>
-        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg><span><strong>Un QR code</strong> qui ouvre la fiche : semis, repiquage, arrosage, récolte.</span></li>
+        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v7"/><path d="m9 7 3 3 3-3"/><path d="M3 14h18"/><ellipse cx="12" cy="18" rx="2.5" ry="1.5"/></svg><span><strong>Trois formats</strong> : 500 g, 2,5 kg et 5 kg, selon la surface à semer et le budget.</span></li>
+        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8"/><path d="M16 14v4"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg><span><strong>Un calculateur</strong> qui estime la quantité de semences d'après la culture et la surface du terrain.</span></li>
+        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v15H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 0 6 21.5h14"/><path d="M9 8h7"/></svg><span><strong>Une fiche de culture</strong> par espèce : semis, pépinière, repiquage, entretien, récolte.</span></li>
       </ul>
       </div>
+    </section>
+
+    <!-- Pour qui : les deux profils du business plan, présentés comme des exemples et non comme des avis clients -->
+    <section class="conteneur pour-qui" aria-labelledby="t-pour-qui">
+      <h2 id="t-pour-qui">Pour qui</h2>
+      <p>Deux profils types, tirés de notre étude, résument les besoins auxquels Pépix répond. Ce sont des exemples, pas des témoignages de clients.</p>
+      <ul class="profils" data-apparition>
+        <li class="profil">
+          <div class="profil-tete">
+            <span class="profil-picto"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span>
+            <div><h3>Abdou</h3><p class="profil-role">Débute dans le maraîchage</p></div>
+          </div>
+          <p>Étudiant en droit, il hérite d'un champ familial de deux hectares et veut le mettre en valeur. Il ne sait pas encore quelles semences acheter, en quelle quantité, ni à quelle période semer.</p>
+          <p class="profil-besoin">Ce qui l'aide : le calculateur et les fiches de culture.</p>
+        </li>
+        <li class="profil">
+          <div class="profil-tete">
+            <span class="profil-picto"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></span>
+            <div><h3>Salif</h3><p class="profil-role">Maraîcher en activité</p></div>
+          </div>
+          <p>Agriculteur expérimenté, il connaît ses cultures. Sa difficulté : se procurer rapidement des semences de qualité. Les délais de livraison retardent la préparation de ses campagnes.</p>
+          <p class="profil-besoin">Ce qui l'aide : la commande en ligne et la livraison.</p>
+        </li>
+      </ul>
     </section>
 
     <section class="conteneur porteur" aria-labelledby="t-porteur">
@@ -96,7 +121,7 @@
         <div>
           <p class="porteur-nom">Yannick Felix Viera MOREIRA</p>
           <p class="porteur-role">Étudiant à l'ISM</p>
-          <p class="porteur-texte">Pépix est son projet d'école : une marque de semences maraîchères pensée pour les producteurs du Sénégal.</p>
+          <p class="porteur-texte">Pépix est son projet d'école : une plateforme de semences maraîchères pensée pour les producteurs du Sénégal, débutants comme expérimentés.</p>
         </div>
       </div>
     </section>
@@ -104,15 +129,20 @@
     <section class="conteneur feuille-route" aria-labelledby="t-route">
       <h2 id="t-route">Où nous en sommes</h2>
       <ol class="phases" data-apparition>
-        <li class="phase">
-          <p class="phase-etat">Phase 1, terminée</p>
-          <h3>Sélection partenaire</h3>
-          <p>Des semences de fournisseurs vérifiés, expédiées directement, avec nos fiches de conseil.</p>
-        </li>
         <li class="phase active">
-          <p class="phase-etat">Phase 2, en cours</p>
-          <h3>Gamme Pépix</h3>
-          <p>Nos propres sachets refermables, lots contrôlés, guide de culture par QR code.</p>
+          <p class="phase-etat">Phase 1, en cours</p>
+          <h3>Fournisseurs locaux</h3>
+          <p>Pépix présente les semences, prend les commandes et suit chaque client. Des fournisseurs locaux sélectionnés préparent et livrent les commandes : pas de stock propre pour commencer.</p>
+        </li>
+        <li class="phase">
+          <p class="phase-etat">Phase 2, ensuite</p>
+          <h3>Stock et marque Pépix</h3>
+          <p>Un stock des semences les plus demandées, des achats directs auprès de fournisseurs spécialisés et des emballages à la marque Pépix.</p>
+        </li>
+        <li class="phase">
+          <p class="phase-etat">À terme</p>
+          <h3>Jeunes plants</h3>
+          <p>Une pépinière Pépix, pour vendre des jeunes plants maraîchers prêts à repiquer.</p>
         </li>
       </ol>
     </section>
@@ -137,9 +167,8 @@
   <footer class="pied">
     <div class="conteneur pied-haut">
       <div class="pied-marque">
-        <strong>PÉPIX</strong>
-        <span>Tout commence par une <span class="jaune">graine.</span></span>
-        <p>Semences maraîchères en sachets de 5 g, testées en germination, livrées partout au Sénégal.</p>
+        <img class="pied-logo" src="img/logo-blanc.webp" alt="Pépix, tout commence par une graine." width="160" height="143" loading="lazy">
+        <p>Semences maraîchères en 500 g, 2,5 kg et 5 kg, dans la quantité qui correspond à votre surface. Livrées partout au Sénégal.</p>
       </div>
       <div>
         <h2>Le site</h2>
@@ -165,6 +194,7 @@
     <a href="boutique.html"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Boutique</span></a>
     <a href="conseils.html"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v15H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 0 6 21.5h14"/><path d="M9 8h7"/></svg><span>Conseils</span></a>
     <a href="qui-sommes-nous.html" aria-current="page"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5"/><path d="M12 8h.01"/></svg><span>À propos</span></a>
+    <button type="button" class="btn-panier nav-bas-panier" aria-label="Panier 0 article"><span class="nav-bas-icone"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></span><span>Panier</span> <span class="compteur">0</span></button>
   </nav>
 
 </body>

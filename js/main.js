@@ -8,7 +8,8 @@
 
 // Produits et réglages : valeurs par défaut + modifications de l'admin (js/donnees.js)
 const TOUS_PRODUITS = Pepix.produits();
-const PRODUITS = TOUS_PRODUITS.filter(p => p.visible);
+// Un produit sans aucun format à prix valide n'est pas affiché
+const PRODUITS = TOUS_PRODUITS.filter(p => p.visible && Object.values(p.prix || {}).some(v => Number(v) > 0));
 const REGLAGES = Pepix.reglages();
 
 // Mois de semis (s) et de récolte (r) : 0 = janvier ... 11 = décembre
@@ -57,14 +58,14 @@ const ETAPES = [
 ];
 // Illustration des états vides (panier vide, 404) : une graine en terre qui germe
 const ILLU_GRAINE = `<svg class="illu-graine" viewBox="0 0 96 96" width="96" height="96" aria-hidden="true" focusable="false">
-  <circle cx="48" cy="48" r="46" fill="#E9DCC3"/>
-  <path d="M14 62h68" stroke="#5B3F26" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-  <path d="M24 72h10M44 76h8M62 72h10" stroke="#5B3F26" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
-  <ellipse cx="48" cy="70" rx="7" ry="4.5" transform="rotate(-20 48 70)" fill="#5B3F26"/>
+  <circle cx="48" cy="48" r="46" fill="#E3E7E0"/>
+  <path d="M14 62h68" stroke="#58402A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M24 72h10M44 76h8M62 72h10" stroke="#58402A" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
+  <ellipse cx="48" cy="70" rx="7" ry="4.5" transform="rotate(-20 48 70)" fill="#58402A"/>
   <g class="illu-pousse">
-    <path d="M48 66V46" stroke="#3D7322" stroke-width="3" stroke-linecap="round" fill="none"/>
-    <path d="M48 50c0-7 5-11 12-11 0 7-5 11-12 11z" fill="#3D7322"/>
-    <path d="M48 54c0-6-4-9-10-9 0 6 4 9 10 9z" fill="#3D7322"/>
+    <path d="M48 66V46" stroke="#3C572C" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M48 50c0-7 5-11 12-11 0 7-5 11-12 11z" fill="#3C572C"/>
+    <path d="M48 54c0-6-4-9-10-9 0 6 4 9 10 9z" fill="#3C572C"/>
   </g>
 </svg>`;
 const icone = (nom, classe = 'icone') =>
@@ -86,14 +87,35 @@ const telLisible = tel => {
 };
 const livraisonTexte = () => FRAIS_LIVRAISON ? `${prix(FRAIS_LIVRAISON)} FCFA` : 'offerte';
 const produit = id => PRODUITS.find(p => p.id === id);
+const format = id => FORMATS.find(f => f.id === id);
+// Prix d'un format, ou null s'il n'est pas vendu (prix absent ou nul)
+const prixFormat = (p, f) => Number(p.prix[f.id]) > 0 ? Number(p.prix[f.id]) : null;
+const formatsVendus = p => FORMATS.filter(f => prixFormat(p, f));
+const prixDepart = p => Math.min(...formatsVendus(p).map(f => prixFormat(p, f)));
 
 /* ---------- Panier (sauvegardé dans le navigateur) ---------- */
+// Une ligne par produit et par format : { 'tomate:500g': 2, 'oignon:5000g': 1 }
+const cleLigne = (id, formatId) => `${id}:${formatId}`;
+const lireCle = cle => {
+  const [id, formatId] = cle.split(':');
+  const p = produit(id), f = format(formatId);
+  return p && f && prixFormat(p, f) ? { p, f } : null;
+};
 let panier = {};
 try { panier = JSON.parse(localStorage.getItem('pepix-panier')) || {}; } catch (e) { panier = {}; }
-// Un produit masqué ou épuisé depuis l'admin sort du panier
-for (const id of Object.keys(panier)) { const p = produit(id); if (!p || !p.enStock) delete panier[id]; }
+// Un produit masqué ou épuisé depuis l'admin, un format retiré ou un ancien panier (sachets de 5 g) sort du panier
+panier = Object.fromEntries(Object.entries(panier).filter(([cle, qte]) => {
+  const l = lireCle(cle);
+  return l && l.p.enStock && Number.isInteger(qte) && qte > 0;
+}));
 let vuePanier = 'lignes';          // 'lignes' | 'formulaire' | 'confirmation'
 let derniereCommande = null;
+
+// Lignes du panier dans l'ordre des produits puis des formats
+const lignesPanier = () => PRODUITS.flatMap(p => FORMATS
+  .filter(f => panier[cleLigne(p.id, f.id)] && prixFormat(p, f))
+  .map(f => ({ cle: cleLigne(p.id, f.id), p, f, qte: panier[cleLigne(p.id, f.id)], prix: prixFormat(p, f) })));
+const quantiteProduit = id => FORMATS.reduce((a, f) => a + (panier[cleLigne(id, f.id)] || 0), 0);
 
 function sauverPanier() {
   try { localStorage.setItem('pepix-panier', JSON.stringify(panier)); } catch (e) { /* navigation privée */ }
@@ -104,31 +126,35 @@ function sauverPanier() {
 // Pastille « 2 dans le panier » sur les cartes (accueil et boutique)
 function majPastillesPanier() {
   document.querySelectorAll('[data-dans-panier]').forEach(el => {
-    const n = panier[el.dataset.dansPanier] || 0;
+    const n = quantiteProduit(el.dataset.dansPanier);
     el.hidden = !n;
     el.lastChild.textContent = `${n} dans le panier`;
   });
 }
 
 const nombreArticles = () => Object.values(panier).reduce((a, b) => a + b, 0);
-const sousTotal = () => PRODUITS.reduce((a, p) => a + (panier[p.id] || 0) * p.prix, 0);
+const sousTotal = () => lignesPanier().reduce((a, l) => a + l.qte * l.prix, 0);
 
 function majCompteur(animer) {
   const n = nombreArticles();
   document.querySelectorAll('.btn-panier').forEach(b => {
     const c = b.querySelector('.compteur');
     c.textContent = n;
-    b.setAttribute('aria-label', 'Panier, ' + n + ' article' + (n > 1 ? 's' : ''));
+    b.setAttribute('aria-label', 'Panier ' + n + ' article' + (n > 1 ? 's' : ''));   // commence par le texte visible « Panier 0 »
     if (animer) { c.classList.remove('saut'); void c.offsetWidth; c.classList.add('saut'); }
   });
 }
 
-function ajouter(id, qte = 1, bouton) {
-  panier[id] = (panier[id] || 0) + qte;
+// articles : [{ id, format, qte }] ; texte : le message de la notification
+function ajouter(articles, texte, bouton) {
+  panier = articles.reduce((acc, a) => {
+    const cle = cleLigne(a.id, a.format);
+    return { ...acc, [cle]: (acc[cle] || 0) + a.qte };
+  }, panier);
   vuePanier = 'lignes';
   sauverPanier();
   majCompteur(true);
-  notifier(`${produit(id).nom} ajouté au panier`);
+  notifier(texte);
   if (bouton) confirmerBouton(bouton);
 }
 
@@ -147,8 +173,9 @@ function confirmerBouton(bouton) {
   }, 1400);
 }
 
-function changerQuantite(id, qte) {
-  if (qte <= 0) delete panier[id]; else panier[id] = qte;
+function changerQuantite(cle, qte) {
+  const { [cle]: _retire, ...reste } = panier;
+  panier = qte > 0 ? { ...panier, [cle]: qte } : reste;
   sauverPanier();
   afficherPanier();
 }
@@ -217,15 +244,15 @@ function carteProduit(p, avecSaison) {
         <h3><button type="button" class="carte-ouvrir" data-ouvrir="${p.id}" aria-label="${p.nom}, voir la fiche">${p.nom}</button></h3>
         ${avecSaison ? `<p class="pastille-saison">${icone('calendrier')}À semer en ${MOIS_LONGS[new Date().getMonth()]}</p>` : ''}
         <p class="pastille-panier" data-dans-panier="${p.id}" hidden>${icone('check')}<span></span></p>
-        <span class="variete">${echapper(p.variete)}, sachet de 5 g</span>
+        <span class="variete">${echapper(p.variete)}, en ${liste(formatsVendus(p).map(f => f.nom))}</span>
         <dl class="carte-reperes">
           <div><dt>Semis</dt><dd>${p.semis.replace(' (pépinière)', '')}</dd></div>
           <div><dt>Cycle</dt><dd>${p.cycle}</dd></div>
         </dl>
         <div class="carte-pied">
-          <strong>${prix(p.prix)} FCFA</strong>
+          <strong><small>dès</small> ${prix(prixDepart(p))} FCFA</strong>
           ${p.enStock
-            ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter ${p.nom} au panier">Ajouter</button>`
+            ? `<button type="button" class="btn btn-vert" data-choisir="${p.id}" aria-label="Choisir le format : ${p.nom}">Choisir</button>`
             : `<span class="epuise">Épuisé</span>`}
         </div>
       </div>
@@ -247,81 +274,189 @@ function afficherProduits(conteneur) {
   conteneur.innerHTML = PRODUITS.map(p => carteProduit(p, pastille && aSemer.includes(p))).join('');
   chargerVisuels(conteneur);
   majPastillesPanier();
+  // Toute la carte, bouton « Choisir » compris, ouvre la fiche : le format se choisit là
   conteneur.addEventListener('click', e => {
-    const bouton = e.target.closest('[data-ajouter]');
-    if (bouton) { ajouter(bouton.dataset.ajouter, 1, bouton); return; }
     const carte = e.target.closest('.carte');
     if (carte) ouvrirFiche(carte.dataset.id);
   });
 }
 
-/* ---------- Boutique : un sachet de chaque (total sans remise) ---------- */
-const LARGEUR_DETOURE = { oignon: 267, tomate: 223, chou: 261, piment: 231 };   // hauteur 440
-function afficherLot(zone) {
-  const dispo = PRODUITS.filter(p => p.enStock);
-  if (dispo.length < 2) { zone.closest('section').hidden = true; return; }
-  const total = dispo.reduce((somme, p) => somme + p.prix, 0);
-  zone.innerHTML = `
-    <div class="lot-visuel" aria-hidden="true">
-      ${dispo.map(p => `<img src="img/sachet-${p.id}-detoure.webp" alt="" width="${LARGEUR_DETOURE[p.id] || 240}" height="440" loading="lazy">`).join('')}
-    </div>
-    <div class="lot-texte">
-      <h2 id="t-lot">Un sachet de chaque</h2>
-      <p>${echapper(liste(dispo.map(p => p.nom)))} : de quoi varier vos planches cette saison.</p>
-    </div>
-    <div class="lot-action">
-      <strong>${prix(total)} FCFA</strong>
-      <button type="button" class="btn btn-jaune" data-lot aria-label="Tout ajouter : un sachet de chaque, ${prix(total)} FCFA">Tout ajouter</button>
-    </div>`;
-  zone.addEventListener('click', e => {
-    const bouton = e.target.closest('[data-lot]');
-    if (!bouton) return;
-    dispo.forEach(p => { panier[p.id] = (panier[p.id] || 0) + 1; });
-    vuePanier = 'lignes';
-    sauverPanier();
-    majCompteur(true);
-    notifier(`${dispo.length} sachets ajoutés au panier`);
-    confirmerBouton(bouton);
-  });
-}
-
-/* ---------- « Pour quelle surface ? » (fiche produit et fiches de culture) ---------- */
-// Formule, entrées et sources : voir le commentaire de PRODUITS_BASE (js/donnees.js)
+/* ---------- Quantité de semences selon la surface ---------- */
+// Doses et sources : voir le commentaire de FORMATS (js/donnees.js)
 const arrondiBas = n => n < 100 ? Math.floor(n) : n < 1000 ? Math.floor(n / 10) * 10 : Math.floor(n / 100) * 100;
+const M2_PAR_HA = 10000;
+const SURFACE_MAX_HA = 1000;          // au-delà, la saisie est sans doute une erreur d'unité
+const TARIF_PRODUCTEUR_G = 20000;     // à partir de 20 kg, on propose d'écrire pour un tarif producteur
+const MAX_2500G = 3, MAX_500G = 9;    // bornes de la recherche de la combinaison la moins chère
 
-function surfaceSachet(p) {
+// "8,5 kg" ou "750 g", arrondi au-dessus (on ne propose jamais moins que le besoin)
+const poids = g => g >= 1000
+  ? `${String(Math.ceil(g / 100) / 10).replace('.', ',')}\u00A0kg`
+  : `${nombre(Math.ceil(g / 10) * 10)}\u00A0g`;
+// "1,5 ha" ou "1 250 m²", arrondi en dessous (on ne promet jamais plus que ce que couvre le format)
+const surfaceLisible = ha => ha >= 1
+  ? `${String(Math.floor(ha * 10) / 10).replace('.', ',')}\u00A0ha`
+  : `${nombre(arrondiBas(ha * M2_PAR_HA))}\u00A0m²`;
+const surfaceCouverte = (p, f) => p.doseHa > 0 ? f.grammes / p.doseHa : 0;
+
+function espacementCm(p) {
   const m = String(p.espacement || '').match(/(\d+)\s*×\s*(\d+)/);
-  if (!m) return null;                       // espacement illisible : rien n'est affiché
-  const a = Number(m[1]), b = Number(m[2]);
-  if (!a || !b) return null;
-  if (!(Number(p.grainesParGramme) > 0)) {
-    // Repli sans nombre de graines : seulement ce que donne l'espacement
-    return { a, b, parM2: Math.max(1, Math.floor(10000 / (a * b))) };
-  }
-  const graines = GRAMMES_SACHET * Number(p.grainesParGramme);
-  const plants = arrondiBas(graines);        // plafond : 1 graine = 1 plant au mieux
-  const surface = arrondiBas(plants * a * b / 10000);
-  return { a, b, graines, plants, surface };
+  return m && Number(m[1]) && Number(m[2]) ? { a: Number(m[1]), b: Number(m[2]) } : null;
+}
+const plantsParHa = p => { const e = espacementCm(p); return e ? (M2_PAR_HA * 10000) / (e.a * e.b) : 0; };
+
+// Combinaison de formats la moins chère qui couvre le besoin (à prix égal, la plus proche du besoin)
+function meilleureCombinaison(p, besoinG) {
+  const [f500, f2500, f5000] = FORMATS.map(f => (prixFormat(p, f) ? f : null));
+  const essais = [];
+  const max5000 = f5000 ? Math.ceil(besoinG / f5000.grammes) : 0;
+  for (let n5 = 0; n5 <= max5000; n5++)
+    for (let n25 = 0; n25 <= (f2500 ? MAX_2500G : 0); n25++)
+      for (let n05 = 0; n05 <= (f500 ? MAX_500G : 0); n05++) {
+        const lignes = [[f5000, n5], [f2500, n25], [f500, n05]].filter(([f, n]) => f && n > 0);
+        const grammes = lignes.reduce((a, [f, n]) => a + f.grammes * n, 0);
+        if (grammes < besoinG) continue;
+        essais.push({ lignes, grammes, total: lignes.reduce((a, [f, n]) => a + prixFormat(p, f) * n, 0) });
+      }
+  return essais.sort((x, y) => x.total - y.total || x.grammes - y.grammes)[0] || null;
 }
 
-function blocSurface(p, contexte) {
-  const s = surfaceSachet(p);
-  if (!s) return '';
-  const id = `surface-${contexte}-${p.id}`;
-  // Dans les fiches de culture, le bloc est sous le titre h3 de la fiche
-  const titre = contexte === 'fiche' ? 'h4' : 'h3';
-  const corps = s.plants
-    ? `<dl>
-        <div><dt>Jusqu'à</dt><dd>${nombre(s.plants)} plants</dd></div>
-        <div><dt>Jusqu'à</dt><dd>${nombre(s.surface)} m²</dd></div>
-      </dl>
-      <p>Un sachet de ${GRAMMES_SACHET} g, environ ${nombre(s.graines)} graines, plantées à ${s.a} × ${s.b} cm. Comptez des pertes à la levée et au repiquage.</p>`
-    : `<p>Planté à ${s.a} × ${s.b} cm : environ ${nombre(s.parM2)} plant${s.parM2 > 1 ? 's' : ''} par m².</p>`;
+// Fiches de culture : la dose et ce que couvre le plus petit format
+function blocQuantite(p) {
+  const plus_petit = formatsVendus(p)[0];
+  if (!(p.doseHa > 0) || !plus_petit) return '';
+  const id = `quantite-${p.id}`;
+  const plants = plantsParHa(p);
+  const e = espacementCm(p);
   return `
     <div class="surface" role="group" aria-labelledby="${id}">
-      <div class="surface-haut"><${titre} id="${id}">Pour quelle surface&nbsp;?</${titre}><span class="indicatif">Indicatif</span></div>
-      ${corps}
+      <div class="surface-haut"><h4 id="${id}">Quelle quantité&nbsp;?</h4><span class="indicatif">Indicatif</span></div>
+      <dl>
+        <div><dt>Pour 1 hectare</dt><dd>${poids(p.doseHa)}</dd></div>
+        <div><dt>${plus_petit.nom} couvrent</dt><dd>${surfaceLisible(surfaceCouverte(p, plus_petit))}</dd></div>
+      </dl>
+      <p>${e ? `Plants repiqués à ${e.a} × ${e.b} cm, soit environ ${nombre(arrondiBas(plants))} plants par hectare. ` : ''}La dose comprend une marge pour les pertes à la levée et au repiquage.</p>
+      <a class="lien" href="boutique.html?culture=${p.id}#calculateur" data-calcul="${p.id}">Calculer pour ma surface</a>
     </div>`;
+}
+
+/* ---------- Calculateur : la surface donne la quantité et les formats à commander ---------- */
+function afficherCalculateur(zone) {
+  const cultures = PRODUITS.filter(p => p.doseHa > 0 && formatsVendus(p).length);
+  if (!cultures.length) { zone.closest('section').hidden = true; return; }
+  const demandee = new URLSearchParams(location.search).get('culture');
+  const depart = cultures.find(p => p.id === demandee) || cultures.find(p => p.id === 'tomate') || cultures[0];
+  zone.innerHTML = `
+    <form class="calcul-form" novalidate>
+      <fieldset class="calcul-champ">
+        <legend>Culture</legend>
+        <div class="calcul-cultures">
+          ${cultures.map(p => `<label><input type="radio" name="culture" value="${p.id}"${p === depart ? ' checked' : ''}><span>${echapper(p.nom)}</span></label>`).join('')}
+        </div>
+      </fieldset>
+      <div class="calcul-champ">
+        <label for="calcul-surface">Surface à cultiver</label>
+        <div class="calcul-surface">
+          <input id="calcul-surface" name="surface" inputmode="decimal" autocomplete="off" placeholder="par exemple 2 000" aria-describedby="calcul-erreur">
+          <select name="unite" aria-label="Unité de surface">
+            <option value="m2">m²</option>
+            <option value="ha">hectares</option>
+          </select>
+        </div>
+        <span class="msg-erreur" id="calcul-erreur" hidden>${icone('alerte')}<span></span></span>
+      </div>
+    </form>
+    <div class="calcul-resultat" aria-live="polite"></div>
+    <div class="plan-zone" hidden></div>`;
+
+  const form = zone.querySelector('form');
+  const resultat = zone.querySelector('.calcul-resultat');
+  const champ = form.elements.surface;
+  const erreur = zone.querySelector('#calcul-erreur');
+  let proposition = null;
+  // Plan de culture daté sous le résultat (js/plan.js, absent des pages sans calculateur)
+  const plan = typeof creerPlan === 'function' ? creerPlan(zone.querySelector('.plan-zone')) : null;
+
+  const montrerErreur = texte => {
+    erreur.hidden = !texte;
+    erreur.lastChild.textContent = texte || '';
+    champ.setAttribute('aria-invalid', texte ? 'true' : 'false');
+  };
+
+  let derniereSaisie = null;
+  const calculer = () => {
+    const p = produit(form.elements.culture.value);
+    const brut = champ.value.trim();
+    // « change » arrive après « input » quand le champ perd le focus (toucher sur « Ajouter au panier ») :
+    // même saisie, on garde le résultat affiché, sinon le bouton touché est remplacé et le toucher se perd
+    const saisie = [p.id, brut, form.elements.unite.value].join('|');
+    if (saisie === derniereSaisie) return;
+    derniereSaisie = saisie;
+    proposition = null;
+    if (!brut) {
+      montrerErreur('');
+      resultat.innerHTML = `<p class="calcul-attente">Indiquez votre surface : on calcule la quantité de semences de ${echapper(p.nom.toLowerCase())} et les formats à commander.</p>`;
+      return;
+    }
+    const valeur = Number(brut.replace(/\s/g, '').replace(',', '.'));
+    const ha = form.elements.unite.value === 'ha' ? valeur : valeur / M2_PAR_HA;
+    if (!Number.isFinite(valeur) || valeur <= 0) { montrerErreur('Entrez une surface en chiffres, par exemple 2 000 m² ou 0,5 ha.'); resultat.innerHTML = ''; return; }
+    if (ha > SURFACE_MAX_HA) { montrerErreur(`Au-delà de ${nombre(SURFACE_MAX_HA)} hectares, écrivez-nous sur WhatsApp. Vérifiez aussi l'unité choisie.`); resultat.innerHTML = ''; return; }
+    montrerErreur('');
+
+    const besoin = ha * p.doseHa;
+    const combi = meilleureCombinaison(p, besoin);
+    const plants = plantsParHa(p) * ha;
+    // L'unité garde ses minuscules dans le surtitre en capitales (« 2 000 m² », pas « M² »)
+    const surfaceTexte = `${echapper(brut.replace('.', ','))}\u00A0<span class="unite">${form.elements.unite.value === 'ha' ? 'ha' : 'm²'}</span>`;
+    if (!combi) { resultat.innerHTML = ''; return; }
+    proposition = { p, combi, surface: `${brut.replace('.', ',')}\u00A0${form.elements.unite.value === 'ha' ? 'ha' : 'm²'}` };
+    const detail = combi.lignes.map(([f, n]) => `<li><span>${n} × ${f.nom}</span><span>${prix(prixFormat(p, f) * n)} FCFA</span></li>`).join('');
+    const surplus = combi.grammes - besoin;
+    resultat.innerHTML = `
+      <div class="calcul-besoin">
+        <span class="surtitre">${echapper(p.nom)} · ${surfaceTexte}</span>
+        <strong>Il vous faut environ ${poids(besoin)} de semences</strong>
+        ${plants >= 1 ? `<span>Soit à peu près ${nombre(Math.max(1, arrondiBas(plants)))} plant${plants >= 2 ? 's' : ''} à repiquer.</span>` : ''}
+      </div>
+      <div class="calcul-conseil">
+        <h3>Ce que nous vous conseillons</h3>
+        <ul>${detail}</ul>
+        <p>${poids(combi.grammes)} au total${surplus >= 100 ? `, de quoi refaire une pépinière si la levée est faible` : ''}.</p>
+        ${besoin >= TARIF_PRODUCTEUR_G ? `<p class="calcul-note">Pour une commande de cette taille, <a class="lien-texte" data-wa="Bonjour Pépix, je voudrais un tarif producteur pour ${poids(besoin)} de semences de ${p.nom.toLowerCase()}." href="#">demandez un tarif producteur sur WhatsApp</a>.</p>` : ''}
+        ${p.enStock
+          ? `<button type="button" class="btn btn-vert" data-ajouter-calcul>Ajouter au panier · ${prix(combi.total)} FCFA</button>`
+          : `<p class="epuise-note">${echapper(p.nom)} est épuisé pour le moment. Écrivez-nous sur WhatsApp pour être prévenu du retour en stock.</p>`}
+      </div>
+      <p class="calcul-mention">Estimation indicative, pour un semis en pépinière suivi d'un repiquage.</p>`;
+    resultat.querySelectorAll('a[data-wa]').forEach(a => { a.href = Pepix.lienWhatsApp(a.dataset.wa); a.target = '_blank'; a.rel = 'noopener'; });
+  };
+  const recalculer = () => { calculer(); if (plan) plan.maj(proposition); };
+
+  // Liens « Calculer pour ma surface » (fiches, fiche produit) : sur une page qui a le calculateur,
+  // on y descend avec la bonne culture au lieu de recharger la page
+  document.addEventListener('click', e => {
+    const lien = e.target.closest('a[data-calcul]');
+    const choix = lien && form.querySelector(`input[name="culture"][value="${lien.dataset.calcul}"]`);
+    if (!choix) return;
+    e.preventDefault();
+    if (voileOuvert) fermer();
+    choix.checked = true;
+    recalculer();
+    zone.closest('section').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    champ.focus({ preventScroll: true });
+  });
+
+  form.addEventListener('input', recalculer);
+  form.addEventListener('change', recalculer);
+  form.addEventListener('submit', e => { e.preventDefault(); recalculer(); });
+  resultat.addEventListener('click', e => {
+    const bouton = e.target.closest('[data-ajouter-calcul]');
+    if (!bouton || !proposition) return;
+    const { p, combi } = proposition;
+    ajouter(combi.lignes.map(([f, n]) => ({ id: p.id, format: f.id, qte: n })), `Semences de ${p.nom.toLowerCase()} ajoutées au panier`, bouton);
+  });
+  recalculer();
 }
 
 /* ---------- Étapes de culture : pictos toujours doublés d'un texte ---------- */
@@ -489,16 +624,16 @@ function afficherFiches(conteneur) {
         <div class="repere"><span>Cycle</span><b>${p.cycle}</b></div>
         <div class="repere"><span>Espacement</span><b>${p.espacement}</b></div>
       </div>
-      ${blocSurface(p, 'fiche')}
+      ${blocQuantite(p)}
       <div class="fiche-etapes">${etapesIllustrees(p)}</div>
       <div class="fiche-pied">
-        <strong>Sachet de 5 g, ${prix(p.prix)} FCFA</strong>
-        ${p.enStock ? `<button type="button" class="btn btn-jaune" data-ajouter="${p.id}" aria-label="Ajouter au panier : ${echapper(p.nom)}">Ajouter au panier</button>` : '<span class="epuise">Épuisé</span>'}
+        <strong>${liste(formatsVendus(p).map(f => f.nom))}, dès ${prix(prixDepart(p))} FCFA</strong>
+        ${p.enStock ? `<button type="button" class="btn btn-vert" data-choisir="${p.id}" aria-label="Choisir le format : ${echapper(p.nom)}">Choisir le format</button>` : '<span class="epuise">Épuisé</span>'}
       </div>
     </article>`).join('')}`;
   chargerVisuels(conteneur);
 
-  // Une fiche à la fois. L'ancre de l'adresse (#fiche-tomate, depuis le QR code) choisit la fiche.
+  // Une fiche à la fois. L'ancre de l'adresse (#fiche-tomate, lien partagé) choisit la fiche.
   const idDepuisAncre = () => (location.hash.match(/^#fiche-([a-z]+)$/) || [])[1];
   const montrer = id => {
     const p = produit(id) || PRODUITS[0];
@@ -519,8 +654,8 @@ function afficherFiches(conteneur) {
       history.replaceState(null, '', `#fiche-${p.id}`);
       return;
     }
-    const bouton = e.target.closest('[data-ajouter]');
-    if (bouton) ajouter(bouton.dataset.ajouter, 1, bouton);
+    const bouton = e.target.closest('[data-choisir]');
+    if (bouton) ouvrirFiche(bouton.dataset.choisir);
   });
   // Liens #fiche-… dans la page (noms du calendrier) : on affiche la fiche, puis le navigateur y descend
   window.addEventListener('hashchange', () => {
@@ -533,24 +668,37 @@ function afficherFiches(conteneur) {
 
 /* ---------- Fenêtre fiche produit ---------- */
 let produitOuvert = null;
+let formatOuvert = null;
 let quantite = 1;
 
 function ouvrirFiche(id) {
   produitOuvert = produit(id);
-  quantite = 1;
   const p = produitOuvert;
+  const formats = formatsVendus(p);
+  formatOuvert = formats[0];
+  quantite = 1;
   $('#fiche-contenu').innerHTML = `
-    <div class="modale-image photo-${p.id}" role="img" aria-label="Sachet de semences ${p.nom} Pépix"></div>
+    <div class="modale-image photo-${p.id}" role="img" aria-label="Semences ${p.nom} Pépix"></div>
     <div class="modale-corps">
       <div class="modale-haut">
-        <span class="variete">Sachet Pépix</span>
+        <span class="variete">Semences maraîchères</span>
         <button type="button" class="btn-rond" data-fermer aria-label="Fermer">${icone('x')}</button>
       </div>
       <h2 id="fiche-titre">${p.nom}</h2>
-      <span class="variete">Variété ${echapper(p.variete)}, sachet de 5 g</span>
+      <span class="variete">Variété ${echapper(p.variete)}</span>
       ${etapesCourtes(p)}
-      ${blocSurface(p, 'modale')}
-      <span class="livraison">Livré en 24 à 48 h à Dakar</span>
+      <fieldset class="formats"${p.enStock ? '' : ' disabled'}>
+        <legend>Format</legend>
+        ${formats.map((f, i) => `
+          <label class="format">
+            <input type="radio" name="format" value="${f.id}"${i === 0 ? ' checked' : ''}>
+            <span class="format-nom">${f.nom}</span>
+            <span class="format-prix">${prix(prixFormat(p, f))} FCFA</span>
+            ${p.doseHa > 0 ? `<span class="format-surface">jusqu'à ${surfaceLisible(surfaceCouverte(p, f))}</span>` : ''}
+          </label>`).join('')}
+      </fieldset>
+      <a class="modale-lien" href="boutique.html?culture=${p.id}#calculateur" data-calcul="${p.id}">Quelle quantité pour ma surface&nbsp;? Le calculateur</a>
+      <span class="livraison">Livré en 24 à 48 h à Dakar, 3 à 5 jours en région</span>
       <a class="modale-lien" href="conseils.html#fiche-${p.id}">Voir la fiche de culture complète</a>
       ${p.enStock ? '' : '<p class="epuise-note">Épuisé pour le moment. Écrivez-nous sur WhatsApp pour être prévenu du retour en stock.</p>'}
       <div class="modale-actions"${p.enStock ? '' : ' hidden'}>
@@ -559,7 +707,7 @@ function ouvrirFiche(id) {
           <strong id="fiche-qte" aria-live="polite">1</strong>
           <button type="button" data-plus aria-label="Augmenter la quantité">${icone('plus')}</button>
         </div>
-        <button type="button" class="btn btn-jaune" data-valider><span>Ajouter pour <span id="fiche-total">${prix(p.prix)}</span>&nbsp;FCFA</span></button>
+        <button type="button" class="btn btn-vert" data-valider><span>Ajouter pour <span id="fiche-total">${prix(prixFormat(p, formatOuvert))}</span>&nbsp;FCFA</span></button>
       </div>
     </div>`;
   chargerVisuels($('#fiche-contenu'));
@@ -568,7 +716,7 @@ function ouvrirFiche(id) {
 
 function majQuantite() {
   $('#fiche-qte').textContent = quantite;
-  $('#fiche-total').textContent = prix(produitOuvert.prix * quantite);
+  $('#fiche-total').textContent = prix(prixFormat(produitOuvert, formatOuvert) * quantite);
   $('[data-moins]').disabled = quantite <= 1;
 }
 
@@ -578,7 +726,7 @@ const TITRES_PANIER = { lignes: 'Panier', formulaire: 'Vos coordonnées (2/2)', 
 
 function afficherPanier() {
   const zone = $('#panier-zone');
-  const lignes = PRODUITS.filter(p => panier[p.id]);
+  const lignes = lignesPanier();
   const vueAffichee = vuePanier === 'confirmation' && derniereCommande ? 'confirmation'
     : vuePanier === 'formulaire' && lignes.length ? 'formulaire' : 'lignes';
   $('#panier-titre').textContent = TITRES_PANIER[vueAffichee];
@@ -608,7 +756,7 @@ function afficherPanier() {
       <div class="panier-message">
         ${ILLU_GRAINE}
         <strong class="panier-vide-titre">Votre panier est vide.</strong>
-        <span>Les semences d'octobre à mars se commandent ici.</span>
+        <span>Choisissez vos semences, ou calculez d'abord la quantité pour votre surface.</span>
         <a class="btn btn-vert" href="boutique.html">Voir la boutique</a>
       </div>`;
     return;
@@ -664,18 +812,18 @@ function afficherPanier() {
 
   zone.innerHTML = `
     <div class="panier-lignes">
-      ${lignes.map(p => `
+      ${lignes.map(({ cle, p, f, qte, prix: unitaire }) => `
         <div class="ligne">
           <div class="ligne-info">
             <span class="ligne-vignette photo-${p.id}" aria-hidden="true"></span>
-            <div><strong>${p.nom}</strong><span>${echapper(p.variete)}, ${prix(p.prix)} FCFA</span></div>
+            <div><strong>${p.nom}, ${f.nom}</strong><span>${echapper(p.variete)}, ${prix(unitaire)} FCFA</span></div>
           </div>
           <div class="ligne-qte">
-            <button type="button" data-retirer="${p.id}" aria-label="Retirer un ${p.nom}">${icone('moins')}</button>
-            <strong aria-label="${panier[p.id]} sachet${panier[p.id] > 1 ? 's' : ''}">${panier[p.id]}</strong>
-            <button type="button" data-remettre="${p.id}" aria-label="Ajouter un ${p.nom}">${icone('plus')}</button>
+            <button type="button" data-retirer="${cle}" aria-label="Retirer un ${p.nom} ${f.nom}">${icone('moins')}</button>
+            <strong aria-label="${qte} × ${f.nom}">${qte}</strong>
+            <button type="button" data-remettre="${cle}" aria-label="Ajouter un ${p.nom} ${f.nom}">${icone('plus')}</button>
           </div>
-          <strong>${prix(p.prix * panier[p.id])} FCFA</strong>
+          <strong>${prix(unitaire * qte)} FCFA</strong>
         </div>`).join('')}
     </div>` + recapTotal;
   chargerVisuels(zone);
@@ -716,7 +864,7 @@ function brancherFormulaire() {
     }
     const d = new FormData(form);
     const st = sousTotal();
-    const lignesCommande = PRODUITS.filter(p => panier[p.id]).map(p => ({ id: p.id, nom: p.nom, variete: p.variete, prix: p.prix, qte: panier[p.id] }));
+    const lignesCommande = lignesPanier().map(({ p, f, qte, prix: unitaire }) => ({ id: p.id, nom: p.nom, variete: p.variete, format: f.nom, grammes: f.grammes, prix: unitaire, qte }));
     // Enregistrée dans le navigateur : l'espace admin la retrouve (démo)
     derniereCommande = Pepix.ajouterCommande({
       nom: d.get('nom').trim(),
@@ -728,7 +876,7 @@ function brancherFormulaire() {
       livraison: FRAIS_LIVRAISON,
       total: st + FRAIS_LIVRAISON,
     });
-    derniereCommande.articles = lignesCommande.map(l => `${l.qte} × ${l.nom}`).join(', ');
+    derniereCommande.articles = lignesCommande.map(l => `${l.qte} × ${l.nom} ${l.format}`).join(', ');
     panier = {};
     sauverPanier();
     vuePanier = 'confirmation';
@@ -801,7 +949,7 @@ function almanach() {
     detail.textContent = 'Les prochains semis reprennent en octobre. Profitez-en pour préparer et amender vos planches.';
   } else {
     titre.textContent = 'Hivernage : on prépare la prochaine saison.';
-    detail.textContent = 'Les semis de saison sèche reprennent en octobre. Commandez vos sachets en septembre pour être prêt.';
+    detail.textContent = 'Les semis de saison sèche reprennent en octobre. Commandez vos semences en septembre pour être prêt.';
   }
 }
 
@@ -855,7 +1003,7 @@ const ZONES = {
   'produits-accueil': afficherProduits,
   'frise': afficherFrise,
   'produits-boutique': afficherProduits,
-  'lot-boutique': afficherLot,
+  'calcul-zone': afficherCalculateur,
   'calendrier': afficherCalendrier,
   'fiches': afficherFiches,
 };
@@ -915,7 +1063,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.id === 'voile-fiche' || e.target.closest('[data-fermer]')) fermer();
     else if (e.target.closest('[data-moins]')) { quantite = Math.max(1, quantite - 1); majQuantite(); }
     else if (e.target.closest('[data-plus]')) { quantite++; majQuantite(); }
-    else if (e.target.closest('[data-valider]')) { ajouter(produitOuvert.id, quantite); fermer(); }
+    else if (e.target.closest('[data-valider]')) {
+      ajouter([{ id: produitOuvert.id, format: formatOuvert.id, qte: quantite }], `${produitOuvert.nom} ${formatOuvert.nom} ajouté au panier`);
+      fermer();
+    }
+  });
+  $('#voile-fiche').addEventListener('change', e => {
+    if (e.target.name !== 'format') return;
+    formatOuvert = format(e.target.value);
+    majQuantite();
   });
 
   // Panier
