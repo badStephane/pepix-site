@@ -268,7 +268,7 @@ body.admin { background: #EAEDE8; }
   .cartes-commandes { display: flex; }
 }
 
-/* Produits : un prix par format (500 g, 2,5 kg, 5 kg) */
+/* Produits : un prix par format (50 g, 500 g, 1 kg) */
 .champ-prix { border: 0; padding: 0; margin: 0; min-width: 0; grid-template-columns: 1fr; }
 .champ-prix legend { padding: 0; margin-bottom: 6px; font-size: 15px; font-weight: 700; }
 /* Une ligne par format : nom, champ, prix tel qu'affiché */

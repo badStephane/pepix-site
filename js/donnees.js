@@ -6,9 +6,14 @@
    - commandes : enregistrées au moment où le client valide
    ========================================================== */
 
-/* Formats vendus (business plan, § 6.1) : 500 g, 2,5 kg et 5 kg, selon les références des fournisseurs.
+/* Formats vendus : 50 g, 500 g et 1 kg.
    prix : un prix par format, en FCFA. PRIX PROVISOIRES de démonstration, à remplacer par les prix
    négociés avec les fournisseurs (modifiables dans l'espace admin, rubrique Produits).
+   Base 500 g ; 50 g = un dixième du 500 g + 30 % (petit format plus cher au gramme) ; 1 kg = deux 500 g − 5 %.
+
+   variete : une variété, ou plusieurs séparées par une virgule (« Agora, cerise ») : le client choisit alors
+   la sienne dans la fiche produit et le calculateur. Les variétés d'un même produit partagent doses et calendrier
+   (tomate cerise : valeurs de la tomate, à faire relire).
 
    doseHa : grammes de semences pour un hectare, semis en pépinière puis repiquage
    (fourchettes courantes des fiches maraîchères d'Afrique de l'Ouest, prises dans le haut pour ne pas manquer) :
@@ -27,15 +32,19 @@
 
    etapes : 5 étapes dans l'ordre Semis, Pépinière, Repiquage, Entretien, Récolte.
      court : la valeur affichée dans la fiche produit ; long : le texte des fiches de culture. */
+// petitSachet : visuel du sachet 50 g (img/sachet-<produit>-50g*.webp) au lieu du sachet 500 g
 const FORMATS = [
+  { id: '50g', grammes: 50, nom: '50 g', petitSachet: true },
   { id: '500g', grammes: 500, nom: '500 g' },
-  { id: '2500g', grammes: 2500, nom: '2,5 kg' },
-  { id: '5000g', grammes: 5000, nom: '5 kg' },
+  { id: '1000g', grammes: 1000, nom: '1 kg' },
 ];
+
+// « Agora, cerise » → ['Agora', 'cerise']
+const varietesDe = p => String(p.variete || '').split(',').map(v => v.trim()).filter(Boolean);
 
 const PRODUITS_BASE = [
   {
-    id: 'oignon', nom: 'Oignon', variete: 'Jaune Paille', prix: { '500g': 20000, '2500g': 92000, '5000g': 175000 },
+    id: 'oignon', nom: 'Oignon', variete: 'Violet de Galmi', prix: { '50g': 2600, '500g': 20000, '1000g': 38000 },
     semis: 'Oct. – Déc. (pépinière)', cycle: '120–150 jours', espacement: '10 × 20 cm',
     conseils: ['Semer en pépinière, repiquer à 6–8 semaines', "Arrêter l'arrosage 2 semaines avant récolte", "Sécher les bulbes à l'ombre avant stockage"],
     doseHa: 4000,
@@ -49,7 +58,7 @@ const PRODUITS_BASE = [
     ],
   },
   {
-    id: 'tomate', nom: 'Tomate', variete: 'Marmande', prix: { '500g': 40000, '2500g': 184000, '5000g': 350000 },
+    id: 'tomate', nom: 'Tomate', variete: 'Agora, cerise', prix: { '50g': 5200, '500g': 40000, '1000g': 76000 },
     semis: 'Oct. – Févr.', cycle: '70–90 jours', espacement: '50 × 70 cm',
     conseils: ['Semis en pépinière 3–4 semaines avant repiquage', 'Tuteurer dès 20 cm de hauteur', 'Supprimer les gourmands régulièrement'],
     doseHa: 250,
@@ -63,7 +72,7 @@ const PRODUITS_BASE = [
     ],
   },
   {
-    id: 'chou', nom: 'Chou', variete: 'Cœur de bœuf', prix: { '500g': 27500, '2500g': 126500, '5000g': 240000 },
+    id: 'chou', nom: 'Chou', variete: 'Pommé', prix: { '50g': 3600, '500g': 27500, '1000g': 52500 },
     semis: 'Oct. – Janv.', cycle: '80–100 jours', espacement: '50 × 60 cm',
     conseils: ['Repiquer à 4–5 feuilles', 'Arrosage régulier, sans excès', 'Surveiller les chenilles en début de cycle'],
     doseHa: 400,
@@ -77,7 +86,7 @@ const PRODUITS_BASE = [
     ],
   },
   {
-    id: 'piment', nom: 'Piment', variete: 'Super Cayenne', prix: { '500g': 35000, '2500g': 161000, '5000g': 305000 },
+    id: 'piment', nom: 'Piment', variete: 'Cayenne', prix: { '50g': 4600, '500g': 35000, '1000g': 66500 },
     semis: 'Oct. – Mars', cycle: '90–120 jours', espacement: '40 × 60 cm',
     conseils: ['Semis en pépinière 4–6 semaines avant repiquage', 'Repiquer à 4–6 feuilles vraies', "Éviter l'excès d'eau au pied"],
     doseHa: 500,
@@ -95,7 +104,7 @@ const PRODUITS_BASE = [
 const REGLAGES_BASE = {
   annonce: '',
   herosTitre: 'Tout commence par une graine.',
-  herosTexte: 'Oignon, tomate, chou et piment en 500 g, 2,5 kg et 5 kg. Indiquez votre surface : on calcule la quantité, on vous livre.',
+  herosTexte: 'Oignon, tomate, chou et piment en 50 g, 500 g et 1 kg. Indiquez votre surface : on calcule la quantité, on vous livre.',
   friseTitre: 'De la graine à la récolte, on vous guide.',
   friseTexte: 'Chaque semence a sa fiche de culture, en ligne. Voici les grandes étapes.',
   fraisLivraison: 1000,

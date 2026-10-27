@@ -22,8 +22,10 @@ const planLireIso = s => {
 };
 // « mer. 1er oct. » : le français écrit « 1er » pour le premier du mois
 const planPremier = t => t.replace(/(^|\s)1 /, '$11er ');
-const planDate = d => planPremier(d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }));
-const planDateCourte = d => planPremier(d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }));
+// L'année n'est écrite que si elle diffère de l'année en cours (« 19 janv. 2027 »)
+const planAnnee = d => d.getFullYear() !== new Date().getFullYear() ? { year: 'numeric' } : {};
+const planDate = d => planPremier(d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', ...planAnnee(d) }));
+const planDateCourte = d => planPremier(d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', ...planAnnee(d) }));
 const planFourchette = (a, b) => +a === +b ? planDate(a) : `entre le ${planDateCourte(a)} et le ${planDateCourte(b)}`;
 const planDeMois = m => (/^[aeiouéâ]/.test(m) ? "d'" : 'de ') + m;
 
@@ -126,6 +128,22 @@ function planMessage(p, etapes, proposition) {
     `Semences : ${commande} (${prix(proposition.combi.total)} FCFA)`,
     `${PLAN_SITE}/boutique?culture=${p.id}#calculateur`,
   ].join('\n');
+}
+
+/* ---------- Accueil : un exemple daté du jour (tomate si elle est vendue) ---------- */
+function afficherApercuPlan(zone) {
+  const p = PRODUITS.find(x => x.id === 'tomate') || PRODUITS[0];
+  const semis = p && planProchainSemis(p, planJour(new Date()));
+  if (!semis) return;   // le texte de repli (étapes sans dates) reste affiché
+  const etapes = planEtapes(p, semis).filter(e => e.debut);
+  zone.innerHTML = `
+    <p class="plan-apercu-titre">Exemple · ${echapper(p.nom)}${+semis === +planJour(new Date()) ? ', semis aujourd’hui' : ''}</p>
+    <ol class="plan-etapes">${etapes.map(e => `
+      <li class="plan-etape plan-${e.cle}">
+        <span class="plan-quand">${planFourchette(e.debut, e.fin)}</span>
+        <strong>${e.titre}</strong>
+      </li>`).join('')}
+    </ol>`;
 }
 
 /* ---------- Affichage ---------- */

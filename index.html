@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pépix, semences maraîchères au Sénégal</title>
-  <meta name="description" content="Semences d'oignon, tomate, chou et piment en 500 g, 2,5 kg et 5 kg, avec un calculateur de quantité selon votre surface. Livrées partout au Sénégal.">
+  <meta name="description" content="Semences d'oignon, tomate, chou et piment en 50 g, 500 g et 1 kg, avec un calculateur de quantité selon votre surface. Livrées partout au Sénégal.">
   <meta name="theme-color" content="#3C572C">
   <meta property="og:title" content="Pépix, semences maraîchères au Sénégal">
-  <meta property="og:description" content="Semences d'oignon, tomate, chou et piment en 500 g, 2,5 kg et 5 kg, avec un calculateur de quantité selon votre surface. Livrées partout au Sénégal.">
+  <meta property="og:description" content="Semences d'oignon, tomate, chou et piment en 50 g, 500 g et 1 kg, avec un calculateur de quantité selon votre surface. Livrées partout au Sénégal.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://pepix.pages.dev/img/partage.jpg">
   <meta property="og:image:width" content="1200">
@@ -24,6 +24,7 @@
   <link rel="preload" href="fonts/montserrat-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/donnees.js" defer></script>
+  <script src="js/plan.js" defer></script>
   <script src="js/main.js" defer></script>
   <!-- Données structurées (schema.org) lues par les moteurs de recherche -->
   <script type="application/ld+json">
@@ -34,7 +35,7 @@
     "url": "https://pepix.pages.dev/",
     "logo": "https://pepix.pages.dev/img/logo.png",
     "slogan": "Tout commence par une graine.",
-    "description": "Plateforme de vente de semences maraîchères au Sénégal : oignon, tomate, chou et piment en 500 g, 2,5 kg et 5 kg, avec un calculateur de quantité et des fiches de culture.",
+    "description": "Plateforme de vente de semences maraîchères au Sénégal : oignon, tomate, chou et piment en 50 g, 500 g et 1 kg, avec un calculateur de quantité et des fiches de culture.",
     "areaServed": {
       "@type": "Country",
       "name": "Sénégal"
@@ -76,10 +77,10 @@
       <div class="conteneur heros-cadre">
         <div class="etiquette">
           <h1 id="t-heros" data-reglage="herosTitre">Tout commence par une <span class="jaune">graine.</span></h1>
-          <p data-reglage="herosTexte">Oignon, tomate, chou et piment en 500 g, 2,5 kg et 5 kg. Indiquez votre surface : on calcule la quantité, on vous livre.</p>
+          <p data-reglage="herosTexte">Oignon, tomate, chou et piment en 50 g, 500 g et 1 kg. Indiquez votre surface : on calcule la quantité, on vous livre.</p>
           <div class="etiquette-actions">
             <a class="btn btn-jaune" href="boutique.html">Voir les semences<svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            <a class="lien-clair" href="boutique.html#calculateur">Calculer ma quantité</a>
+            <a class="lien-clair" href="boutique.html#calculateur">Faire mon plan de culture</a>
           </div>
         </div>
         <!-- Les quatre sachets en éventail : décoratifs, les mêmes sont présentés juste en dessous -->
@@ -107,6 +108,26 @@
       <div class="produits defile-mobile" id="produits-accueil" data-apparition></div>
     </section>
 
+    <!-- Plan de culture : la quantité et les dates de chaque étape (exemple daté du jour par js/plan.js) -->
+    <section class="conteneur section plan-accueil" aria-labelledby="t-plan">
+      <div class="plan-accueil-carte" data-apparition>
+        <div class="plan-accueil-texte">
+          <p class="surtitre">Votre plan de culture</p>
+          <h2 id="t-plan">Combien semer, et quand&nbsp;?</h2>
+          <p>Indiquez la culture et la surface : on calcule la quantité et les formats les moins chers, puis on date chaque étape jusqu'à la récolte. Ajoutez le tout à votre agenda, avec un rappel le jour J.</p>
+          <a class="btn btn-jaune" href="boutique.html#calculateur">Faire mon plan de culture<svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
+        <div class="plan-apercu" id="plan-apercu">
+          <p class="plan-apercu-titre">Exemple</p>
+          <ol class="plan-etapes">
+            <li class="plan-etape plan-semis"><strong>Semis en pépinière</strong></li>
+            <li class="plan-etape plan-repiquage"><strong>Repiquage</strong></li>
+            <li class="plan-etape plan-recolte"><strong>Début des récoltes</strong></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
     <!-- Comment ça marche : chaque étape porte ses garanties (faits déjà écrits ailleurs, aucun avis ni chiffre inventé) -->
     <section class="comment" aria-labelledby="t-comment">
       <div class="conteneur">
@@ -116,7 +137,7 @@
             <span class="etape-num" aria-hidden="true">1</span>
             <div>
               <strong>Calculez, puis choisissez</strong>
-              <p>Indiquez votre surface : le calculateur donne la quantité et les formats, en 500 g, 2,5 kg ou 5 kg.</p>
+              <p>Indiquez votre surface : le calculateur donne la quantité et les formats, en 50 g, 500 g ou 1 kg.</p>
               <ul class="etape-preuves">
                 <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>Semences de fournisseurs locaux sélectionnés</li>
               </ul>
@@ -137,7 +158,7 @@
             <span class="etape-num" aria-hidden="true">3</span>
             <div>
               <strong>Cultivez avec la fiche</strong>
-              <p>Semis, repiquage, arrosage et récolte, étape par étape.</p>
+              <p>Votre plan date chaque étape, la fiche explique comment faire : semis, repiquage, arrosage et récolte.</p>
               <ul class="etape-preuves">
                 <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v15H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 0 6 21.5h14"/><path d="M9 8h7"/></svg>Une fiche en ligne pour chaque culture</li>
               </ul>
@@ -186,7 +207,7 @@
     <div class="conteneur pied-haut">
       <div class="pied-marque">
         <img class="pied-logo" src="img/logo-blanc.webp" alt="Pépix, tout commence par une graine." width="160" height="143" loading="lazy">
-        <p>Semences maraîchères en 500 g, 2,5 kg et 5 kg, dans la quantité qui correspond à votre surface. Livrées partout au Sénégal.</p>
+        <p>Semences maraîchères en 50 g, 500 g et 1 kg, dans la quantité qui correspond à votre surface. Livrées partout au Sénégal.</p>
       </div>
       <div>
         <h2>Le site</h2>

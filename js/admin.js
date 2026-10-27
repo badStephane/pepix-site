@@ -21,8 +21,9 @@ const dateCourte = iso => new Date(iso).toLocaleDateString('fr-FR', { day: 'nume
 const heure = iso => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 const dateLongue = iso => new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const pastilleStatut = s => `<span class="statut statut-${s}">${STATUTS[s] || s}</span>`;
-// Une ligne de commande porte son format (500 g, 2,5 kg, 5 kg) ; les commandes d'avant les formats n'en ont pas
-const nomLigne = l => l.format ? `${l.nom} ${l.format}` : l.nom;
+// Une ligne de commande porte son format (50 g, 500 g, 1 kg) ; les commandes d'avant les formats n'en ont pas.
+// libelle : « Tomate cerise » quand le client a choisi la variété (absent des commandes plus anciennes)
+const nomLigne = l => { const nom = l.libelle || l.nom; return l.format ? `${nom} ${l.format}` : nom; };
 const articles = c => (c.lignes || []).map(l => `${l.qte} × ${nomLigne(l)}`).join(', ');
 const nbArticles = c => (c.lignes || []).reduce((a, l) => a + l.qte, 0);
 const PRIX_MIN = 100, PRIX_MAX = 2000000;
@@ -407,7 +408,8 @@ function vueProduits() {
         <form data-produit="${p.id}" novalidate>
           <div class="champ">
             <label for="var-${p.id}">Variété</label>
-            <input id="var-${p.id}" name="variete" value="${echapper(p.variete)}" maxlength="40" required>
+            <input id="var-${p.id}" name="variete" value="${echapper(p.variete)}" maxlength="80" required aria-describedby="a-var-${p.id}">
+            <span class="aide" id="a-var-${p.id}">Plusieurs variétés au choix : séparez-les par une virgule (Agora, cerise).</span>
           </div>
           <fieldset class="champ-ligne champ-prix">
             <legend>Prix par format (FCFA)</legend>
@@ -546,7 +548,10 @@ function chargerExemples() {
     const choix = produits.filter((_, k) => (i + k) % 3 !== 0).slice(0, 1 + (i % 3));
     const lignes = choix.map((p, k) => {
       const f = FORMATS[(i + k) % FORMATS.length];
-      return { id: p.id, nom: p.nom, variete: p.variete, format: f.nom, grammes: f.grammes, prix: Number(p.prix[f.id]) || 0, qte: 1 + ((i + k) % 3) };
+      const varietes = varietesDe(p);
+      const variete = varietes[(i + k) % varietes.length] || '';
+      const libelle = varietes.length > 1 ? `${p.nom} ${variete}` : p.nom;
+      return { id: p.id, nom: p.nom, libelle, variete, format: f.nom, grammes: f.grammes, prix: Number(p.prix[f.id]) || 0, qte: 1 + ((i + k) % 3) };
     });
     const st = lignes.reduce((a, l) => a + l.qte * l.prix, 0);
     const d = new Date(); d.setDate(d.getDate() - Math.floor(i * 1.1)); d.setHours(8 + (i * 3) % 11, (i * 17) % 60, 0, 0);

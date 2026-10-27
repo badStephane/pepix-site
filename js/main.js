@@ -75,8 +75,9 @@ const icone = (nom, classe = 'icone') =>
 const prix = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 // Même format avec une espace insécable : "1 500 plants" ne se coupe pas
 const nombre = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0');
-// "oignon, tomate et chou"
-const liste = l => l.length > 1 ? l.slice(0, -1).join(', ') + ' et ' + l[l.length - 1] : (l[0] || '');
+// "oignon, tomate et chou" ; avec mot = 'ou' : "Agora ou cerise"
+const liste = (l, mot = 'et') => l.length > 1 ? l.slice(0, -1).join(', ') + ` ${mot} ` + l[l.length - 1] : (l[0] || '');
+const majuscule = t => t.charAt(0).toUpperCase() + t.slice(1);
 const $ = sel => document.querySelector(sel);
 // Tout texte saisi (admin ou client) est échappé avant d'aller dans du HTML
 const echapper = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -92,14 +93,28 @@ const format = id => FORMATS.find(f => f.id === id);
 const prixFormat = (p, f) => Number(p.prix[f.id]) > 0 ? Number(p.prix[f.id]) : null;
 const formatsVendus = p => FORMATS.filter(f => prixFormat(p, f));
 const prixDepart = p => Math.min(...formatsVendus(p).map(f => prixFormat(p, f)));
+// Variétés au choix (tomate : Agora ou cerise) ; un produit à une seule variété n'en propose pas
+const choixVarietes = p => { const v = varietesDe(p); return v.length > 1 ? v : []; };
+// « Violet de Galmi », ou « Agora ou cerise »
+const varietesTexte = p => majuscule(liste(varietesDe(p), 'ou'));
+// Nom de l'article : « Oignon », ou « Tomate cerise » quand la variété a été choisie
+const nomArticle = (p, variete) => variete ? `${p.nom} ${variete}` : p.nom;
+// Sachet 50 g : son propre visuel (voir petitSachet dans FORMATS)
+const classeSachet = f => f && f.petitSachet ? ' sachet-50g' : '';
 
 /* ---------- Panier (sauvegardé dans le navigateur) ---------- */
-// Une ligne par produit et par format : { 'tomate:500g': 2, 'oignon:5000g': 1 }
-const cleLigne = (id, formatId) => `${id}:${formatId}`;
+// Une ligne par produit, format et, s'il y a le choix, variété : { 'oignon:500g': 2, 'tomate:50g:cerise': 1 }
+const cleLigne = (id, formatId, variete) => [id, formatId, variete].filter(Boolean).map(encodeURIComponent).join(':');
 const lireCle = cle => {
-  const [id, formatId] = cle.split(':');
+  let morceaux;
+  try { morceaux = cle.split(':').map(decodeURIComponent); } catch (e) { return null; }
+  const [id, formatId, variete = ''] = morceaux;
   const p = produit(id), f = format(formatId);
-  return p && f && prixFormat(p, f) ? { p, f } : null;
+  if (!p || !f || !prixFormat(p, f)) return null;
+  // Variété au choix : la ligne doit en porter une qui existe encore ; sinon, aucune
+  const choix = choixVarietes(p);
+  const ok = choix.length ? choix.includes(variete) : !variete;
+  return ok ? { p, f, variete } : null;
 };
 let panier = {};
 try { panier = JSON.parse(localStorage.getItem('pepix-panier')) || {}; } catch (e) { panier = {}; }
@@ -111,11 +126,11 @@ panier = Object.fromEntries(Object.entries(panier).filter(([cle, qte]) => {
 let vuePanier = 'lignes';          // 'lignes' | 'formulaire' | 'confirmation'
 let derniereCommande = null;
 
-// Lignes du panier dans l'ordre des produits puis des formats
-const lignesPanier = () => PRODUITS.flatMap(p => FORMATS
-  .filter(f => panier[cleLigne(p.id, f.id)] && prixFormat(p, f))
-  .map(f => ({ cle: cleLigne(p.id, f.id), p, f, qte: panier[cleLigne(p.id, f.id)], prix: prixFormat(p, f) })));
-const quantiteProduit = id => FORMATS.reduce((a, f) => a + (panier[cleLigne(id, f.id)] || 0), 0);
+// Lignes du panier dans l'ordre des produits, des variétés puis des formats
+const lignesPanier = () => PRODUITS.flatMap(p => (choixVarietes(p).length ? choixVarietes(p) : ['']).flatMap(variete => FORMATS
+  .filter(f => panier[cleLigne(p.id, f.id, variete)] && prixFormat(p, f))
+  .map(f => ({ cle: cleLigne(p.id, f.id, variete), p, f, variete, qte: panier[cleLigne(p.id, f.id, variete)], prix: prixFormat(p, f) }))));
+const quantiteProduit = id => lignesPanier().filter(l => l.p.id === id).reduce((a, l) => a + l.qte, 0);
 
 function sauverPanier() {
   try { localStorage.setItem('pepix-panier', JSON.stringify(panier)); } catch (e) { /* navigation privée */ }
@@ -145,10 +160,10 @@ function majCompteur(animer) {
   });
 }
 
-// articles : [{ id, format, qte }] ; texte : le message de la notification
+// articles : [{ id, format, variete, qte }] (variete : seulement s'il y a le choix) ; texte : le message de la notification
 function ajouter(articles, texte, bouton) {
   panier = articles.reduce((acc, a) => {
-    const cle = cleLigne(a.id, a.format);
+    const cle = cleLigne(a.id, a.format, a.variete);
     return { ...acc, [cle]: (acc[cle] || 0) + a.qte };
   }, panier);
   vuePanier = 'lignes';
@@ -221,7 +236,7 @@ function chargerVisuels(racine = document) {
     if (!id) return;
     // Cartes, fiche produit et fiches de culture : sachet détouré sur une teinte ; panier : photo d'origine
     const detoure = ['carte-image', 'modale-image', 'fiche-vignette', 'choix-vignette'].some(c => el.classList.contains(c));
-    const fichier = detoure ? `sachet-${id}-detoure` : `sachet-${id}`;
+    const fichier = `sachet-${id}${el.classList.contains('sachet-50g') ? '-50g' : ''}${detoure ? '-detoure' : ''}`;
     if (!visuels[fichier]) {
       const img = new Image();
       img.src = `img/${fichier}.webp`;
@@ -244,7 +259,7 @@ function carteProduit(p, avecSaison) {
         <h3><button type="button" class="carte-ouvrir" data-ouvrir="${p.id}" aria-label="${p.nom}, voir la fiche">${p.nom}</button></h3>
         ${avecSaison ? `<p class="pastille-saison">${icone('calendrier')}À semer en ${MOIS_LONGS[new Date().getMonth()]}</p>` : ''}
         <p class="pastille-panier" data-dans-panier="${p.id}" hidden>${icone('check')}<span></span></p>
-        <span class="variete">${echapper(p.variete)}, en ${liste(formatsVendus(p).map(f => f.nom))}</span>
+        <span class="variete">${echapper(varietesTexte(p))}, en ${liste(formatsVendus(p).map(f => f.nom))}</span>
         <dl class="carte-reperes">
           <div><dt>Semis</dt><dd>${p.semis.replace(' (pépinière)', '')}</dd></div>
           <div><dt>Cycle</dt><dd>${p.cycle}</dd></div>
@@ -287,7 +302,6 @@ const arrondiBas = n => n < 100 ? Math.floor(n) : n < 1000 ? Math.floor(n / 10) 
 const M2_PAR_HA = 10000;
 const SURFACE_MAX_HA = 1000;          // au-delà, la saisie est sans doute une erreur d'unité
 const TARIF_PRODUCTEUR_G = 20000;     // à partir de 20 kg, on propose d'écrire pour un tarif producteur
-const MAX_2500G = 3, MAX_500G = 9;    // bornes de la recherche de la combinaison la moins chère
 
 // "8,5 kg" ou "750 g", arrondi au-dessus (on ne propose jamais moins que le besoin)
 const poids = g => g >= 1000
@@ -305,20 +319,27 @@ function espacementCm(p) {
 }
 const plantsParHa = p => { const e = espacementCm(p); return e ? (M2_PAR_HA * 10000) / (e.a * e.b) : 0; };
 
-// Combinaison de formats la moins chère qui couvre le besoin (à prix égal, la plus proche du besoin)
+// Combinaison de formats la moins chère qui couvre le besoin (à prix égal, la plus proche du besoin).
+// Le plus grand format couvre le gros du besoin ; un format plus petit n'est jamais pris plus de fois
+// qu'il n'en faut pour égaler le format au-dessus (dix 50 g pour un 500 g, deux 500 g pour un 1 kg).
 function meilleureCombinaison(p, besoinG) {
-  const [f500, f2500, f5000] = FORMATS.map(f => (prixFormat(p, f) ? f : null));
-  const essais = [];
-  const max5000 = f5000 ? Math.ceil(besoinG / f5000.grammes) : 0;
-  for (let n5 = 0; n5 <= max5000; n5++)
-    for (let n25 = 0; n25 <= (f2500 ? MAX_2500G : 0); n25++)
-      for (let n05 = 0; n05 <= (f500 ? MAX_500G : 0); n05++) {
-        const lignes = [[f5000, n5], [f2500, n25], [f500, n05]].filter(([f, n]) => f && n > 0);
-        const grammes = lignes.reduce((a, [f, n]) => a + f.grammes * n, 0);
-        if (grammes < besoinG) continue;
-        essais.push({ lignes, grammes, total: lignes.reduce((a, [f, n]) => a + prixFormat(p, f) * n, 0) });
-      }
-  return essais.sort((x, y) => x.total - y.total || x.grammes - y.grammes)[0] || null;
+  const vendus = formatsVendus(p);   // du plus petit au plus grand
+  const bornes = vendus.map((f, i) => Math.ceil((i === vendus.length - 1 ? besoinG : vendus[i + 1].grammes) / f.grammes));
+  let meilleure = null;
+  const garder = essai => {
+    if (!meilleure || essai.total < meilleure.total || (essai.total === meilleure.total && essai.grammes < meilleure.grammes)) meilleure = essai;
+  };
+  // Du plus grand format au plus petit ; lignes dans le même ordre
+  const explorer = (i, lignes, grammes, total) => {
+    if (grammes >= besoinG) { garder({ lignes, grammes, total }); return; }   // ajouter encore ne ferait que coûter plus
+    if (i < 0) return;
+    const f = vendus[i];
+    for (let n = 0; n <= bornes[i]; n++) {
+      explorer(i - 1, n ? [...lignes, [f, n]] : lignes, grammes + f.grammes * n, total + prixFormat(p, f) * n);
+    }
+  };
+  if (vendus.length) explorer(vendus.length - 1, [], 0, 0);
+  return meilleure;
 }
 
 // Fiches de culture : la dose et ce que couvre le plus petit format
@@ -354,6 +375,7 @@ function afficherCalculateur(zone) {
           ${cultures.map(p => `<label><input type="radio" name="culture" value="${p.id}"${p === depart ? ' checked' : ''}><span>${echapper(p.nom)}</span></label>`).join('')}
         </div>
       </fieldset>
+      <fieldset class="calcul-champ" data-varietes hidden></fieldset>
       <div class="calcul-champ">
         <label for="calcul-surface">Surface à cultiver</label>
         <div class="calcul-surface">
@@ -383,6 +405,23 @@ function afficherCalculateur(zone) {
     champ.setAttribute('aria-invalid', texte ? 'true' : 'false');
   };
 
+  // Variété au choix (tomate : Agora ou cerise) : même quantité, mais il faut savoir laquelle mettre au panier
+  const zoneVarietes = form.querySelector('[data-varietes]');
+  let cultureVarietes = null;
+  const majVarietes = () => {
+    const p = produit(form.elements.culture.value);
+    if (p === cultureVarietes) return;
+    cultureVarietes = p;
+    const choix = choixVarietes(p);
+    zoneVarietes.hidden = !choix.length;
+    zoneVarietes.innerHTML = choix.length ? `
+      <legend>Variété</legend>
+      <div class="calcul-cultures">
+        ${choix.map((v, i) => `<label><input type="radio" name="variete" value="${echapper(v)}"${i === 0 ? ' checked' : ''}><span>${echapper(majuscule(v))}</span></label>`).join('')}
+      </div>` : '';
+  };
+  const varieteChoisie = () => (choixVarietes(cultureVarietes).length ? form.elements.variete.value : '');
+
   let derniereSaisie = null;
   const calculer = () => {
     const p = produit(form.elements.culture.value);
@@ -408,9 +447,12 @@ function afficherCalculateur(zone) {
     const combi = meilleureCombinaison(p, besoin);
     const plants = plantsParHa(p) * ha;
     // L'unité garde ses minuscules dans le surtitre en capitales (« 2 000 m² », pas « M² »)
-    const surfaceTexte = `${echapper(brut.replace('.', ','))}\u00A0<span class="unite">${form.elements.unite.value === 'ha' ? 'ha' : 'm²'}</span>`;
+    // « 2 000 » et « 0,5 » : le nombre saisi, avec l'espace des milliers
+    const [entier, decimales] = String(valeur).split('.');
+    const surfaceNombre = nombre(entier) + (decimales ? ',' + decimales : '');
+    const surfaceTexte = `${surfaceNombre}\u00A0<span class="unite">${form.elements.unite.value === 'ha' ? 'ha' : 'm²'}</span>`;
     if (!combi) { resultat.innerHTML = ''; return; }
-    proposition = { p, combi, surface: `${brut.replace('.', ',')}\u00A0${form.elements.unite.value === 'ha' ? 'ha' : 'm²'}` };
+    proposition = { p, combi, surface: `${surfaceNombre}\u00A0${form.elements.unite.value === 'ha' ? 'ha' : 'm²'}` };
     const detail = combi.lignes.map(([f, n]) => `<li><span>${n} × ${f.nom}</span><span>${prix(prixFormat(p, f) * n)} FCFA</span></li>`).join('');
     const surplus = combi.grammes - besoin;
     resultat.innerHTML = `
@@ -431,7 +473,7 @@ function afficherCalculateur(zone) {
       <p class="calcul-mention">Estimation indicative, pour un semis en pépinière suivi d'un repiquage.</p>`;
     resultat.querySelectorAll('a[data-wa]').forEach(a => { a.href = Pepix.lienWhatsApp(a.dataset.wa); a.target = '_blank'; a.rel = 'noopener'; });
   };
-  const recalculer = () => { calculer(); if (plan) plan.maj(proposition); };
+  const recalculer = () => { majVarietes(); calculer(); if (plan) plan.maj(proposition); };
 
   // Liens « Calculer pour ma surface » (fiches, fiche produit) : sur une page qui a le calculateur,
   // on y descend avec la bonne culture au lieu de recharger la page
@@ -454,7 +496,8 @@ function afficherCalculateur(zone) {
     const bouton = e.target.closest('[data-ajouter-calcul]');
     if (!bouton || !proposition) return;
     const { p, combi } = proposition;
-    ajouter(combi.lignes.map(([f, n]) => ({ id: p.id, format: f.id, qte: n })), `Semences de ${p.nom.toLowerCase()} ajoutées au panier`, bouton);
+    const variete = varieteChoisie();
+    ajouter(combi.lignes.map(([f, n]) => ({ id: p.id, format: f.id, variete, qte: n })), `Semences de ${p.nom.toLowerCase()}${variete ? ' ' + echapper(variete) : ''} ajoutées au panier`, bouton);
   });
   recalculer();
 }
@@ -617,7 +660,7 @@ function afficherFiches(conteneur) {
     <article class="fiche" id="fiche-${p.id}" aria-labelledby="t-fiche-${p.id}">
       <div class="fiche-haut">
         <span class="fiche-vignette photo-${p.id}" aria-hidden="true"></span>
-        <div><h3 id="t-fiche-${p.id}">${echapper(p.nom)}</h3><span class="variete-fiche">${echapper(p.variete)}</span></div>
+        <div><h3 id="t-fiche-${p.id}">${echapper(p.nom)}</h3><span class="variete-fiche">${echapper(varietesTexte(p))}</span></div>
       </div>
       <div class="reperes">
         <div class="repere"><span>Semis</span><b>${p.semis}</b></div>
@@ -669,24 +712,36 @@ function afficherFiches(conteneur) {
 /* ---------- Fenêtre fiche produit ---------- */
 let produitOuvert = null;
 let formatOuvert = null;
+let varieteOuverte = '';   // vide quand le produit n'a qu'une variété
 let quantite = 1;
 
 function ouvrirFiche(id) {
   produitOuvert = produit(id);
   const p = produitOuvert;
   const formats = formatsVendus(p);
+  const varietes = choixVarietes(p);
   formatOuvert = formats[0];
+  varieteOuverte = varietes[0] || '';
   quantite = 1;
   $('#fiche-contenu').innerHTML = `
-    <div class="modale-image photo-${p.id}" role="img" aria-label="Semences ${p.nom} Pépix"></div>
+    <div class="modale-image photo-${p.id}${classeSachet(formatOuvert)}" role="img" aria-label="Semences ${p.nom} Pépix"></div>
     <div class="modale-corps">
       <div class="modale-haut">
         <span class="variete">Semences maraîchères</span>
         <button type="button" class="btn-rond" data-fermer aria-label="Fermer">${icone('x')}</button>
       </div>
       <h2 id="fiche-titre">${p.nom}</h2>
-      <span class="variete">Variété ${echapper(p.variete)}</span>
+      ${varietes.length ? '' : `<span class="variete">Variété ${echapper(p.variete)}</span>`}
       ${etapesCourtes(p)}
+      ${varietes.length ? `
+      <fieldset class="formats varietes"${p.enStock ? '' : ' disabled'}>
+        <legend>Variété</legend>
+        ${varietes.map((v, i) => `
+          <label class="format">
+            <input type="radio" name="variete" value="${echapper(v)}"${i === 0 ? ' checked' : ''}>
+            <span class="format-nom">${echapper(majuscule(v))}</span>
+          </label>`).join('')}
+      </fieldset>` : ''}
       <fieldset class="formats"${p.enStock ? '' : ' disabled'}>
         <legend>Format</legend>
         ${formats.map((f, i) => `
@@ -739,7 +794,7 @@ function afficherPanier() {
         <strong>Jërëjëf, ${echapper(c.nom.split(' ')[0])} !</strong>
         <span>Commande de démonstration <b>${c.numero}</b> enregistrée. Ce site est un projet d'école : rien n'est envoyé et personne ne vous appellera. Sur le vrai site, Pépix vous appellerait au ${echapper(telLisible(c.tel))} pour confirmer la livraison.</span>
         <div class="recap">
-          <div><span>Articles</span><span>${c.articles}</span></div>
+          <div><span>Articles</span><span>${echapper(c.articles)}</span></div>
           <div><span>Livraison</span><span>${echapper(c.adresse)}</span></div>
           <div><span>Paiement</span><span>${echapper(c.paiement)}</span></div>
           <div><b>Total</b><b>${prix(c.total)} FCFA</b></div>
@@ -812,16 +867,16 @@ function afficherPanier() {
 
   zone.innerHTML = `
     <div class="panier-lignes">
-      ${lignes.map(({ cle, p, f, qte, prix: unitaire }) => `
+      ${lignes.map(({ cle, p, f, variete, qte, prix: unitaire }) => `
         <div class="ligne">
           <div class="ligne-info">
-            <span class="ligne-vignette photo-${p.id}" aria-hidden="true"></span>
-            <div><strong>${p.nom}, ${f.nom}</strong><span>${echapper(p.variete)}, ${prix(unitaire)} FCFA</span></div>
+            <span class="ligne-vignette photo-${p.id}${classeSachet(f)}" aria-hidden="true"></span>
+            <div><strong>${echapper(nomArticle(p, variete))}, ${f.nom}</strong><span>${variete ? '' : `${echapper(p.variete)}, `}${prix(unitaire)} FCFA</span></div>
           </div>
           <div class="ligne-qte">
-            <button type="button" data-retirer="${cle}" aria-label="Retirer un ${p.nom} ${f.nom}">${icone('moins')}</button>
+            <button type="button" data-retirer="${cle}" aria-label="Retirer un ${echapper(nomArticle(p, variete))} ${f.nom}">${icone('moins')}</button>
             <strong aria-label="${qte} × ${f.nom}">${qte}</strong>
-            <button type="button" data-remettre="${cle}" aria-label="Ajouter un ${p.nom} ${f.nom}">${icone('plus')}</button>
+            <button type="button" data-remettre="${cle}" aria-label="Ajouter un ${echapper(nomArticle(p, variete))} ${f.nom}">${icone('plus')}</button>
           </div>
           <strong>${prix(unitaire * qte)} FCFA</strong>
         </div>`).join('')}
@@ -864,7 +919,10 @@ function brancherFormulaire() {
     }
     const d = new FormData(form);
     const st = sousTotal();
-    const lignesCommande = lignesPanier().map(({ p, f, qte, prix: unitaire }) => ({ id: p.id, nom: p.nom, variete: p.variete, format: f.nom, grammes: f.grammes, prix: unitaire, qte }));
+    // libelle : « Tomate cerise » quand la variété a été choisie (affiché dans l'admin et le message WhatsApp)
+    const lignesCommande = lignesPanier().map(({ p, f, variete, qte, prix: unitaire }) => ({
+      id: p.id, nom: p.nom, libelle: nomArticle(p, variete), variete: variete || p.variete, format: f.nom, grammes: f.grammes, prix: unitaire, qte,
+    }));
     // Enregistrée dans le navigateur : l'espace admin la retrouve (démo)
     derniereCommande = Pepix.ajouterCommande({
       nom: d.get('nom').trim(),
@@ -876,7 +934,7 @@ function brancherFormulaire() {
       livraison: FRAIS_LIVRAISON,
       total: st + FRAIS_LIVRAISON,
     });
-    derniereCommande.articles = lignesCommande.map(l => `${l.qte} × ${l.nom} ${l.format}`).join(', ');
+    derniereCommande.articles = lignesCommande.map(l => `${l.qte} × ${l.libelle} ${l.format}`).join(', ');
     panier = {};
     sauverPanier();
     vuePanier = 'confirmation';
@@ -1004,6 +1062,7 @@ const ZONES = {
   'frise': afficherFrise,
   'produits-boutique': afficherProduits,
   'calcul-zone': afficherCalculateur,
+  'plan-apercu': zone => { if (typeof afficherApercuPlan === 'function') afficherApercuPlan(zone); },
   'calendrier': afficherCalendrier,
   'fiches': afficherFiches,
 };
@@ -1064,13 +1123,19 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (e.target.closest('[data-moins]')) { quantite = Math.max(1, quantite - 1); majQuantite(); }
     else if (e.target.closest('[data-plus]')) { quantite++; majQuantite(); }
     else if (e.target.closest('[data-valider]')) {
-      ajouter([{ id: produitOuvert.id, format: formatOuvert.id, qte: quantite }], `${produitOuvert.nom} ${formatOuvert.nom} ajouté au panier`);
+      ajouter([{ id: produitOuvert.id, format: formatOuvert.id, variete: varieteOuverte, qte: quantite }],
+        `${echapper(nomArticle(produitOuvert, varieteOuverte))} ${formatOuvert.nom} ajouté au panier`);
       fermer();
     }
   });
   $('#voile-fiche').addEventListener('change', e => {
+    if (e.target.name === 'variete') { varieteOuverte = e.target.value; return; }
     if (e.target.name !== 'format') return;
     formatOuvert = format(e.target.value);
+    // Le visuel suit le format : petit sachet pour le 50 g
+    const image = $('#fiche-contenu .modale-image');
+    image.classList.toggle('sachet-50g', Boolean(formatOuvert.petitSachet));
+    chargerVisuels($('#fiche-contenu'));
     majQuantite();
   });
 

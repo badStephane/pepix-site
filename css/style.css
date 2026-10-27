@@ -910,6 +910,15 @@ body.bloque { overflow: hidden; }
 :is(.carte-image, .modale-image).photo-tomate.charge { background-image: url(../img/sachet-tomate-detoure.webp); }
 :is(.carte-image, .modale-image).photo-chou.charge   { background-image: url(../img/sachet-chou-detoure.webp); }
 :is(.carte-image, .modale-image).photo-piment.charge { background-image: url(../img/sachet-piment-detoure.webp); }
+/* Format 50 g choisi : le petit sachet, dans la fiche produit et le panier */
+.modale-image.sachet-50g.photo-oignon.charge { background-image: url(../img/sachet-oignon-50g-detoure.webp); }
+.modale-image.sachet-50g.photo-tomate.charge { background-image: url(../img/sachet-tomate-50g-detoure.webp); }
+.modale-image.sachet-50g.photo-chou.charge   { background-image: url(../img/sachet-chou-50g-detoure.webp); }
+.modale-image.sachet-50g.photo-piment.charge { background-image: url(../img/sachet-piment-50g-detoure.webp); }
+.ligne-vignette.sachet-50g.photo-oignon { background-image: url(../img/sachet-oignon-50g.webp); }
+.ligne-vignette.sachet-50g.photo-tomate { background-image: url(../img/sachet-tomate-50g.webp); }
+.ligne-vignette.sachet-50g.photo-chou   { background-image: url(../img/sachet-chou-50g.webp); }
+.ligne-vignette.sachet-50g.photo-piment { background-image: url(../img/sachet-piment-50g.webp); }
 .carte { transition: border-color var(--rapide), transform var(--rapide) var(--courbe), box-shadow var(--rapide); }
 @media (hover: hover) {
   .carte:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(60, 87, 44, .14); }
@@ -1136,6 +1145,8 @@ body.bloque { overflow: hidden; }
 .format-prix { font-size: 14px; font-weight: 700; white-space: nowrap; }
 .format-surface { font-size: 13px; color: var(--terre); line-height: 1.3; }
 .formats:disabled .format { opacity: .55; cursor: not-allowed; }
+/* Variétés au choix (tomate : Agora ou cerise), au-dessus des formats */
+.formats.varietes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 480px) { .format { padding: 8px; } .format-nom { font-size: 15px; } .format-prix { font-size: 13px; } }
 
 /* ---------- Calculateur : surface → quantité → formats ---------- */
@@ -1225,12 +1236,44 @@ body.bloque { overflow: hidden; }
 .plan-actions { display: flex; flex-wrap: wrap; gap: var(--e-3); }
 .plan-actions[hidden] { display: none; }
 .plan-actions .btn { flex: 1 1 260px; }
+/* Accueil : le plan de culture annoncé, avec un exemple daté du jour */
+.plan-accueil-carte {
+  background: var(--principale); color: var(--claire); border-radius: var(--r-carte);
+  padding: clamp(24px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--e-6); align-items: center;
+}
+.plan-accueil-texte { display: flex; flex-direction: column; gap: var(--e-3); align-items: flex-start; }
+.plan-accueil-texte .surtitre { color: var(--secondaire); }
+.plan-accueil-texte h2 { font-size: var(--t-h2); color: var(--claire); text-wrap: balance; }
+.plan-accueil-texte p:not(.surtitre) { font-size: 17px; color: rgba(243, 245, 242, .92); max-width: 32em; }
+.plan-accueil-texte .btn { margin-top: var(--e-2); }
+.plan-apercu { background: var(--blanc); color: var(--sombre); border-radius: var(--r-carte); padding: var(--e-5); display: flex; flex-direction: column; gap: var(--e-4); }
+.plan-apercu-titre { font-size: 14px; font-weight: 700; color: var(--terre); }
 @media (min-width: 860px) {
-  /* Grand écran : la frise passe à l'horizontale, quatre étapes côte à côte */
-  .plan-etapes { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: var(--e-4); }
-  .plan-etape { padding: 28px var(--e-2) 0 0; }
-  .plan-etape::before { left: 0; top: 0; }
-  .plan-etape::after { left: 14px; right: -16px; top: 6px; bottom: auto; width: auto; height: 2px; }
+  .plan-accueil-carte { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+}
+
+/* Boutique : encart qui mène au calculateur, placé en bas de page */
+.plan-appel {
+  margin-top: var(--e-4); display: flex; align-items: center; gap: var(--e-4); padding: var(--e-4) var(--e-5);
+  background: var(--blanc); border: 1px solid var(--filet); border-left: 4px solid var(--secondaire); border-radius: var(--r-carte);
+  color: inherit; text-decoration: none; max-width: 720px;
+}
+.plan-appel:hover { border-color: var(--principale); border-left-color: var(--secondaire); }
+.plan-appel:focus-visible { outline: 3px solid var(--jaune); outline-offset: 2px; }
+.plan-appel-picto { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--principale); color: var(--claire); display: flex; align-items: center; justify-content: center; }
+.plan-appel-picto .icone { width: 22px; height: 22px; }
+.plan-appel-texte { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.plan-appel-texte strong { font-size: 17px; }
+.plan-appel-texte span { font-size: 15px; color: var(--terre); }
+.plan-appel > .icone { flex: none; width: 22px; height: 22px; color: var(--principale); }
+
+@media (min-width: 860px) {
+  /* Grand écran : la frise du calculateur passe à l'horizontale, quatre étapes côte à côte
+     (l'exemple de l'accueil, dans une demi-colonne, reste vertical) */
+  .plan .plan-etapes { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: var(--e-4); }
+  .plan .plan-etape { padding: 28px var(--e-2) 0 0; }
+  .plan .plan-etape::before { left: 0; top: 0; }
+  .plan .plan-etape::after { left: 14px; right: -16px; top: 6px; bottom: auto; width: auto; height: 2px; }
 }
 @media (min-width: 860px) {
   .calcul-corps { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--e-7); }
